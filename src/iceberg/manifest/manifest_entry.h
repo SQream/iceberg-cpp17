@@ -44,7 +44,7 @@ enum class ManifestStatus {
 };
 
 /// \brief Get the relative manifest status type from int
-ICEBERG_EXPORT constexpr Result<ManifestStatus> ManifestStatusFromInt(
+ICEBERG_EXPORT inline Result<ManifestStatus> ManifestStatusFromInt(
     int32_t status) noexcept {
   switch (status) {
     case 0:
@@ -289,7 +289,29 @@ struct ICEBERG_EXPORT DataFile {
       SchemaField::MakeOptional(kContentSizeFieldId, "content_size_in_bytes", int64(),
                                 "The length of referenced content stored in the file");
 
-  bool operator==(const DataFile& other) const = default;
+  bool operator==(const DataFile& other) const {
+    return content == other.content &&
+           file_path == other.file_path &&
+           file_format == other.file_format &&
+           partition == other.partition &&
+           record_count == other.record_count &&
+           file_size_in_bytes == other.file_size_in_bytes &&
+           column_sizes == other.column_sizes &&
+           value_counts == other.value_counts &&
+           null_value_counts == other.null_value_counts &&
+           nan_value_counts == other.nan_value_counts &&
+           lower_bounds == other.lower_bounds &&
+           upper_bounds == other.upper_bounds &&
+           key_metadata == other.key_metadata &&
+           split_offsets == other.split_offsets &&
+           equality_ids == other.equality_ids &&
+           sort_order_id == other.sort_order_id &&
+           partition_spec_id == other.partition_spec_id &&
+           first_row_id == other.first_row_id &&
+           referenced_data_file == other.referenced_data_file &&
+           content_offset == other.content_offset &&
+           content_size_in_bytes == other.content_size_in_bytes;
+  }
 
   /// \brief Get the schema of the data file with the given partition type.
   static std::shared_ptr<StructType> Type(std::shared_ptr<StructType> partition_type);
@@ -411,7 +433,7 @@ ICEBERG_EXPORT constexpr std::string_view ToString(DataFile::Content type) noexc
 }
 
 /// \brief Get the relative data file content type from int
-ICEBERG_EXPORT constexpr Result<DataFile::Content> DataFileContentFromInt(
+ICEBERG_EXPORT inline Result<DataFile::Content> DataFileContentFromInt(
     int32_t content) noexcept {
   switch (content) {
     case 0:

@@ -182,7 +182,7 @@ Result<bool> InMemoryNamespace::NamespaceExists(const Namespace& namespace_ident
   if (ns.error().kind == ErrorKind::kNoSuchNamespace) {
     return false;
   }
-  return std::unexpected<Error>(ns.error());
+  return compat::unexpected<Error>(ns.error());
 }
 
 Result<std::vector<Namespace>> InMemoryNamespace::ListNamespaces(
@@ -194,7 +194,7 @@ Result<std::vector<Namespace>> InMemoryNamespace::ListNamespaces(
   std::vector<Namespace> names;
   auto const& children = ns->children_;
   names.reserve(children.size());
-  std::ranges::transform(children, std::back_inserter(names), [&](const auto& pair) {
+  std::transform(children.begin(), children.end(), std::back_inserter(names), [&](const auto& pair) {
     auto childNs = parent_namespace_ident;
     childNs.levels.emplace_back(pair.first);
     return childNs;
@@ -267,10 +267,10 @@ Status InMemoryNamespace::UpdateNamespaceProperties(
   const auto ns = GetNamespace(this, namespace_ident);
   ICEBERG_RETURN_UNEXPECTED(ns);
 
-  std::ranges::for_each(updates, [&](const auto& prop) {
+  std::for_each(updates.begin(), updates.end(), [&](const auto& prop) {
     ns.value()->properties_[prop.first] = prop.second;
   });
-  std::ranges::for_each(removals,
+  std::for_each(removals.begin(), removals.end(),
                         [&](const auto& prop) { ns.value()->properties_.erase(prop); });
   return {};
 }
@@ -284,9 +284,9 @@ Result<std::vector<std::string>> InMemoryNamespace::ListTables(
   std::vector<std::string> table_names;
   table_names.reserve(locations.size());
 
-  std::ranges::transform(locations, std::back_inserter(table_names),
+  std::transform(locations.begin(), locations.end(), std::back_inserter(table_names),
                          [](const auto& pair) { return pair.first; });
-  std::ranges::sort(table_names);
+  std::sort(table_names.begin(), table_names.end());
 
   return table_names;
 }
@@ -295,7 +295,7 @@ Status InMemoryNamespace::RegisterTable(const TableIdentifier& table_ident,
                                         const std::string& metadata_location) {
   const auto ns = GetNamespace(this, table_ident.ns);
   ICEBERG_RETURN_UNEXPECTED(ns);
-  if (ns.value()->table_metadata_locations_.contains(table_ident.name)) {
+  if (ns.value()->table_metadata_locations_.find(table_ident.name) != ns.value()->table_metadata_locations_.end()) {
     return AlreadyExists("{} already exists", table_ident.name);
   }
   ns.value()->table_metadata_locations_[table_ident.name] = metadata_location;
@@ -312,7 +312,7 @@ Status InMemoryNamespace::UnregisterTable(const TableIdentifier& table_ident) {
 Result<bool> InMemoryNamespace::TableExists(const TableIdentifier& table_ident) const {
   const auto ns = GetNamespace(this, table_ident.ns);
   ICEBERG_RETURN_UNEXPECTED(ns);
-  return ns.value()->table_metadata_locations_.contains(table_ident.name);
+  return ns.value()->table_metadata_locations_.find(table_ident.name) != ns.value()->table_metadata_locations_.end();
 }
 
 Result<std::string> InMemoryNamespace::GetTableMetadataLocation(
@@ -396,9 +396,9 @@ Result<std::vector<TableIdentifier>> InMemoryCatalog::ListTables(
   ICEBERG_RETURN_UNEXPECTED(table_names);
   std::vector<TableIdentifier> table_idents;
   table_idents.reserve(table_names.value().size());
-  std::ranges::transform(
-      table_names.value(), std::back_inserter(table_idents),
-      [&ns](auto const& table_name) { return TableIdentifier(ns, table_name); });
+  std::transform(
+      table_names.value().begin(), table_names.value().end(), std::back_inserter(table_idents),
+      [&ns](auto const& table_name) { return TableIdentifier{ns, table_name}; });
   return table_idents;
 }
 

@@ -19,9 +19,9 @@
 
 #include "avro_stream_internal.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 
-#include <arrow/result.h>
+#include "iceberg/format_compat.h"
 
 #include "iceberg/exception.h"
 

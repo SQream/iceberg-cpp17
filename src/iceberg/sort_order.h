@@ -21,10 +21,10 @@
 
 #include <cstdint>
 #include <memory>
-#include <span>
 #include <unordered_set>
 #include <vector>
 
+#include "iceberg/cpp17_compat.h"
 #include "iceberg/iceberg_export.h"
 #include "iceberg/sort_field.h"
 #include "iceberg/type_fwd.h"

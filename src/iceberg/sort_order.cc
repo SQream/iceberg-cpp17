@@ -19,7 +19,7 @@
 
 #include "iceberg/sort_order.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <memory>
 #include <optional>
 #include <ranges>
@@ -74,7 +74,7 @@ bool SortOrder::SameOrder(const SortOrder& other) const {
 std::string SortOrder::ToString() const {
   std::string repr = "[";
   for (const auto& field : fields_) {
-    std::format_to(std::back_inserter(repr), "\n  {}", field);
+    repr += "\n  " + field.ToString();
   }
   if (!fields_.empty()) {
     repr.push_back('\n');

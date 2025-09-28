@@ -19,7 +19,7 @@
 
 #include "iceberg/expression/expression.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <utility>
 
 #include "iceberg/util/checked_cast.h"
@@ -59,7 +59,7 @@ And::And(std::shared_ptr<Expression> left, std::shared_ptr<Expression> right)
 }
 
 std::string And::ToString() const {
-  return std::format("({} and {})", left_->ToString(), right_->ToString());
+  return compat::format("({} and {})", left_->ToString(), right_->ToString());
 }
 
 Result<std::shared_ptr<Expression>> And::Negate() const {
@@ -93,7 +93,7 @@ Or::Or(std::shared_ptr<Expression> left, std::shared_ptr<Expression> right)
 }
 
 std::string Or::ToString() const {
-  return std::format("({} or {})", left_->ToString(), right_->ToString());
+  return compat::format("({} or {})", left_->ToString(), right_->ToString());
 }
 
 Result<std::shared_ptr<Expression>> Or::Negate() const {

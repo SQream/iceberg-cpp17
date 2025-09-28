@@ -30,6 +30,7 @@
 #include <climits>
 #include <cmath>
 #include <cstring>
+#include "iceberg/format_compat.h"
 #include <iomanip>
 #include <limits>
 #include <sstream>
@@ -156,7 +157,7 @@ constexpr std::array<uint64_t, kInt64DecimalDigits + 1> kUInt64PowersOfTen = {
 };
 
 /// \brief Powers of ten for Decimal with scale from 0 to 38.
-constexpr std::array<Decimal, Decimal::kMaxScale + 1> kDecimal128PowersOfTen = {
+const std::array<Decimal, Decimal::kMaxScale + 1> kDecimal128PowersOfTen = {
     Decimal(1LL),
     Decimal(10LL),
     Decimal(100LL),
@@ -501,14 +502,27 @@ Result<Decimal> Decimal::FromBigEndian(const uint8_t* bytes, int32_t length) {
   std::memcpy(reinterpret_cast<uint8_t*>(&result) + kMaxDecimalBytes - length, bytes,
               length);
 
-  if constexpr (std::endian::native == std::endian::little) {
-    auto high = static_cast<uint64_t>(result >> 64);
-    auto low = static_cast<uint64_t>(result);
-    high = std::byteswap(high);
-    low = std::byteswap(low);
-    // also need to swap the two halves
-    result = (static_cast<uint128_t>(low) << 64) | high;
-  }
+  // Convert from big-endian to native endian (assuming little-endian)
+  // This is a simplified version for C++17 compatibility
+  auto high_part = static_cast<uint64_t>(result >> 64);
+  auto low_part = static_cast<uint64_t>(result);
+  
+  // Manual byte swap for C++17 compatibility
+  auto byteswap_64 = [](uint64_t val) {
+    return ((val & 0xFF00000000000000ULL) >> 56) |
+           ((val & 0x00FF000000000000ULL) >> 40) |
+           ((val & 0x0000FF0000000000ULL) >> 24) |
+           ((val & 0x000000FF00000000ULL) >> 8) |
+           ((val & 0x00000000FF000000ULL) << 8) |
+           ((val & 0x0000000000FF0000ULL) << 24) |
+           ((val & 0x000000000000FF00ULL) << 40) |
+           ((val & 0x00000000000000FFULL) << 56);
+  };
+  
+  high_part = byteswap_64(high_part);
+  low_part = byteswap_64(low_part);
+  // also need to swap the two halves
+  result = (static_cast<uint128_t>(low_part) << 64) | high_part;
 
   if (is_negative && length < kMaxDecimalBytes) {
     // Sign extend the high bits

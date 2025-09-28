@@ -19,7 +19,7 @@
 
 #include "iceberg/sort_field.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 
 #include <gtest/gtest.h>
 
@@ -37,7 +37,7 @@ TEST(SortFieldTest, Basics) {
     EXPECT_EQ(SortDirection::kAscending, field.direction());
     EXPECT_EQ(NullOrder::kFirst, field.null_order());
     EXPECT_EQ(field.ToString(), "identity(1) asc nulls-first");
-    EXPECT_EQ(std::format("{}", field), "identity(1) asc nulls-first");
+    EXPECT_EQ(compat::format("{}", field), "identity(1) asc nulls-first");
   }
 }
 

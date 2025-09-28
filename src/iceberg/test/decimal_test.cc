@@ -440,7 +440,7 @@ TEST(DecimalTest, FromBigEndian) {
       auto native_endian = value.ToBytes();
       if constexpr (std::endian::native == std::endian::little) {
         // convert to big endian
-        std::ranges::reverse(native_endian);
+        std::reverse(native_endian);
       }
       // Limit the number of bytes we are passing to make
       // sure that it works correctly. That's why all of the
@@ -458,7 +458,7 @@ TEST(DecimalTest, FromBigEndian) {
 
       if constexpr (std::endian::native == std::endian::little) {
         // convert to big endian
-        std::ranges::reverse(native_endian);
+        std::reverse(native_endian);
       }
 
       result = Decimal::FromBigEndian(native_endian.data() + WidthMinusOne - ii, ii + 1);
@@ -472,7 +472,7 @@ TEST(DecimalTest, FromBigEndian) {
 
       if constexpr (std::endian::native == std::endian::little) {
         // convert to big endian
-        std::ranges::reverse(native_endian);
+        std::reverse(native_endian);
       }
       result = Decimal::FromBigEndian(native_endian.data(), Decimal::kByteWidth);
       ASSERT_THAT(result, IsOk());

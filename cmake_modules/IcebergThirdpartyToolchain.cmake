@@ -444,7 +444,7 @@ function(resolve_cpr_dependency)
   set(CPR_BUILD_TESTS OFF)
   set(CPR_ENABLE_CURL_HTTP_ONLY ON)
   set(CPR_ENABLE_SSL ON)
-  set(CPR_USE_SYSTEM_CURL ON)
+  set(CPR_USE_SYSTEM_CURL OFF)
 
   if(DEFINED ENV{ICEBERG_CPR_URL})
     set(CPR_URL "$ENV{ICEBERG_CPR_URL}")

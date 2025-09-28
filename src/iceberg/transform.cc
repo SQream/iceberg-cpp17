@@ -19,7 +19,7 @@
 
 #include "iceberg/transform.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <regex>
 #include <utility>
 
@@ -453,13 +453,14 @@ std::string Transform::ToString() const {
     case TransformType::kHour:
     case TransformType::kVoid:
     case TransformType::kUnknown:
-      return std::format("{}", TransformTypeToString(transform_type_));
+      return compat::format("{}", TransformTypeToString(transform_type_));
     case TransformType::kBucket:
     case TransformType::kTruncate:
-      return std::format("{}[{}]", TransformTypeToString(transform_type_),
+      return compat::format("{}[{}]", TransformTypeToString(transform_type_),
                          std::get<int32_t>(param_));
   }
-  std::unreachable();
+  // This should never be reached, but added to satisfy compiler
+  return "";
 }
 
 std::string Transform::DedupName() const { return ToString(); }
@@ -509,7 +510,7 @@ Result<std::shared_ptr<Transform>> TransformFromString(std::string_view transfor
 
   // Match bucket[16] or truncate[4]
   static const std::regex param_regex(
-      std::format(R"(({}|{})\[(\d+)\])", kBucketName, kTruncateName));
+      compat::format(R"(({}|{})\[(\d+)\])", kBucketName, kTruncateName));
   std::string str(transform_str);
   std::smatch match;
   if (std::regex_match(str, match, param_regex)) {

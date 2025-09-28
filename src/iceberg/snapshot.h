@@ -25,8 +25,10 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 #include <variant>
 
+#include "iceberg/cpp17_compat.h"
 #include "iceberg/iceberg_export.h"
 #include "iceberg/manifest/manifest_list.h"
 #include "iceberg/result.h"
@@ -53,11 +55,13 @@ ICEBERG_EXPORT constexpr std::string_view ToString(SnapshotRefType type) noexcep
       return "branch";
     case SnapshotRefType::kTag:
       return "tag";
+    default:
+      compat::unreachable();
   }
-  std::unreachable();
+  return "unknown";  // This should never be reached
 }
 /// \brief Get the relative snapshot reference type from name
-ICEBERG_EXPORT constexpr Result<SnapshotRefType> SnapshotRefTypeFromString(
+ICEBERG_EXPORT inline Result<SnapshotRefType> SnapshotRefTypeFromString(
     std::string_view str) noexcept {
   if (str == "branch") return SnapshotRefType::kBranch;
   if (str == "tag") return SnapshotRefType::kTag;

@@ -31,7 +31,7 @@ namespace {
 
 ReaderFactory GetNotImplementedFactory(FileFormatType format_type) {
   return [format_type]() -> Result<std::unique_ptr<Reader>> {
-    return NotImplemented("Missing reader factory for file format: {}", format_type);
+    return NotImplemented("Missing reader factory for file format: {}", ToString(format_type));
   };
 }
 

@@ -42,16 +42,24 @@ class ICEBERG_EXPORT Literal : public util::Formattable {
   /// of a specific primitive type. It can happen when casting a literal to a narrower
   /// primitive type.
   struct BelowMin {
-    bool operator==(const BelowMin&) const = default;
-    std::strong_ordering operator<=>(const BelowMin&) const = default;
+    bool operator==(const BelowMin&) const { return true; }
+    bool operator!=(const BelowMin&) const { return false; }
+    bool operator<(const BelowMin&) const { return false; }
+    bool operator<=(const BelowMin&) const { return true; }
+    bool operator>(const BelowMin&) const { return false; }
+    bool operator>=(const BelowMin&) const { return true; }
   };
 
   /// \brief Sentinel value to indicate that the literal value is above the valid range
   /// of a specific primitive type. It can happen when casting a literal to a narrower
   /// primitive type.
   struct AboveMax {
-    bool operator==(const AboveMax&) const = default;
-    std::strong_ordering operator<=>(const AboveMax&) const = default;
+    bool operator==(const AboveMax&) const { return true; }
+    bool operator!=(const AboveMax&) const { return false; }
+    bool operator<(const AboveMax&) const { return false; }
+    bool operator<=(const AboveMax&) const { return true; }
+    bool operator>(const AboveMax&) const { return false; }
+    bool operator>=(const AboveMax&) const { return true; }
   };
   using Value = std::variant<std::monostate,  // for null
                              bool,            // for boolean
@@ -136,7 +144,11 @@ class ICEBERG_EXPORT Literal : public util::Formattable {
   /// BelowMin or Null, the result is unordered.
   /// Note: This comparison cannot be used for sorting literals if any literal is
   /// AboveMax, BelowMin or Null.
-  std::partial_ordering operator<=>(const Literal& other) const;
+  // Comparison operators for C++17 compatibility
+  bool operator<(const Literal& other) const;
+  bool operator<=(const Literal& other) const;
+  bool operator>(const Literal& other) const;
+  bool operator>=(const Literal& other) const;
 
   /// Check if this literal represents a value above the maximum allowed value
   /// for its type. This occurs when casting from a wider type to a narrower type

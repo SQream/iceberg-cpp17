@@ -33,8 +33,9 @@ inline void PruneFieldProjection(FieldProjection& field_projection) {
       local_index_to_pruned_index.emplace(std::get<1>(child_projection.from), 0);
     }
   }
-  for (size_t pruned_index = 0; auto& [_, value] : local_index_to_pruned_index) {
-    value = pruned_index++;
+  size_t pruned_index = 0;
+  for (auto& pair : local_index_to_pruned_index) {
+    pair.second = pruned_index++;
   }
   for (auto& child_projection : field_projection.children) {
     if (child_projection.kind == FieldProjection::Kind::kProjected) {

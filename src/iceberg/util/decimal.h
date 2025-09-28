@@ -57,10 +57,14 @@ class ICEBERG_EXPORT Decimal : public util::Formattable {
   constexpr Decimal(int128_t value) noexcept  // NOLINT implicit conversion
       : data_(value) {}
 
-  /// \brief Create a Decimal from any integer not wider than 64 bits.
-  template <typename T>
-    requires(std::is_integral_v<T> && (sizeof(T) <= sizeof(uint64_t)))
-  constexpr Decimal(T value) noexcept  // NOLINT implicit conversion
+  /// \brief Create a Decimal from common integer types.
+  constexpr Decimal(int value) noexcept  // NOLINT implicit conversion
+      : data_(static_cast<int128_t>(value)) {}
+
+  constexpr Decimal(long long value) noexcept  // NOLINT implicit conversion
+      : data_(static_cast<int128_t>(value)) {}
+
+  constexpr Decimal(unsigned long long value) noexcept  // NOLINT implicit conversion
       : data_(static_cast<int128_t>(value)) {}
 
   /// \brief Parse a Decimal from a string representation.
@@ -179,18 +183,6 @@ class ICEBERG_EXPORT Decimal : public util::Formattable {
   /// Returns true if the number of significant digits is less or equal to `precision`.
   bool FitsInPrecision(int32_t precision) const;
 
-  /// \brief Spaceship operator for three-way comparison.
-  std::strong_ordering operator<=>(const Decimal& other) const {
-    if (high() != other.high()) {
-      return high() <=> other.high();
-    }
-    return low() <=> other.low();
-  }
-
-  /// \brief Compare two Decimals with different scales.
-  static std::partial_ordering Compare(const Decimal& lhs, const Decimal& rhs,
-                                       int32_t lhs_scale, int32_t rhs_scale);
-
   const uint8_t* native_endian_bytes() const {
     return reinterpret_cast<const uint8_t*>(&data_);
   }
@@ -214,8 +206,46 @@ class ICEBERG_EXPORT Decimal : public util::Formattable {
     return lhs.data_ != rhs.data_;
   }
 
+  friend bool operator<(const Decimal& lhs, const Decimal& rhs) {
+    if (lhs.high() != rhs.high()) {
+      return lhs.high() < rhs.high();
+    }
+    return lhs.low() < rhs.low();
+  }
+
+  friend bool operator<=(const Decimal& lhs, const Decimal& rhs) {
+    return lhs < rhs || lhs == rhs;
+  }
+
+  friend bool operator>(const Decimal& lhs, const Decimal& rhs) {
+    return !(lhs <= rhs);
+  }
+
+  friend bool operator>=(const Decimal& lhs, const Decimal& rhs) {
+    return !(lhs < rhs);
+  }
+
   ICEBERG_EXPORT friend Decimal operator-(const Decimal& operand);
   ICEBERG_EXPORT friend Decimal operator~(const Decimal& operand);
+
+  ICEBERG_EXPORT friend bool operator<(const Decimal& lhs, const Decimal& rhs) {
+    if (lhs.high() != rhs.high()) {
+      return lhs.high() < rhs.high();
+    }
+    return lhs.low() < rhs.low();
+  }
+
+  ICEBERG_EXPORT friend bool operator<=(const Decimal& lhs, const Decimal& rhs) {
+    return lhs < rhs || lhs == rhs;
+  }
+
+  ICEBERG_EXPORT friend bool operator>(const Decimal& lhs, const Decimal& rhs) {
+    return !(lhs <= rhs);
+  }
+
+  ICEBERG_EXPORT friend bool operator>=(const Decimal& lhs, const Decimal& rhs) {
+    return !(lhs < rhs);
+  }
 
   ICEBERG_EXPORT friend Decimal operator+(const Decimal& lhs, const Decimal& rhs);
   ICEBERG_EXPORT friend Decimal operator-(const Decimal& lhs, const Decimal& rhs);

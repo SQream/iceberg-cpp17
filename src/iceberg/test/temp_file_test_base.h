@@ -20,7 +20,7 @@
 #pragma once
 
 #include <filesystem>
-#include <format>
+#include "iceberg/format_compat.h"
 #include <fstream>
 #include <random>
 #include <string>
@@ -87,7 +87,7 @@ class TempFileTestBase : public ::testing::Test {
   std::string GenerateUniqueTempFilePath() const {
     std::filesystem::path temp_dir = std::filesystem::temp_directory_path();
     std::string file_name =
-        std::format("iceberg_test_{}_{}.tmp", TestInfo(), GenerateRandomString(8));
+        compat::format("iceberg_test_{}_{}.tmp", TestInfo(), GenerateRandomString(8));
     return (temp_dir / file_name).string();
   }
 
@@ -95,7 +95,7 @@ class TempFileTestBase : public ::testing::Test {
   std::string GenerateUniqueTempFilePathWithSuffix(const std::string& suffix) {
     std::filesystem::path temp_dir = std::filesystem::temp_directory_path();
     std::string file_name =
-        std::format("iceberg_test_{}_{}{}", TestInfo(), GenerateRandomString(8), suffix);
+        compat::format("iceberg_test_{}_{}{}", TestInfo(), GenerateRandomString(8), suffix);
     return (temp_dir / file_name).string();
   }
 
@@ -118,13 +118,9 @@ class TempFileTestBase : public ::testing::Test {
   /// \brief Get the test name for inclusion in the filename
   std::string TestInfo() const {
     if (const auto info = ::testing::UnitTest::GetInstance()->current_test_info(); info) {
-      std::string result = std::format("{}_{}", info->test_suite_name(), info->name());
+      std::string result = compat::format("{}_{}", info->test_suite_name(), info->name());
       // Replace slashes (from parameterized tests) with underscores to avoid path issues
-      for (auto& c : result) {
-        if (c == '/') {
-          c = '_';
-        }
-      }
+      std::replace(result.begin(), result.end(), '/', '_');
       return result;
     }
     return "unknown_test";
@@ -149,14 +145,14 @@ class TempFileTestBase : public ::testing::Test {
   std::string CreateTempDirectory() {
     std::filesystem::path temp_dir = std::filesystem::temp_directory_path();
     std::string dir_name =
-        std::format("iceberg_test_dir_{}_{}", TestInfo(), GenerateRandomString(8));
+        compat::format("iceberg_test_dir_{}_{}", TestInfo(), GenerateRandomString(8));
     std::filesystem::path dir_path = temp_dir / dir_name;
 
     std::error_code ec;
     std::filesystem::create_directory(dir_path, ec);
     if (ec) {
       throw std::runtime_error(
-          std::format("Failed to create temporary directory: {}", ec.message()));
+          compat::format("Failed to create temporary directory: {}", ec.message()));
     }
 
     created_temp_files_.push_back(dir_path.string());
@@ -167,11 +163,11 @@ class TempFileTestBase : public ::testing::Test {
   void WriteContentToFile(const std::string& path, const std::string& content) {
     std::ofstream file(path, std::ios::binary);
     if (!file) {
-      throw std::runtime_error(std::format("Failed to open file for writing: {}", path));
+      throw std::runtime_error(compat::format("Failed to open file for writing: {}", path));
     }
     file.write(content.data(), content.size());
     if (!file) {
-      throw std::runtime_error(std::format("Failed to write to file: {}", path));
+      throw std::runtime_error(compat::format("Failed to write to file: {}", path));
     }
   }
 

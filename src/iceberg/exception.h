@@ -47,7 +47,7 @@ class ICEBERG_EXPORT ExpressionError : public IcebergError {
 #define ICEBERG_CHECK_OR_DIE(condition, ...)                 \
   do {                                                       \
     if (!(condition)) [[unlikely]] {                         \
-      throw iceberg::IcebergError(std::format(__VA_ARGS__)); \
+      throw iceberg::IcebergError(compat::format(__VA_ARGS__)); \
     }                                                        \
   } while (0)
 

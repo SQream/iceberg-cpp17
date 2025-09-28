@@ -19,7 +19,7 @@
 
 #include "iceberg/statistics_file.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 
 #include "iceberg/util/formatter_internal.h"
 
@@ -27,34 +27,55 @@ namespace iceberg {
 
 std::string ToString(const BlobMetadata& blob_metadata) {
   std::string repr = "BlobMetadata[";
-  std::format_to(std::back_inserter(repr),
-                 "type='{}',sourceSnapshotId={},sourceSnapshotSequenceNumber={},",
-                 blob_metadata.type, blob_metadata.source_snapshot_id,
-                 blob_metadata.source_snapshot_sequence_number);
-  std::format_to(std::back_inserter(repr), "fields={},", blob_metadata.fields);
-  std::format_to(std::back_inserter(repr), "properties={}", blob_metadata.properties);
-  std::format_to(std::back_inserter(repr), "]");
+  repr += "type='" + blob_metadata.type + "'";
+  repr += ",sourceSnapshotId=" + std::to_string(blob_metadata.source_snapshot_id);
+  repr += ",sourceSnapshotSequenceNumber=" + std::to_string(blob_metadata.source_snapshot_sequence_number);
+  
+  // Format fields vector
+  repr += ",fields=[";
+  for (size_t i = 0; i < blob_metadata.fields.size(); ++i) {
+    if (i > 0) repr += ",";
+    repr += std::to_string(blob_metadata.fields[i]);
+  }
+  repr += "]";
+  
+  // Format properties map
+  repr += ",properties={";
+  bool first = true;
+  for (const auto& pair : blob_metadata.properties) {
+    if (!first) repr += ",";
+    repr += pair.first + ":" + pair.second;
+    first = false;
+  }
+  repr += "}";
+  repr += "]";
   return repr;
 }
 
 std::string ToString(const StatisticsFile& statistics_file) {
   std::string repr = "StatisticsFile[";
-  std::format_to(std::back_inserter(repr),
-                 "snapshotId={},path={},fileSizeInBytes={},fileFooterSizeInBytes={},",
-                 statistics_file.snapshot_id, statistics_file.path,
-                 statistics_file.file_size_in_bytes,
-                 statistics_file.file_footer_size_in_bytes);
-  std::format_to(std::back_inserter(repr), "blobMetadata={}",
-                 statistics_file.blob_metadata);
-  std::format_to(std::back_inserter(repr), "]");
+  repr += "snapshotId=" + std::to_string(statistics_file.snapshot_id);
+  repr += ",path=" + statistics_file.path;
+  repr += ",fileSizeInBytes=" + std::to_string(statistics_file.file_size_in_bytes);
+  repr += ",fileFooterSizeInBytes=" + std::to_string(statistics_file.file_footer_size_in_bytes);
+  
+  // Format blob_metadata vector
+  repr += ",blobMetadata=[";
+  for (size_t i = 0; i < statistics_file.blob_metadata.size(); ++i) {
+    if (i > 0) repr += ",";
+    repr += ToString(statistics_file.blob_metadata[i]);
+  }
+  repr += "]";
+  repr += "]";
   return repr;
 }
 
 std::string ToString(const PartitionStatisticsFile& partition_statistics_file) {
   std::string repr = "PartitionStatisticsFile[";
-  std::format_to(std::back_inserter(repr), "snapshotId={},path={},fileSizeInBytes={},",
-                 partition_statistics_file.snapshot_id, partition_statistics_file.path,
-                 partition_statistics_file.file_size_in_bytes);
+  repr += "snapshotId=" + std::to_string(partition_statistics_file.snapshot_id);
+  repr += ",path=" + partition_statistics_file.path;
+  repr += ",fileSizeInBytes=" + std::to_string(partition_statistics_file.file_size_in_bytes);
+  repr += "]";
   return repr;
 }
 

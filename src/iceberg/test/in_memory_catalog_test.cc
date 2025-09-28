@@ -70,14 +70,14 @@ class InMemoryCatalogTest : public ::testing::Test {
   std::string GenerateTestTableLocation(std::string table_name) {
     std::filesystem::path temp_dir = std::filesystem::temp_directory_path();
     const auto info = ::testing::UnitTest::GetInstance()->current_test_info();
-    auto table_location = std::format("{}/iceberg_test_{}_{}/{}/", temp_dir.string(),
+    auto table_location = compat::format("{}/iceberg_test_{}_{}/{}/", temp_dir.string(),
                                       info->test_suite_name(), info->name(), table_name);
     // generate a unique directory for the table
     std::error_code ec;
     std::filesystem::create_directories(table_location + "metadata", ec);
     if (ec) {
       throw std::runtime_error(
-          std::format("Failed to create temporary directory: {}, error message: {}",
+          compat::format("Failed to create temporary directory: {}, error message: {}",
                       table_location, ec.message()));
     }
 
@@ -137,7 +137,7 @@ TEST_F(InMemoryCatalogTest, RegisterTable) {
                          ReadTableMetadataFromResource("TableMetadataV2Valid.json"));
 
   auto table_location = GenerateTestTableLocation(tableIdent.name);
-  auto metadata_location = std::format("{}v1.metadata.json", table_location);
+  auto metadata_location = compat::format("{}v1.metadata.json", table_location);
   auto status = TableMetadataUtil::Write(*file_io_, metadata_location, *metadata);
   EXPECT_THAT(status, IsOk());
 

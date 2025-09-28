@@ -80,7 +80,8 @@ ICEBERG_EXPORT constexpr std::string_view TransformTypeToString(TransformType ty
     case TransformType::kVoid:
       return "void";
   }
-  std::unreachable();
+  // This should never be reached, but added to satisfy compiler
+  return "";
 }
 
 /// \brief Represents a transform used in partitioning or sorting in Iceberg.

@@ -241,8 +241,8 @@ const std::vector<AppendDatumParam> kPrimitiveTestCases = {
                                                 .value();
               // The byte array must contain the two's-complement representation of
               // the unscaled integer value in big-endian byte order.
-              for (uint8_t& rvalue : std::ranges::reverse_view(fixed)) {
-                rvalue = static_cast<uint8_t>(decimal_value & 0xFF);
+              for (auto it = fixed.rbegin(); it != fixed.rend(); ++it) {
+                *it = static_cast<uint8_t>(decimal_value & 0xFF);
                 decimal_value >>= 8;
               }
             },
@@ -329,8 +329,8 @@ const std::vector<AppendDatumParam> kPrimitiveTestCases = {
                                                 .fieldAt(0)
                                                 .value<::avro::GenericFixed>()
                                                 .value();
-              for (uint8_t& rvalue : std::ranges::reverse_view(fixed)) {
-                rvalue = static_cast<uint8_t>(decimal_value & 0xFF);
+              for (auto it = fixed.rbegin(); it != fixed.rend(); ++it) {
+                *it = static_cast<uint8_t>(decimal_value & 0xFF);
                 decimal_value >>= 8;
               }
             },

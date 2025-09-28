@@ -19,7 +19,7 @@
 
 #include "iceberg/sort_order.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <memory>
 
 #include <gtest/gtest.h>
@@ -81,7 +81,7 @@ TEST_F(SortOrderTest, Basics) {
       "  identity(7) desc nulls-first\n"
       "]";
   EXPECT_EQ(sort_order->ToString(), sort_order_str);
-  EXPECT_EQ(std::format("{}", *sort_order), sort_order_str);
+  EXPECT_EQ(compat::format("{}", *sort_order), sort_order_str);
 }
 
 TEST_F(SortOrderTest, Equality) {

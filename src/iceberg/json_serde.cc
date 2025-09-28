@@ -19,7 +19,7 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <format>
+#include "iceberg/format_compat.h"
 #include <regex>
 #include <unordered_set>
 #include <utility>
@@ -223,11 +223,191 @@ constexpr std::string_view kRequirementAssertDefaultSortOrderID =
 constexpr std::string_view kLastAssignedFieldId = "last-assigned-field-id";
 constexpr std::string_view kLastAssignedPartitionId = "last-assigned-partition-id";
 
+template <typename T>
+void SetOptionalField(nlohmann::json& json, std::string_view key,
+                      const std::optional<T>& value) {
+  if (value.has_value()) {
+    json[key] = *value;
+  }
+}
+
+std::string SafeDumpJson(const nlohmann::json& json) {
+  return json.dump(/*indent=*/-1, /*indent_char=*/' ', /*ensure_ascii=*/false,
+                   nlohmann::detail::error_handler_t::ignore);
+}
+
+template <typename T>
+Result<T> GetJsonValueImpl(const nlohmann::json& json, std::string_view key) {
+  try {
+    return json.at(key).get<T>();
+  } catch (const std::exception& ex) {
+    return JsonParseError("Failed to parse '{}' from {}: {}", key, SafeDumpJson(json),
+                          ex.what());
+  }
+}
+
+template <typename T>
+Result<std::optional<T>> GetJsonValueOptional(const nlohmann::json& json,
+                                              std::string_view key) {
+  if (!json.contains(key)) {
+    return std::nullopt;
+  }
+  ICEBERG_ASSIGN_OR_RAISE(auto value, GetJsonValueImpl<T>(json, key));
+  return std::make_optional(std::move(value));
+}
+
+template <typename T>
+Result<T> GetJsonValue(const nlohmann::json& json, std::string_view key) {
+  if (!json.contains(key)) {
+    return JsonParseError("Missing '{}' in {}", key, SafeDumpJson(json));
+  }
+  return GetJsonValueImpl<T>(json, key);
+}
+
+template <typename T>
+Result<T> GetJsonValueOrDefault(const nlohmann::json& json, std::string_view key,
+                                T default_value = T{}) {
+  if (!json.contains(key)) {
+    return default_value;
+  }
+  return GetJsonValueImpl<T>(json, key);
+}
+
+/// \brief Convert a list of items to a json array.
+///
+/// Note that ToJson(const T&) is required for this function to work.
+template <typename T>
+nlohmann::json::array_t ToJsonList(const std::vector<T>& list) {
+  return std::accumulate(list.cbegin(), list.cend(), nlohmann::json::array(),
+                         [](nlohmann::json::array_t arr, const T& item) {
+                           arr.push_back(ToJson(item));
+                           return arr;
+                         });
+}
+
+/// \brief Overload of the above function for a list of shared pointers.
+template <typename T>
+nlohmann::json::array_t ToJsonList(const std::vector<std::shared_ptr<T>>& list) {
+  return std::accumulate(list.cbegin(), list.cend(), nlohmann::json::array(),
+                         [](nlohmann::json::array_t arr, const std::shared_ptr<T>& item) {
+                           arr.push_back(ToJson(*item));
+                           return arr;
+                         });
+}
+
+/// \brief Parse a list of items from a JSON object.
+///
+/// \param[in] json The JSON object to parse.
+/// \param[in] key The key to parse.
+/// \param[in] from_json The function to parse an item from a JSON object.
+/// \return The list of items.
+template <typename T>
+Result<std::vector<T>> FromJsonList(
+    const nlohmann::json& json, std::string_view key,
+    const std::function<Result<T>(const nlohmann::json&)>& from_json) {
+  std::vector<T> list{};
+  if (json.contains(key)) {
+    ICEBERG_ASSIGN_OR_RAISE(auto list_json, GetJsonValue<nlohmann::json>(json, key));
+    if (!list_json.is_array()) {
+      return JsonParseError("Cannot parse '{}' from non-array: {}", key,
+                            SafeDumpJson(list_json));
+    }
+    for (const auto& entry_json : list_json) {
+      ICEBERG_ASSIGN_OR_RAISE(auto entry, from_json(entry_json));
+      list.emplace_back(std::move(entry));
+    }
+  }
+  return list;
+}
+
+/// \brief Parse a list of items from a JSON object.
+///
+/// \param[in] json The JSON object to parse.
+/// \param[in] key The key to parse.
+/// \param[in] from_json The function to parse an item from a JSON object.
+/// \return The list of items.
+template <typename T>
+Result<std::vector<std::shared_ptr<T>>> FromJsonList(
+    const nlohmann::json& json, std::string_view key,
+    const std::function<Result<std::shared_ptr<T>>(const nlohmann::json&)>& from_json) {
+  std::vector<std::shared_ptr<T>> list{};
+  if (json.contains(key)) {
+    ICEBERG_ASSIGN_OR_RAISE(auto list_json, GetJsonValue<nlohmann::json>(json, key));
+    if (!list_json.is_array()) {
+      return JsonParseError("Cannot parse '{}' from non-array: {}", key,
+                            SafeDumpJson(list_json));
+    }
+    for (const auto& entry_json : list_json) {
+      ICEBERG_ASSIGN_OR_RAISE(auto entry, from_json(entry_json));
+      list.emplace_back(std::move(entry));
+    }
+  }
+  return list;
+}
+
+/// \brief Convert a map of type <std::string, T> to a json object.
+///
+/// Note that ToJson(const T&) is required for this function to work.
+template <typename T>
+nlohmann::json::object_t ToJsonMap(const std::unordered_map<std::string, T>& map) {
+  return std::accumulate(map.cbegin(), map.cend(), nlohmann::json::object(),
+                         [](nlohmann::json::object_t obj, const auto& item) {
+                           obj[item.first] = ToJson(item.second);
+                           return obj;
+                         });
+}
+
+/// \brief Overload of the above function for a map of type <std::string,
+/// std::shared_ptr<T>>.
+template <typename T>
+nlohmann::json::object_t ToJsonMap(
+    const std::unordered_map<std::string, std::shared_ptr<T>>& map) {
+  return std::accumulate(map.cbegin(), map.cend(), nlohmann::json::object(),
+                         [](nlohmann::json::object_t obj, const auto& item) {
+                           obj[item.first] = ToJson(*item.second);
+                           return obj;
+                         });
+}
+
+/// \brief Parse a map of type <std::string, T> from a JSON object.
+///
+/// \param[in] json The JSON object to parse.
+/// \param[in] key The key to parse.
+/// \param[in] from_json The function to parse an item from a JSON object.
+/// \return The map of items.
+template <typename T = std::string>
+Result<std::unordered_map<std::string, T>> FromJsonMap(
+    const nlohmann::json& json, std::string_view key,
+    const std::function<Result<T>(const nlohmann::json&)>& from_json =
+        [](const nlohmann::json& json) -> Result<T> {
+      static_assert(std::is_same_v<T, std::string>, "T must be std::string");
+      try {
+        return json.get<std::string>();
+      } catch (const std::exception& ex) {
+        return JsonParseError("Cannot parse {} to a string value: {}", SafeDumpJson(json),
+                              ex.what());
+      }
+    }) {
+  std::unordered_map<std::string, T> map{};
+  if (json.contains(key)) {
+    ICEBERG_ASSIGN_OR_RAISE(auto map_json, GetJsonValue<nlohmann::json>(json, key));
+    if (!map_json.is_object()) {
+      return JsonParseError("Cannot parse '{}' from non-object: {}", key,
+                            SafeDumpJson(map_json));
+    }
+    for (const auto& [key, value] : map_json.items()) {
+      ICEBERG_ASSIGN_OR_RAISE(auto entry, from_json(value));
+      map[key] = std::move(entry);
+    }
+  }
+  return map;
+}
+
 }  // namespace
 
 nlohmann::json ToJson(const SortField& sort_field) {
   nlohmann::json json;
-  json[kTransform] = std::format("{}", *sort_field.transform());
+  json[kTransform] = sort_field.transform()->ToString();
   json[kSourceId] = sort_field.source_id();
   json[kDirection] = std::format("{}", sort_field.direction());
   json[kNullOrder] = std::format("{}", sort_field.null_order());
@@ -350,7 +530,7 @@ nlohmann::json ToJson(const Type& type) {
       return "double";
     case TypeId::kDecimal: {
       const auto& decimal_type = internal::checked_cast<const DecimalType&>(type);
-      return std::format("decimal({},{})", decimal_type.precision(),
+      return compat::format("decimal({},{})", decimal_type.precision(),
                          decimal_type.scale());
     }
     case TypeId::kDate:
@@ -367,12 +547,14 @@ nlohmann::json ToJson(const Type& type) {
       return "binary";
     case TypeId::kFixed: {
       const auto& fixed_type = internal::checked_cast<const FixedType&>(type);
-      return std::format("fixed[{}]", fixed_type.length());
+      return compat::format("fixed[{}]", fixed_type.length());
     }
     case TypeId::kUuid:
       return "uuid";
+    default:
+      compat::unreachable();
   }
-  std::unreachable();
+  return "unknown";  // This should never be reached
 }
 
 nlohmann::json ToJson(const Schema& schema) {
@@ -492,14 +674,14 @@ Result<std::unique_ptr<Type>> TypeFromJson(const nlohmann::json& json) {
       return std::make_unique<BinaryType>();
     } else if (type_str == "uuid") {
       return std::make_unique<UuidType>();
-    } else if (type_str.starts_with("fixed")) {
+    } else if (type_str.substr(0, 5) == "fixed") {
       std::regex fixed_regex(R"(fixed\[\s*(\d+)\s*\])");
       std::smatch match;
       if (std::regex_match(type_str, match, fixed_regex)) {
         return std::make_unique<FixedType>(std::stoi(match[1].str()));
       }
       return JsonParseError("Invalid fixed type: {}", type_str);
-    } else if (type_str.starts_with("decimal")) {
+    } else if (type_str.substr(0, 7) == "decimal") {
       std::regex decimal_regex(R"(decimal\(\s*(\d+)\s*,\s*(\d+)\s*\))");
       std::smatch match;
       if (std::regex_match(type_str, match, decimal_regex)) {
@@ -565,7 +747,7 @@ nlohmann::json ToJson(const PartitionField& partition_field) {
   nlohmann::json json;
   json[kSourceId] = partition_field.source_id();
   json[kFieldId] = partition_field.field_id();
-  json[kTransform] = std::format("{}", *partition_field.transform());
+  json[kTransform] = partition_field.transform()->ToString();
   json[kName] = partition_field.name();
   return json;
 }
@@ -656,17 +838,43 @@ Result<std::unique_ptr<SnapshotRef>> SnapshotRefFromJson(const nlohmann::json& j
     ICEBERG_ASSIGN_OR_RAISE(auto max_ref_age_ms,
                             GetJsonValueOptional<int64_t>(json, kMaxRefAgeMs));
 
-    return std::make_unique<SnapshotRef>(
-        snapshot_id, SnapshotRef::Branch{.min_snapshots_to_keep = min_snapshots_to_keep,
+    return std::make_unique<SnapshotRef>(SnapshotRef{
+        .snapshot_id = snapshot_id,
+        .retention = SnapshotRef::Branch{.min_snapshots_to_keep = min_snapshots_to_keep,
                                          .max_snapshot_age_ms = max_snapshot_age_ms,
-                                         .max_ref_age_ms = max_ref_age_ms});
+                                         .max_ref_age_ms = max_ref_age_ms}});
   } else {
     ICEBERG_ASSIGN_OR_RAISE(auto max_ref_age_ms,
                             GetJsonValueOptional<int64_t>(json, kMaxRefAgeMs));
 
-    return std::make_unique<SnapshotRef>(
-        snapshot_id, SnapshotRef::Tag{.max_ref_age_ms = max_ref_age_ms});
+    return std::make_unique<SnapshotRef>(SnapshotRef{
+        .snapshot_id = snapshot_id,
+        .retention = SnapshotRef::Tag{.max_ref_age_ms = max_ref_age_ms}});
   }
+}
+
+// Wrapper to convert unique_ptr to shared_ptr for template compatibility
+Result<std::shared_ptr<SnapshotRef>> SnapshotRefFromJsonShared(const nlohmann::json& json) {
+  ICEBERG_ASSIGN_OR_RAISE(auto unique_ref, SnapshotRefFromJson(json));
+  return std::shared_ptr<SnapshotRef>(std::move(unique_ref));
+}
+
+// Wrapper to convert unique_ptr to shared_ptr for template compatibility
+Result<std::shared_ptr<Snapshot>> SnapshotFromJsonShared(const nlohmann::json& json) {
+  ICEBERG_ASSIGN_OR_RAISE(auto unique_snapshot, SnapshotFromJson(json));
+  return std::shared_ptr<Snapshot>(std::move(unique_snapshot));
+}
+
+// Wrapper to convert unique_ptr to shared_ptr for template compatibility
+Result<std::shared_ptr<StatisticsFile>> StatisticsFileFromJsonShared(const nlohmann::json& json) {
+  ICEBERG_ASSIGN_OR_RAISE(auto unique_stats, StatisticsFileFromJson(json));
+  return std::shared_ptr<StatisticsFile>(std::move(unique_stats));
+}
+
+// Wrapper to convert unique_ptr to shared_ptr for template compatibility
+Result<std::shared_ptr<PartitionStatisticsFile>> PartitionStatisticsFileFromJsonShared(const nlohmann::json& json) {
+  ICEBERG_ASSIGN_OR_RAISE(auto unique_stats, PartitionStatisticsFileFromJson(json));
+  return std::shared_ptr<PartitionStatisticsFile>(std::move(unique_stats));
 }
 
 Result<std::unique_ptr<Snapshot>> SnapshotFromJson(const nlohmann::json& json) {
@@ -694,23 +902,27 @@ Result<std::unique_ptr<Snapshot>> SnapshotFromJson(const nlohmann::json& json) {
                               SafeDumpJson(value));
       }
       if (key == SnapshotSummaryFields::kOperation &&
-          !kValidDataOperation.contains(value.get<std::string>())) {
+          kValidDataOperation.find(value.get<std::string>()) == kValidDataOperation.end()) {
         return JsonParseError("Invalid snapshot operation: {}", SafeDumpJson(value));
       }
       summary[key] = value.get<std::string>();
     }
     // If summary is available but operation is missing, set operation to overwrite.
-    if (!summary.contains(SnapshotSummaryFields::kOperation)) {
+    if (summary.find(SnapshotSummaryFields::kOperation) == summary.end()) {
       summary[SnapshotSummaryFields::kOperation] = DataOperation::kOverwrite;
     }
   }
 
   ICEBERG_ASSIGN_OR_RAISE(auto schema_id, GetJsonValueOptional<int32_t>(json, kSchemaId));
 
-  return std::make_unique<Snapshot>(
-      snapshot_id, parent_snapshot_id,
-      sequence_number.value_or(TableMetadata::kInitialSequenceNumber), timestamp_ms,
-      manifest_list, std::move(summary), schema_id);
+  return std::make_unique<Snapshot>(Snapshot{
+      .snapshot_id = snapshot_id,
+      .parent_snapshot_id = parent_snapshot_id,
+      .sequence_number = sequence_number.value_or(TableMetadata::kInitialSequenceNumber),
+      .timestamp_ms = timestamp_ms,
+      .manifest_list = manifest_list,
+      .summary = std::move(summary),
+      .schema_id = schema_id});
 }
 
 nlohmann::json ToJson(const BlobMetadata& blob_metadata) {
@@ -1108,9 +1320,9 @@ Result<std::unique_ptr<TableMetadata>> TableMetadataFromJson(const nlohmann::jso
           PartitionSpec::Unpartitioned()->last_assigned_field_id();
     } else {
       table_metadata->last_partition_id =
-          std::ranges::max(table_metadata->partition_specs, {}, [](const auto& spec) {
-            return spec->last_assigned_field_id();
-          })->last_assigned_field_id();
+          (*std::max_element(table_metadata->partition_specs.begin(), table_metadata->partition_specs.end(), [](const auto& a, const auto& b) {
+            return a->last_assigned_field_id() < b->last_assigned_field_id();
+          }))->last_assigned_field_id();
     }
   }
 
@@ -1143,7 +1355,7 @@ Result<std::unique_ptr<TableMetadata>> TableMetadataFromJson(const nlohmann::jso
   if (json.contains(kRefs)) {
     ICEBERG_ASSIGN_OR_RAISE(
         table_metadata->refs,
-        FromJsonMap<std::shared_ptr<SnapshotRef>>(json, kRefs, SnapshotRefFromJson));
+        FromJsonMap<std::shared_ptr<SnapshotRef>>(json, kRefs, SnapshotRefFromJsonShared));
   } else if (table_metadata->current_snapshot_id != kInvalidSnapshotId) {
     table_metadata->refs["main"] = std::make_unique<SnapshotRef>(SnapshotRef{
         .snapshot_id = table_metadata->current_snapshot_id,
@@ -1152,14 +1364,14 @@ Result<std::unique_ptr<TableMetadata>> TableMetadataFromJson(const nlohmann::jso
   }
 
   ICEBERG_ASSIGN_OR_RAISE(table_metadata->snapshots,
-                          FromJsonList<Snapshot>(json, kSnapshots, SnapshotFromJson));
+                          FromJsonList<std::shared_ptr<Snapshot>>(json, kSnapshots, SnapshotFromJsonShared));
   ICEBERG_ASSIGN_OR_RAISE(
       table_metadata->statistics,
-      FromJsonList<StatisticsFile>(json, kStatistics, StatisticsFileFromJson));
+      FromJsonList<std::shared_ptr<StatisticsFile>>(json, kStatistics, StatisticsFileFromJsonShared));
   ICEBERG_ASSIGN_OR_RAISE(
       table_metadata->partition_statistics,
-      FromJsonList<PartitionStatisticsFile>(json, kPartitionStatistics,
-                                            PartitionStatisticsFileFromJson));
+      FromJsonList<std::shared_ptr<PartitionStatisticsFile>>(json, kPartitionStatistics,
+                                            PartitionStatisticsFileFromJsonShared));
   ICEBERG_ASSIGN_OR_RAISE(
       table_metadata->snapshot_log,
       FromJsonList<SnapshotLogEntry>(json, kSnapshotLog, SnapshotLogEntryFromJson));

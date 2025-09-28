@@ -19,7 +19,7 @@
 
 #include "iceberg/type.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <memory>
 #include <string>
 #include <thread>
@@ -87,7 +87,7 @@ TEST_P(TypeTest, ToString) {
 
 TEST_P(TypeTest, StdFormat) {
   const auto& test_case = GetParam();
-  ASSERT_EQ(test_case.repr, std::format("{}", *test_case.type));
+  ASSERT_EQ(test_case.repr, compat::format("{}", *test_case.type));
 }
 
 const static std::array<TypeTestCase, 16> kPrimitiveTypes = {{
@@ -262,7 +262,7 @@ TEST(TypeTest, Equality) {
 
   for (size_t i = 0; i < alltypes.size(); i++) {
     for (size_t j = 0; j < alltypes.size(); j++) {
-      SCOPED_TRACE(std::format("{} == {}", *alltypes[i], *alltypes[j]));
+      SCOPED_TRACE(compat::format("{} == {}", *alltypes[i], *alltypes[j]));
 
       if (i == j) {
         ASSERT_EQ(*alltypes[i], *alltypes[j]);

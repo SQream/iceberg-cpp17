@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <format>
+#include "../format_compat.h"
 #include <functional>
 #include <string>
 #include <unordered_map>
@@ -40,7 +40,7 @@ std::string DefaultToString(const U& val) {
     return val;
   } else {
     throw IcebergError(
-        std::format("Explicit to_str() is required for {}", typeid(U).name()));
+        compat::format("Explicit to_str() is required for {}", typeid(U).name()));
   }
 }
 
@@ -56,7 +56,7 @@ U DefaultFromString(const std::string& val) {
     return static_cast<U>(std::stod(val));
   } else {
     throw IcebergError(
-        std::format("Explicit from_str() is required for {}", typeid(U).name()));
+        compat::format("Explicit from_str() is required for {}", typeid(U).name()));
   }
 }
 }  // namespace internal

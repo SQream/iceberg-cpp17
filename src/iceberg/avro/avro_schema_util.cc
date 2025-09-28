@@ -17,7 +17,7 @@
  * under the License.
  */
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <mutex>
 #include <sstream>
 #include <string_view>
@@ -155,7 +155,7 @@ Status ToAvroNodeVisitor::Visit(const DoubleType& type, ::avro::NodePtr* node) {
 Status ToAvroNodeVisitor::Visit(const DecimalType& type, ::avro::NodePtr* node) {
   *node = std::make_shared<::avro::NodeFixed>();
   (*node)->setName(
-      ::avro::Name(std::format("decimal_{}_{}", type.precision(), type.scale())));
+      ::avro::Name(compat::format("decimal_{}_{}", type.precision(), type.scale())));
   (*node)->setFixedSize(::arrow::DecimalType::DecimalSize(type.precision()));
 
   ::avro::LogicalType logical_type(::avro::LogicalType::DECIMAL);
@@ -211,7 +211,7 @@ Status ToAvroNodeVisitor::Visit(const UuidType& type, ::avro::NodePtr* node) {
 
 Status ToAvroNodeVisitor::Visit(const FixedType& type, ::avro::NodePtr* node) {
   *node = std::make_shared<::avro::NodeFixed>();
-  (*node)->setName(::avro::Name(std::format("fixed_{}", type.length())));
+  (*node)->setName(::avro::Name(compat::format("fixed_{}", type.length())));
   (*node)->setFixedSize(type.length());
   return {};
 }
@@ -227,7 +227,7 @@ Status ToAvroNodeVisitor::Visit(const StructType& type, ::avro::NodePtr* node) {
   if (field_ids_.empty()) {
     (*node)->setName(::avro::Name("iceberg_schema"));  // Root node
   } else {
-    (*node)->setName(::avro::Name(std::format("r{}", field_ids_.top())));
+    (*node)->setName(::avro::Name(compat::format("r{}", field_ids_.top())));
   }
 
   for (const SchemaField& sub_field : type.fields()) {
@@ -294,7 +294,7 @@ Status ToAvroNodeVisitor::Visit(const MapType& type, ::avro::NodePtr* node) {
   } else {
     auto struct_node = std::make_shared<::avro::NodeRecord>();
     struct_node->setName(::avro::Name(
-        std::format("k{}_v{}", key_field.field_id(), value_field.field_id())));
+        compat::format("k{}_v{}", key_field.field_id(), value_field.field_id())));
 
     ::avro::NodePtr key_node;
     ICEBERG_RETURN_UNEXPECTED(Visit(key_field, &key_node));

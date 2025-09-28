@@ -22,6 +22,8 @@
 /// \file iceberg/table_identifier.h
 /// A TableIdentifier is a unique identifier for a table
 
+#include "iceberg/cpp17_compat.h"
+
 #include <string>
 #include <vector>
 

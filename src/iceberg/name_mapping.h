@@ -22,12 +22,12 @@
 #include <functional>
 #include <memory>
 #include <optional>
-#include <span>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
+#include "iceberg/cpp17_compat.h"
 #include "iceberg/iceberg_export.h"
 #include "iceberg/result.h"
 #include "iceberg/schema.h"
@@ -47,6 +47,9 @@ struct ICEBERG_EXPORT MappedField {
   std::shared_ptr<class MappedFields> nested_mapping;
 
   friend bool operator==(const MappedField& lhs, const MappedField& rhs);
+  friend bool operator!=(const MappedField& lhs, const MappedField& rhs) {
+    return !(lhs == rhs);
+  }
 };
 
 using MappedFieldConstRef = std::reference_wrapper<const MappedField>;

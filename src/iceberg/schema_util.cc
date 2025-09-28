@@ -19,7 +19,7 @@
 
 #include "iceberg/schema_util.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <string_view>
 #include <unordered_map>
 #include <utility>
@@ -33,6 +33,25 @@
 
 namespace iceberg {
 
+#if __cplusplus < 202002L
+// Simple FormatRange implementation for C++17 compatibility
+template<typename Range>
+std::string FormatRange(const Range& range, std::string_view separator,
+                       std::string_view prefix, std::string_view suffix) {
+  std::string result(prefix);
+  bool first = true;
+  for (const auto& item : range) {
+    if (!first) {
+      result += separator;
+    }
+    result += ToString(item);
+    first = false;
+  }
+  result += suffix;
+  return result;
+}
+#endif
+
 namespace {
 
 Status ValidateSchemaEvolution(const Type& expected_type, const Type& source_type) {
@@ -40,7 +59,7 @@ Status ValidateSchemaEvolution(const Type& expected_type, const Type& source_typ
     // Nested type requires identical type ids but their sub-fields are checked
     // recursively and individually.
     if (source_type.type_id() != expected_type.type_id()) {
-      return NotSupported("Cannot read {} from {}", expected_type, source_type);
+      return NotSupported("Cannot read " + expected_type.ToString() + " from " + source_type.ToString());
     }
     return {};
   }
@@ -76,16 +95,16 @@ Status ValidateSchemaEvolution(const Type& expected_type, const Type& source_typ
     default:
       break;
   }
-  return NotSupported("Cannot read {} from {}", expected_type, source_type);
+  return NotSupported("Cannot read " + expected_type.ToString() + " from " + source_type.ToString());
 }
 
 Result<FieldProjection> ProjectNested(const Type& expected_type, const Type& source_type,
                                       bool prune_source) {
   if (!expected_type.is_nested()) {
-    return InvalidSchema("Expected a nested type, but got {}", expected_type);
+    return InvalidSchema("Expected a nested type, but got " + expected_type.ToString());
   }
   if (expected_type.type_id() != source_type.type_id()) {
-    return InvalidSchema("Expected {}, but got {}", expected_type, source_type);
+    return InvalidSchema("Expected " + expected_type.ToString() + ", but got " + source_type.ToString());
   }
 
   const auto& expected_fields =
@@ -98,6 +117,9 @@ Result<FieldProjection> ProjectNested(const Type& expected_type, const Type& sou
   struct SourceFieldInfo {
     size_t local_index;
     const SchemaField* field;
+    
+    SourceFieldInfo(size_t idx, const SchemaField* fld) 
+      : local_index(idx), field(fld) {}
   };
   std::unordered_map<int32_t, SourceFieldInfo> source_field_map;
   source_field_map.reserve(source_fields.size());
@@ -107,8 +129,8 @@ Result<FieldProjection> ProjectNested(const Type& expected_type, const Type& sou
             std::piecewise_construct, std::forward_as_tuple(field.field_id()),
             std::forward_as_tuple(i, &field));
         !inserted) [[unlikely]] {
-      return InvalidSchema("Duplicate field id found, prev: {}, curr: {}",
-                           *iter->second.field, field);
+      return InvalidSchema("Duplicate field id found, prev: " + 
+                           iter->second.field->ToString() + ", curr: " + field.ToString());
     }
   }
 
@@ -173,24 +195,24 @@ std::string_view ToString(FieldProjection::Kind kind) {
     case FieldProjection::Kind::kNull:
       return "null";
   }
-  std::unreachable();
+  // This should never be reached, but added to satisfy compiler
+  return "";
 }
 
 std::string ToString(const FieldProjection& projection) {
-  std::string repr = std::format("FieldProjection(kind={}", projection.kind);
+  std::string repr = "FieldProjection(kind=" + std::string(ToString(projection.kind)) + ")";
   if (projection.kind == FieldProjection::Kind::kProjected) {
-    std::format_to(std::back_inserter(repr), ", from={}", std::get<1>(projection.from));
+    repr.insert(repr.length() - 1, ", from=" + std::to_string(std::get<1>(projection.from)));
   }
   if (!projection.children.empty()) {
-    std::format_to(std::back_inserter(repr), ", children={}",
-                   FormatRange(projection.children, ", ", "[", "]"));
+    repr.insert(repr.length() - 1, ", children=" + 
+                FormatRange(projection.children, ", ", "[", "]"));
   }
-  std::format_to(std::back_inserter(repr), ")");
   return repr;
 }
 
 std::string ToString(const SchemaProjection& projection) {
-  return std::format("{}", FormatRange(projection.fields, "\n", "", ""));
+  return FormatRange(projection.fields, "\n", "", "");
 }
 
 }  // namespace iceberg

@@ -94,8 +94,10 @@ inline auto VisitType(const Type& type, VISITOR&& visitor, ARGS&&... args)
   switch (type.type_id()) {
     ICEBERG_GENERATE_FOR_ALL_TYPES(TYPE_VISIT_INLINE);
     default:
-      std::unreachable();
+      compat::unreachable();
   }
+  // This should never be reached
+  return std::forward<VISITOR>(visitor)(type, args...);
 }
 
 #undef TYPE_VISIT_INLINE

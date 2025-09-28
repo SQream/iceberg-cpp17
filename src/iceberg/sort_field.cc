@@ -19,7 +19,7 @@
 
 #include "iceberg/sort_field.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 
 #include "iceberg/transform.h"
 #include "iceberg/util/formatter.h"  // IWYU pragma: keep
@@ -52,7 +52,9 @@ bool SortField::Satisfies(const SortField& other) const {
 }
 
 std::string SortField::ToString() const {
-  return std::format("{}({}) {} {}", *transform_, source_id_, direction_, null_order_);
+  return transform_->ToString() + "(" + std::to_string(source_id_) + ") "
+    + std::string(SortDirectionToString(direction_))
+    + " " + std::string(NullOrderToString(null_order_));
 }
 
 bool SortField::Equals(const SortField& other) const {

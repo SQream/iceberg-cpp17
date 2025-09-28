@@ -19,8 +19,12 @@
 
 #pragma once
 
+// This file requires C++20 concepts and std::formatter
+// Disable for C++17 compatibility
+#if __cplusplus >= 202002L
+
 #include <concepts>
-#include <format>
+#include "../format_compat.h"
 #include <map>
 #include <ranges>
 #include <sstream>
@@ -45,22 +49,22 @@ template <typename T>
 std::string FormatItem(const T& item) {
   if constexpr (SmartPointerType<T>) {
     if (item) {
-      return std::format("{}", *item);
+      return compat::format("{}", *item);
     } else {
       return "null";
     }
   } else {
-    return std::format("{}", item);
+    return compat::format("{}", item);
   }
 }
 
 /// \brief Generic function to join a range of elements with a separator and wrap with
 /// delimiters
-template <std::ranges::input_range Range>
+template <typename Range>
 std::string FormatRange(const Range& range, std::string_view separator,
                         std::string_view prefix, std::string_view suffix) {
-  if (std::ranges::empty(range)) {
-    return std::format("{}{}", prefix, suffix);
+  if (range.empty()) {
+    return compat::format("{}{}", prefix, suffix);
   }
 
   std::stringstream ss;
@@ -71,7 +75,7 @@ std::string FormatRange(const Range& range, std::string_view separator,
     if (!first) {
       ss << separator;
     }
-    ss << std::format("{}", element);
+    ss << compat::format("{}", element);
     first = false;
   }
 
@@ -82,13 +86,15 @@ std::string FormatRange(const Range& range, std::string_view separator,
 /// \brief Helper template for formatting map-like containers
 template <typename MapType>
 std::string FormatMap(const MapType& map) {
-  // Transform the map items into formatted key-value pairs
-  std::ranges::transform_view formatted_range =
-      map | std::views::transform([](const auto& pair) -> std::string {
-        const auto& [key, value] = pair;
-        return std::format("{}: {}", FormatItem(key), FormatItem(value));
-      });
-  return FormatRange(formatted_range, ", ", "{", "}");
+  // Transform the map items into formatted key-value pairs using C++17 approach
+  std::vector<std::string> formatted_pairs;
+  formatted_pairs.reserve(map.size());
+  for (const auto& pair : map) {
+    const auto& key = pair.first;
+    const auto& value = pair.second;
+    formatted_pairs.push_back(compat::format("{}: {}", FormatItem(key), FormatItem(value)));
+  }
+  return FormatRange(formatted_pairs, ", ", "{", "}");
 }
 
 /// \brief std::formatter specialization for std::map
@@ -146,3 +152,5 @@ struct std::formatter<std::unordered_set<T, Hash, KeyEqual, Allocator>>
         FormatRange(formatted_range, ", ", "[", "]"), ctx);
   }
 };
+
+#endif // C++20 or later

@@ -31,7 +31,7 @@ namespace {
 
 WriterFactory GetNotImplementedFactory(FileFormatType format_type) {
   return [format_type]() -> Result<std::unique_ptr<Writer>> {
-    return NotImplemented("Missing writer factory for file format: {}", format_type);
+    return NotImplemented("Missing writer factory for file format: {}", ToString(format_type));
   };
 }
 

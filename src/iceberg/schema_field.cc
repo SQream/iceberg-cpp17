@@ -19,7 +19,7 @@
 
 #include "iceberg/schema_field.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <string_view>
 
 #include "iceberg/type.h"
@@ -66,9 +66,9 @@ Status SchemaField::Validate() const {
 }
 
 std::string SchemaField::ToString() const {
-  std::string result = std::format("{} ({}): {} ({}){}", name_, field_id_, *type_,
-                                   optional_ ? "optional" : "required",
-                                   !doc_.empty() ? std::format(" - {}", doc_) : "");
+  std::string result = name_ + " (" + std::to_string(field_id_) + "): " + type_->ToString() + 
+                      " (" + (optional_ ? "optional" : "required") + ")" + 
+                      (!doc_.empty() ? " - " + doc_ : "");
   return result;
 }
 

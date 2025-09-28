@@ -19,6 +19,7 @@
 
 #include "iceberg/schema.h"
 
+#include "iceberg/format_compat.h"
 #include <memory>
 #include <thread>
 

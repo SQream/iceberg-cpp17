@@ -53,7 +53,7 @@ ICEBERG_EXPORT constexpr std::string_view ToString(SortDirection direction) {
   }
 }
 /// \brief Get the relative sort direction from name
-ICEBERG_EXPORT constexpr Result<SortDirection> SortDirectionFromString(
+ICEBERG_EXPORT inline Result<SortDirection> SortDirectionFromString(
     std::string_view str) {
   if (str == "asc") return SortDirection::kAscending;
   if (str == "desc") return SortDirection::kDescending;
@@ -78,7 +78,7 @@ ICEBERG_EXPORT constexpr std::string_view ToString(NullOrder null_order) {
   }
 }
 /// \brief Get the relative null order from name
-ICEBERG_EXPORT constexpr Result<NullOrder> NullOrderFromString(std::string_view str) {
+ICEBERG_EXPORT inline Result<NullOrder> NullOrderFromString(std::string_view str) {
   if (str == "nulls-first") return NullOrder::kFirst;
   if (str == "nulls-last") return NullOrder::kLast;
   return InvalidArgument("Invalid NullOrder string: {}", str);

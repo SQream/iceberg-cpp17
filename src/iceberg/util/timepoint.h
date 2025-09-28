@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "iceberg/cpp17_compat.h"
+
 #include <chrono>
 
 #include "iceberg/iceberg_export.h"

@@ -574,7 +574,7 @@ Status ExtractDatumFromArray(const ::arrow::Array& array, int64_t index,
       auto& fixed_datum = datum->value<::avro::GenericFixed>();
       auto& bytes = fixed_datum.value();
       bytes.assign(decimal_value.begin(), decimal_value.end());
-      std::ranges::reverse(bytes);
+      std::reverse(bytes);
       return {};
     }
 

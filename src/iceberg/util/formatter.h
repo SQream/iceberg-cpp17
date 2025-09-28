@@ -25,15 +25,18 @@
 /// meant to be included widely) does not leak <format> unnecessarily into
 /// other headers.  You must include this header to format a Formattable.
 
-#include <concepts>
-#include <format>
+#include <type_traits>
+#include "../format_compat.h"
 #include <string_view>
 
 #include "iceberg/util/formattable.h"
 
+// std::formatter is only available in C++20, disable for C++17
+#if __cplusplus >= 202002L
+
 /// \brief Make all classes deriving from iceberg::util::Formattable
 ///   formattable with std::format.
-template <std::derived_from<iceberg::util::Formattable> Derived>
+template <typename Derived, typename = typename std::enable_if_t<std::is_base_of_v<iceberg::util::Formattable, Derived>>>
 struct std::formatter<Derived> : std::formatter<std::string_view> {
   template <class FormatContext>
   auto format(const iceberg::util::Formattable& obj, FormatContext& ctx) const {
@@ -52,3 +55,5 @@ struct std::formatter<T> : std::formatter<std::string_view> {
     return std::formatter<std::string_view>::format(ToString(value), ctx);
   }
 };
+
+#endif // C++20 or later

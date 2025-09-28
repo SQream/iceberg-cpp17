@@ -23,6 +23,8 @@
 /// File format used by Iceberg.
 
 #include <string_view>
+
+#include "iceberg/cpp17_compat.h"
 #include <utility>
 
 #include "iceberg/iceberg_export.h"
@@ -50,8 +52,10 @@ ICEBERG_EXPORT inline std::string_view ToString(FileFormatType format_type) {
       return "orc";
     case FileFormatType::kPuffin:
       return "puffin";
+    default:
+      compat::unreachable();
   }
-  std::unreachable();
+  return "unknown";  // This should never be reached
 }
 
 /// \brief Convert a string to a FileFormatType

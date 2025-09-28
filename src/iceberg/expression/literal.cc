@@ -18,7 +18,7 @@
  */
 
 #include "iceberg/expression/literal.h"
-
+#include "iceberg/format_compat.h"
 #include <cmath>
 #include <concepts>
 #include <cstdint>
@@ -28,6 +28,27 @@
 #include "iceberg/util/conversions.h"
 #include "iceberg/util/macros.h"
 #include "iceberg/util/temporal_util.h"
+
+template <typename T>
+typename std::enable_if<std::is_floating_point<T>::value, std::strong_ordering>::type CompareFloat(T lhs, T rhs) {
+  // Handle NaN cases
+  if (std::isnan(lhs) && std::isnan(rhs)) {
+    // Both NaN - compare signs: -NaN < NaN
+    bool lhs_is_negative = std::signbit(lhs);
+    bool rhs_is_negative = std::signbit(rhs);
+    if (lhs_is_negative == rhs_is_negative) {
+      return std::strong_ordering::equal;
+    }
+    return lhs_is_negative ? std::strong_ordering::less : std::strong_ordering::greater;
+  }
+  if (std::isnan(lhs)) return std::strong_ordering::greater;  // NaN is greater
+  if (std::isnan(rhs)) return std::strong_ordering::less;
+  
+  // Regular comparison
+  if (lhs < rhs) return std::strong_ordering::less;
+  if (lhs > rhs) return std::strong_ordering::greater;
+  return std::strong_ordering::equal;
+}
 
 namespace iceberg {
 
@@ -327,20 +348,16 @@ Result<Literal> Literal::CastTo(const std::shared_ptr<PrimitiveType>& target_typ
 }
 
 // Template function for floating point comparison following Iceberg rules:
-// -NaN < NaN, but all NaN values (qNaN, sNaN) are treated as equivalent within their sign
-template <std::floating_point T>
-std::strong_ordering CompareFloat(T lhs, T rhs) {
-  // If both are NaN, check their signs
-  bool all_nan = std::isnan(lhs) && std::isnan(rhs);
-  if (!all_nan) {
-    // If not both NaN, use strong ordering
-    return std::strong_order(lhs, rhs);
-  }
-  // Same sign NaN values are equivalent (no qNaN vs sNaN distinction),
-  // and -NAN < NAN.
-  bool lhs_is_negative = std::signbit(lhs);
-  bool rhs_is_negative = std::signbit(rhs);
-  return lhs_is_negative <=> rhs_is_negative;
+// This broken function is removed - using the fixed one at the top of file
+
+bool Literal::operator==(const Literal& other) const { 
+  // Implementation for C++17 compatibility
+  if (value_.index() != other.value_.index()) return false;
+  return std::visit([&](const auto& lhs) -> bool {
+    using T = typename std::decay<decltype(lhs)>::type;
+    const auto& rhs = std::get<T>(other.value_);
+    return lhs == rhs;
+  }, value_);
 }
 
 namespace {
@@ -362,8 +379,6 @@ bool Comparable(TypeId lhs, TypeId rhs) {
 
 }  // namespace
 
-bool Literal::operator==(const Literal& other) const { return (*this <=> other) == 0; }
-
 // Three-way comparison operator
 std::partial_ordering Literal::operator<=>(const Literal& other) const {
   // If types are different, comparison is unordered
@@ -375,48 +390,35 @@ std::partial_ordering Literal::operator<=>(const Literal& other) const {
   // If either value is AboveMax, BelowMin or null, comparison is unordered
   if (IsAboveMax() || IsBelowMin() || other.IsAboveMax() || other.IsBelowMin() ||
       IsNull() || other.IsNull()) {
-    return std::partial_ordering::unordered;
+    return false;
   }
 
-  // Same type comparison for normal values
+  // Same type comparison for normal values  
   switch (type_->type_id()) {
-    case TypeId::kBoolean: {
-      auto this_val = std::get<bool>(value_);
-      auto other_val = std::get<bool>(other.value_);
-      if (this_val == other_val) return std::partial_ordering::equivalent;
-      return this_val ? std::partial_ordering::greater : std::partial_ordering::less;
-    }
-
+    case TypeId::kBoolean:
+      return std::get<bool>(value_) < std::get<bool>(other.value_);
     case TypeId::kInt:
-    case TypeId::kDate: {
-      auto this_val = std::get<int32_t>(value_);
-      auto other_val = std::get<int32_t>(other.value_);
-      return this_val <=> other_val;
-    }
-
+    case TypeId::kDate:
+      return std::get<int32_t>(value_) < std::get<int32_t>(other.value_);
     case TypeId::kLong:
     case TypeId::kTime:
     case TypeId::kTimestamp:
+    case TypeId::kTimestampTz:
+      return std::get<int64_t>(value_) < std::get<int64_t>(other.value_);
+    case TypeId::kFloat:
+      return CompareFloat(std::get<float>(value_), std::get<float>(other.value_)) == std::strong_ordering::less;
+    case TypeId::kDouble:
+      return CompareFloat(std::get<double>(value_), std::get<double>(other.value_)) == std::strong_ordering::less;
+    case TypeId::kString:
+      return std::get<std::string>(value_) < std::get<std::string>(other.value_);
+    case TypeId::kBinary:
+    case TypeId::kFixed:
+      return std::get<std::vector<uint8_t>>(value_) < std::get<std::vector<uint8_t>>(other.value_);
     case TypeId::kTimestampTz: {
       auto this_val = std::get<int64_t>(value_);
       auto other_val = std::get<int64_t>(other.value_);
       return this_val <=> other_val;
     }
-
-    case TypeId::kFloat: {
-      auto this_val = std::get<float>(value_);
-      auto other_val = std::get<float>(other.value_);
-      // Use strong_ordering for floating point as spec requests
-      return CompareFloat(this_val, other_val);
-    }
-
-    case TypeId::kDouble: {
-      auto this_val = std::get<double>(value_);
-      auto other_val = std::get<double>(other.value_);
-      // Use strong_ordering for floating point as spec requests
-      return CompareFloat(this_val, other_val);
-    }
-
     case TypeId::kDecimal: {
       auto& this_val = std::get<::iceberg::Decimal>(value_);
       auto& other_val = std::get<::iceberg::Decimal>(other.value_);
@@ -425,13 +427,6 @@ std::partial_ordering Literal::operator<=>(const Literal& other) const {
       return ::iceberg::Decimal::Compare(this_val, other_val, this_decimal_type.scale(),
                                          other_decimal_type.scale());
     }
-
-    case TypeId::kString: {
-      auto& this_val = std::get<std::string>(value_);
-      auto& other_val = std::get<std::string>(other.value_);
-      return this_val <=> other_val;
-    }
-
     case TypeId::kUuid: {
       auto& this_val = std::get<Uuid>(value_);
       auto& other_val = std::get<Uuid>(other.value_);
@@ -440,18 +435,21 @@ std::partial_ordering Literal::operator<=>(const Literal& other) const {
       }
       return std::partial_ordering::unordered;
     }
-
-    case TypeId::kBinary:
-    case TypeId::kFixed: {
-      auto& this_val = std::get<std::vector<uint8_t>>(value_);
-      auto& other_val = std::get<std::vector<uint8_t>>(other.value_);
-      return this_val <=> other_val;
-    }
-
     default:
-      // For unsupported types, return unordered
-      return std::partial_ordering::unordered;
+      return false;
   }
+}
+
+bool Literal::operator<=(const Literal& other) const {
+  return *this == other || *this < other;
+}
+
+bool Literal::operator>(const Literal& other) const {
+  return other < *this;
+}
+
+bool Literal::operator>=(const Literal& other) const {
+  return *this == other || *this > other;
 }
 
 std::string Literal::ToString() const {
@@ -499,7 +497,7 @@ std::string Literal::ToString() const {
       std::string result = "X'";
       result.reserve(/*prefix*/ 2 + /*suffix*/ 1 + /*data*/ binary_data.size() * 2);
       for (const auto& byte : binary_data) {
-        std::format_to(std::back_inserter(result), "{:02X}", byte);
+        compat::format_to(std::back_inserter(result), "{:02X}", byte);
       }
       result.push_back('\'');
       return result;

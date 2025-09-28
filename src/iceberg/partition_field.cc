@@ -19,7 +19,7 @@
 
 #include "iceberg/partition_field.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 
 #include "iceberg/transform.h"
 #include "iceberg/util/formatter.h"  // IWYU pragma: keep
@@ -42,7 +42,7 @@ std::string_view PartitionField::name() const { return name_; }
 std::shared_ptr<Transform> const& PartitionField::transform() const { return transform_; }
 
 std::string PartitionField::ToString() const {
-  return std::format("{} ({} {}({}))", name_, field_id_, *transform_, source_id_);
+  return compat::format("{} ({} {}({}))", name_, field_id_, transform_->ToString(), source_id_);
 }
 
 bool PartitionField::Equals(const PartitionField& other) const {

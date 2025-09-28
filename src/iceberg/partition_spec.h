@@ -25,11 +25,11 @@
 #include <cstdint>
 #include <memory>
 #include <optional>
-#include <span>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
+#include "iceberg/cpp17_compat.h"
 #include "iceberg/iceberg_export.h"
 #include "iceberg/partition_field.h"
 #include "iceberg/result.h"

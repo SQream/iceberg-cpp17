@@ -67,7 +67,12 @@ struct ICEBERG_EXPORT PartitionFieldSummary {
   inline static const SchemaField kUpperBound = SchemaField::MakeOptional(
       511, "upper_bound", iceberg::binary(), "Partition upper bound for all files");
 
-  bool operator==(const PartitionFieldSummary& other) const = default;
+  bool operator==(const PartitionFieldSummary& other) const {
+    return contains_null == other.contains_null &&
+           contains_nan == other.contains_nan &&
+           lower_bound == other.lower_bound &&
+           upper_bound == other.upper_bound;
+  }
 
   static const std::shared_ptr<StructType>& Type();
 };
@@ -260,7 +265,7 @@ ICEBERG_EXPORT inline constexpr std::string_view ToString(ManifestContent type) 
     case ManifestContent::kDeletes:
       return "deletes";
   }
-  std::unreachable();
+  compat::unreachable();
 }
 
 /// \brief Get the relative manifest content type from name

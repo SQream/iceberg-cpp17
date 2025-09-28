@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <expected>
-#include <format>
+#include "iceberg/cpp17_compat.h"
+#include "iceberg/format_compat.h"
 #include <string>
 
 #include "iceberg/iceberg_export.h"
@@ -63,7 +63,7 @@ enum class ErrorKind {
 };
 
 /// \brief Error with a kind and a message.
-struct ICEBERG_EXPORT [[nodiscard]] Error {
+struct ICEBERG_EXPORT Error {
   ErrorKind kind;
   std::string message;
 };
@@ -76,20 +76,20 @@ struct DefaultError {
 
 /// \brief Result alias
 template <typename T, typename E = typename DefaultError<T>::type>
-using Result = std::expected<T, E>;
+using Result = compat::expected<T, E>;
 
 using Status = Result<void>;
 
 /// \brief Macro to define error creation functions
 #define DEFINE_ERROR_FUNCTION(name)                                           \
   template <typename... Args>                                                 \
-  inline auto name(const std::format_string<Args...> fmt, Args&&... args)     \
-      -> std::unexpected<Error> {                                             \
-    return std::unexpected<Error>(                                            \
-        {ErrorKind::k##name, std::format(fmt, std::forward<Args>(args)...)}); \
+  inline auto name(const std::string& fmt, Args&&... args)                   \
+      -> compat::unexpected<Error> {                                          \
+    return compat::unexpected<Error>(                                         \
+        {ErrorKind::k##name, compat::format(fmt, std::forward<Args>(args)...)}); \
   }                                                                           \
-  inline auto name(const std::string& message) -> std::unexpected<Error> {    \
-    return std::unexpected<Error>({ErrorKind::k##name, message});             \
+  inline auto name(const std::string& message) -> compat::unexpected<Error> {    \
+    return compat::unexpected<Error>({ErrorKind::k##name, message});             \
   }
 
 DEFINE_ERROR_FUNCTION(AlreadyExists)

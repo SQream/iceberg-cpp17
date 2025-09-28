@@ -20,7 +20,7 @@
 #include "iceberg/type.h"
 
 #include <cstdint>
-#include <format>
+#include "iceberg/format_compat.h"
 #include <iterator>
 #include <memory>
 #include <utility>
@@ -46,7 +46,7 @@ TypeId StructType::type_id() const { return kTypeId; }
 std::string StructType::ToString() const {
   std::string repr = "struct<\n";
   for (const auto& field : fields_) {
-    std::format_to(std::back_inserter(repr), "  {}\n", field);
+    repr += "  " + field.ToString() + "\n";
   }
   repr += ">";
   return repr;
@@ -294,7 +294,7 @@ int32_t DecimalType::precision() const { return precision_; }
 int32_t DecimalType::scale() const { return scale_; }
 TypeId DecimalType::type_id() const { return kTypeId; }
 std::string DecimalType::ToString() const {
-  return std::format("decimal({}, {})", precision_, scale_);
+  return compat::format("decimal({}, {})", precision_, scale_);
 }
 bool DecimalType::Equals(const Type& other) const {
   if (other.type_id() != kTypeId) {
@@ -340,7 +340,7 @@ FixedType::FixedType(int32_t length) : length_(length) {
 
 int32_t FixedType::length() const { return length_; }
 TypeId FixedType::type_id() const { return kTypeId; }
-std::string FixedType::ToString() const { return std::format("fixed({})", length_); }
+std::string FixedType::ToString() const { return compat::format("fixed({})", length_); }
 bool FixedType::Equals(const Type& other) const {
   if (other.type_id() != kTypeId) {
     return false;

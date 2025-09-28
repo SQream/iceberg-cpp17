@@ -19,7 +19,7 @@
 
 #include "iceberg/schema_field.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <memory>
 
 #include <gtest/gtest.h>
@@ -37,7 +37,7 @@ TEST(SchemaFieldTest, Basics) {
     EXPECT_EQ(TypeId::kInt, field.type()->type_id());
     EXPECT_FALSE(field.optional());
     EXPECT_EQ("foo (1): int (required)", field.ToString());
-    EXPECT_EQ("foo (1): int (required)", std::format("{}", field));
+    EXPECT_EQ("foo (1): int (required)", compat::format("{}", field));
   }
   {
     SchemaField field =
@@ -47,7 +47,7 @@ TEST(SchemaFieldTest, Basics) {
     EXPECT_EQ(FixedType(10), *field.type());
     EXPECT_TRUE(field.optional());
     EXPECT_EQ("foo bar (2): fixed(10) (optional)", field.ToString());
-    EXPECT_EQ("foo bar (2): fixed(10) (optional)", std::format("{}", field));
+    EXPECT_EQ("foo bar (2): fixed(10) (optional)", compat::format("{}", field));
   }
   {
     SchemaField field =
@@ -57,7 +57,7 @@ TEST(SchemaFieldTest, Basics) {
     EXPECT_EQ(FixedType(10), *field.type());
     EXPECT_FALSE(field.optional());
     EXPECT_EQ("foo bar (2): fixed(10) (required)", field.ToString());
-    EXPECT_EQ("foo bar (2): fixed(10) (required)", std::format("{}", field));
+    EXPECT_EQ("foo bar (2): fixed(10) (required)", compat::format("{}", field));
   }
 }
 

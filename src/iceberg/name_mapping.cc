@@ -19,7 +19,7 @@
 
 #include "iceberg/name_mapping.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <sstream>
 
 #include "iceberg/util/formatter_internal.h"
@@ -251,14 +251,32 @@ bool operator==(const NameMapping& lhs, const NameMapping& rhs) {
 }
 
 std::string ToString(const MappedField& field) {
-  return std::format(
-      "({} -> {}{})", field.names,
+  // Convert unordered_set to string manually for C++17 compatibility
+  std::string names_str = "[";
+  bool first = true;
+  for (const auto& name : field.names) {
+    if (!first) names_str += ", ";
+    names_str += name;
+    first = false;
+  }
+  names_str += "]";
+  
+  return compat::format(
+      "({} -> {}{})", names_str,
       field.field_id.has_value() ? std::to_string(field.field_id.value()) : "null",
-      field.nested_mapping ? std::format(", {}", ToString(*field.nested_mapping)) : "");
+      field.nested_mapping ? compat::format(", {}", ToString(*field.nested_mapping)) : "");
 }
 
 std::string ToString(const MappedFields& fields) {
-  return std::format("{}", fields.fields());
+  // Convert span to string manually for C++17 compatibility
+  std::string result = "[";
+  const auto& field_span = fields.fields();
+  for (size_t i = 0; i < field_span.size(); ++i) {
+    if (i > 0) result += ", ";
+    result += ToString(field_span[i]);
+  }
+  result += "]";
+  return result;
 }
 
 std::string ToString(const NameMapping& name_mapping) {
@@ -268,7 +286,7 @@ std::string ToString(const NameMapping& name_mapping) {
   }
   std::string repr = "[\n";
   for (const auto& field : fields.fields()) {
-    std::format_to(std::back_inserter(repr), "  {}\n", ToString(field));
+    repr += "  " + ToString(field) + "\n";
   }
   repr += "]";
   return repr;

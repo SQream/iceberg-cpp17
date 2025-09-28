@@ -19,7 +19,7 @@
 
 #include "iceberg/schema.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <functional>
 #include <stack>
 
@@ -144,7 +144,7 @@ int32_t Schema::schema_id() const { return schema_id_; }
 std::string Schema::ToString() const {
   std::string repr = "schema<";
   for (const auto& field : fields_) {
-    std::format_to(std::back_inserter(repr), "  {}\n", field);
+    repr += "  " + field.ToString() + "\n";
   }
   repr += ">";
   return repr;
@@ -209,7 +209,7 @@ Result<std::unique_ptr<StructLikeAccessor>> Schema::GetAccessorById(
 
 Result<std::unique_ptr<Schema>> Schema::Select(std::span<const std::string> names,
                                                bool case_sensitive) const {
-  if (std::ranges::find(names, kAllColumns) != names.end()) {
+  if (std::find(names.begin(), names.end(), kAllColumns) != names.end()) {
     auto struct_type = ToStructType(*this);
     return FromStructType(std::move(*struct_type), std::nullopt);
   }

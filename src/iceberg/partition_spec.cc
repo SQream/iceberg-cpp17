@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
-#include <format>
+#include "iceberg/format_compat.h"
 #include <map>
 #include <memory>
 #include <ranges>
@@ -50,9 +50,9 @@ PartitionSpec::PartitionSpec(int32_t spec_id, std::vector<PartitionField> fields
   } else if (fields_.empty()) {
     last_assigned_field_id_ = kLegacyPartitionDataIdStart - 1;
   } else {
-    last_assigned_field_id_ = std::ranges::max(fields_, {}, [](const auto& field) {
-                                return field.field_id();
-                              }).field_id();
+    last_assigned_field_id_ = std::max_element(fields_.begin(), fields_.end(), [](const auto& a, const auto& b) {
+                                return a.field_id() < b.field_id();
+                              })->field_id();
   }
 }
 
@@ -141,9 +141,9 @@ bool PartitionSpec::CompatibleWith(const PartitionSpec& other) const {
 }
 
 std::string PartitionSpec::ToString() const {
-  std::string repr = std::format("partition_spec[spec_id<{}>,\n", spec_id_);
+  std::string repr = compat::format("partition_spec[spec_id<{}>,\n", spec_id_);
   for (const auto& field : fields_) {
-    std::format_to(std::back_inserter(repr), "  {}\n", field);
+    repr += "  " + field.ToString() + "\n";
   }
   repr += "]";
   return repr;

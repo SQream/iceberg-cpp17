@@ -19,7 +19,7 @@
 
 #include "iceberg/partition_spec.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 #include <memory>
 
 #include <gmock/gmock.h>
@@ -56,7 +56,7 @@ TEST(PartitionSpecTest, Basics) {
         "partition_spec[spec_id<100>,\n  day (1000 identity(5))\n  hour (1001 "
         "identity(5))\n]";
     EXPECT_EQ(spec_str, spec->ToString());
-    EXPECT_EQ(spec_str, std::format("{}", *spec));
+    EXPECT_EQ(spec_str, compat::format("{}", *spec));
   }
 }
 

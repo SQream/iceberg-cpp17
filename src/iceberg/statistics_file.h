@@ -45,7 +45,13 @@ struct ICEBERG_EXPORT BlobMetadata {
   std::unordered_map<std::string, std::string> properties;
 
   /// \brief Compare two BlobMetadatas for equality.
-  friend bool operator==(const BlobMetadata& lhs, const BlobMetadata& rhs) = default;
+  friend bool operator==(const BlobMetadata& lhs, const BlobMetadata& rhs) {
+    return lhs.type == rhs.type &&
+           lhs.source_snapshot_id == rhs.source_snapshot_id &&
+           lhs.source_snapshot_sequence_number == rhs.source_snapshot_sequence_number &&
+           lhs.fields == rhs.fields &&
+           lhs.properties == rhs.properties;
+  }
 };
 
 /// \brief Represents a statistics file in the Puffin format
@@ -62,7 +68,13 @@ struct ICEBERG_EXPORT StatisticsFile {
   std::vector<BlobMetadata> blob_metadata;
 
   /// \brief Compare two StatisticsFiles for equality.
-  friend bool operator==(const StatisticsFile& lhs, const StatisticsFile& rhs) = default;
+  friend bool operator==(const StatisticsFile& lhs, const StatisticsFile& rhs) {
+    return lhs.snapshot_id == rhs.snapshot_id &&
+           lhs.path == rhs.path &&
+           lhs.file_size_in_bytes == rhs.file_size_in_bytes &&
+           lhs.file_footer_size_in_bytes == rhs.file_footer_size_in_bytes &&
+           lhs.blob_metadata == rhs.blob_metadata;
+  }
 };
 
 /// \brief Represents a partition statistics file
@@ -77,7 +89,11 @@ struct ICEBERG_EXPORT PartitionStatisticsFile {
 
   /// \brief Compare two PartitionStatisticsFiles for equality.
   friend bool operator==(const PartitionStatisticsFile& lhs,
-                         const PartitionStatisticsFile& rhs) = default;
+                         const PartitionStatisticsFile& rhs) {
+    return lhs.snapshot_id == rhs.snapshot_id &&
+           lhs.path == rhs.path &&
+           lhs.file_size_in_bytes == rhs.file_size_in_bytes;
+  }
 };
 
 /// \brief Returns a string representation of a BlobMetadata

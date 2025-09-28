@@ -23,7 +23,7 @@
 #include <charconv>
 #include <chrono>
 #include <cstdint>
-#include <format>
+#include "iceberg/format_compat.h"
 #include <memory>
 #include <optional>
 #include <ranges>
@@ -181,13 +181,57 @@ std::vector<std::unique_ptr<TableUpdate>> ChangesForCreate(
 }  // namespace
 
 std::string ToString(const SnapshotLogEntry& entry) {
-  return std::format("SnapshotLogEntry[timestampMillis={},snapshotId={}]",
-                     entry.timestamp_ms, entry.snapshot_id);
+  return "SnapshotLogEntry[timestampMillis=" + 
+         std::to_string(UnixMsFromTimePointMs(entry.timestamp_ms)) + 
+         ",snapshotId=" + std::to_string(entry.snapshot_id) + "]";
 }
 
 std::string ToString(const MetadataLogEntry& entry) {
-  return std::format("MetadataLogEntry[timestampMillis={},file={}]", entry.timestamp_ms,
-                     entry.metadata_file);
+  return "MetadataLogEntry[timestampMillis=" + 
+         std::to_string(UnixMsFromTimePointMs(entry.timestamp_ms)) + 
+         ",file=" + entry.metadata_file + "]";
+}
+
+Result<std::unique_ptr<TableMetadata>> TableMetadata::Make(
+    const iceberg::Schema& schema, const iceberg::PartitionSpec& spec,
+    const iceberg::SortOrder& sort_order, const std::string& location,
+    const std::unordered_map<std::string, std::string>& properties, int format_version) {
+  for (const auto& [key, _] : properties) {
+    if (TableProperties::reserved_properties().contains(key)) {
+      return InvalidArgument(
+          "Table properties should not contain reserved properties, but got {}", key);
+    }
+  }
+
+  // Reassign all column ids to ensure consistency
+  int32_t last_column_id = 0;
+  auto next_id = [&last_column_id]() -> int32_t { return ++last_column_id; };
+  ICEBERG_ASSIGN_OR_RAISE(auto fresh_schema,
+                          AssignFreshIds(Schema::kInitialSchemaId, schema, next_id));
+
+  // Rebuild the partition spec using the new column ids
+  ICEBERG_ASSIGN_OR_RAISE(
+      auto fresh_spec,
+      FreshPartitionSpec(PartitionSpec::kInitialSpecId, spec, schema, *fresh_schema));
+
+  // rebuild the sort order using the new column ids
+  ICEBERG_ASSIGN_OR_RAISE(
+      auto fresh_order,
+      FreshSortOrder(SortOrder::kInitialSortOrderId, sort_order, schema, *fresh_schema))
+
+  // Validata the metrics configuration.
+  ICEBERG_RETURN_UNEXPECTED(
+      MetricsConfig::VerifyReferencedColumns(properties, *fresh_schema));
+
+  ICEBERG_RETURN_UNEXPECTED(PropertyUtil::ValidateCommitProperties(properties));
+
+  return TableMetadataBuilder::BuildFromEmpty(format_version)
+      ->SetLocation(location)
+      .SetCurrentSchema(std::move(fresh_schema), last_column_id)
+      .SetDefaultPartitionSpec(std::move(fresh_spec))
+      .SetDefaultSortOrder(std::move(fresh_order))
+      .SetProperties(properties)
+      .Build();
 }
 
 Result<std::unique_ptr<TableMetadata>> TableMetadata::Make(
@@ -237,7 +281,7 @@ Result<std::shared_ptr<Schema>> TableMetadata::Schema() const {
 }
 
 Result<std::shared_ptr<Schema>> TableMetadata::SchemaById(int32_t schema_id) const {
-  auto iter = std::ranges::find_if(schemas, [schema_id](const auto& schema) {
+  auto iter = std::find_if(schemas.begin(), schemas.end(), [schema_id](const auto& schema) {
     return schema != nullptr && schema->schema_id() == schema_id;
   });
   if (iter == schemas.end()) {
@@ -252,7 +296,7 @@ Result<std::shared_ptr<PartitionSpec>> TableMetadata::PartitionSpec() const {
 
 Result<std::shared_ptr<PartitionSpec>> TableMetadata::PartitionSpecById(
     int32_t spec_id) const {
-  auto iter = std::ranges::find_if(partition_specs, [spec_id](const auto& spec) {
+  auto iter = std::find_if(partition_specs.begin(), partition_specs.end(), [spec_id](const auto& spec) {
     return spec != nullptr && spec->spec_id() == spec_id;
   });
   if (iter == partition_specs.end()) {
@@ -266,7 +310,7 @@ Result<std::shared_ptr<SortOrder>> TableMetadata::SortOrder() const {
 }
 
 Result<std::shared_ptr<SortOrder>> TableMetadata::SortOrderById(int32_t order_id) const {
-  auto iter = std::ranges::find_if(sort_orders, [order_id](const auto& order) {
+  auto iter = std::find_if(sort_orders.begin(), sort_orders.end(), [order_id](const auto& order) {
     return order != nullptr && order->order_id() == order_id;
   });
   if (iter == sort_orders.end()) {
@@ -283,7 +327,7 @@ Result<std::shared_ptr<Snapshot>> TableMetadata::Snapshot() const {
 }
 
 Result<std::shared_ptr<Snapshot>> TableMetadata::SnapshotById(int64_t snapshot_id) const {
-  auto iter = std::ranges::find_if(snapshots, [snapshot_id](const auto& snapshot) {
+  auto iter = std::find_if(snapshots.begin(), snapshots.end(), [snapshot_id](const auto& snapshot) {
     return snapshot != nullptr && snapshot->snapshot_id == snapshot_id;
   });
   if (iter == snapshots.end()) {
@@ -305,7 +349,7 @@ bool SharedPtrVectorEquals(const std::vector<std::shared_ptr<T>>& lhs,
     return false;
   }
   for (size_t i = 0; i < lhs.size(); ++i) {
-    if (*lhs[i] != *rhs[i]) {
+    if (!(*lhs[i] == *rhs[i])) {
       return false;
     }
   }
@@ -323,7 +367,7 @@ bool SnapshotRefEquals(
     if (iter == rhs.end()) {
       return false;
     }
-    if (*iter->second != *value) {
+    if (!(*iter->second == *value)) {
       return false;
     }
   }
@@ -426,7 +470,9 @@ Result<MetadataFileCodecType> TableMetadataUtil::Codec::FromFileName(
   }
 
   // We have to be backward-compatible with .metadata.json.gz files
-  if (file_name.ends_with(kCompGzipTableMetadataFileSuffix)) {
+  const std::string suffix1 = kCompGzipTableMetadataFileSuffix;
+  if (file_name.length() >= suffix1.length() && 
+      file_name.substr(file_name.length() - suffix1.length()) == suffix1) {
     return MetadataFileCodecType::kGzip;
   }
 

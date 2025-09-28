@@ -25,6 +25,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "iceberg/cpp17_compat.h"
 #include "iceberg/iceberg_export.h"
 #include "iceberg/snapshot.h"
 #include "iceberg/table_identifier.h"

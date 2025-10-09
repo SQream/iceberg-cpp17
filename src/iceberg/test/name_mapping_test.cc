@@ -148,7 +148,7 @@ TEST_F(NameMappingTest, FindMethodsOnConstObject) {
   EXPECT_THAT(field_by_id->get().names, testing::UnorderedElementsAre("foo", "bar"));
 
   // Test Find by name on const object
-  auto field_by_name = const_mapping.Find("baz");
+  auto field_by_name = const_mapping.Find(std::string("baz"));
   ASSERT_TRUE(field_by_name.has_value());
   EXPECT_EQ(field_by_name->get().field_id, 2);
   EXPECT_THAT(field_by_name->get().names, testing::UnorderedElementsAre("baz"));
@@ -163,7 +163,7 @@ TEST_F(NameMappingTest, FindMethodsOnConstObject) {
   auto non_existent = const_mapping.Find(999);
   EXPECT_FALSE(non_existent.has_value());
 
-  auto non_existent_name = const_mapping.Find("non_existent");
+  auto non_existent_name = const_mapping.Find(std::string("non_existent"));
   EXPECT_FALSE(non_existent_name.has_value());
 
   auto non_existent_parts =
@@ -180,7 +180,7 @@ TEST_F(NameMappingTest, FindMethodsOnConstEmptyMapping) {
   EXPECT_FALSE(field_by_id.has_value());
 
   // Test Find by name on const empty mapping
-  auto field_by_name = const_empty_mapping.Find("test");
+  auto field_by_name = const_empty_mapping.Find(std::string("test"));
   EXPECT_FALSE(field_by_name.has_value());
 
   // Test Find by name parts on const empty mapping

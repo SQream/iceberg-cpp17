@@ -71,6 +71,10 @@ class ICEBERG_EXPORT SortOrder : public util::Formattable {
     return lhs.Equals(rhs);
   }
 
+  friend bool operator!=(const SortOrder& lhs, const SortOrder& rhs) {
+    return !lhs.Equals(rhs);
+  }
+
   /// \brief Validates the sort order against a schema.
   /// \param schema The schema to validate against.
   /// \return Error status if the sort order has any invalid transform.

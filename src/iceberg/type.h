@@ -58,6 +58,7 @@ class ICEBERG_EXPORT Type : public iceberg::util::Formattable {
 
   /// \brief Compare two types for equality.
   friend bool operator==(const Type& lhs, const Type& rhs) { return lhs.Equals(rhs); }
+  friend bool operator!=(const Type& lhs, const Type& rhs) { return !(lhs == rhs); }
 
  protected:
   /// \brief Compare two types for equality.

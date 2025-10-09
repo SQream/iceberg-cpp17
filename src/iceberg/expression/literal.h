@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <compare>
 #include <memory>
 #include <string>
 #include <variant>

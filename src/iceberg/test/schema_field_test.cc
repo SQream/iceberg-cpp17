@@ -37,7 +37,7 @@ TEST(SchemaFieldTest, Basics) {
     EXPECT_EQ(TypeId::kInt, field.type()->type_id());
     EXPECT_FALSE(field.optional());
     EXPECT_EQ("foo (1): int (required)", field.ToString());
-    EXPECT_EQ("foo (1): int (required)", compat::format("{}", field));
+    EXPECT_EQ("foo (1): int (required)", field.ToString());
   }
   {
     SchemaField field =
@@ -47,7 +47,7 @@ TEST(SchemaFieldTest, Basics) {
     EXPECT_EQ(FixedType(10), *field.type());
     EXPECT_TRUE(field.optional());
     EXPECT_EQ("foo bar (2): fixed(10) (optional)", field.ToString());
-    EXPECT_EQ("foo bar (2): fixed(10) (optional)", compat::format("{}", field));
+    EXPECT_EQ("foo bar (2): fixed(10) (optional)", field.ToString());
   }
   {
     SchemaField field =
@@ -57,7 +57,7 @@ TEST(SchemaFieldTest, Basics) {
     EXPECT_EQ(FixedType(10), *field.type());
     EXPECT_FALSE(field.optional());
     EXPECT_EQ("foo bar (2): fixed(10) (required)", field.ToString());
-    EXPECT_EQ("foo bar (2): fixed(10) (required)", compat::format("{}", field));
+    EXPECT_EQ("foo bar (2): fixed(10) (required)", field.ToString());
   }
 }
 

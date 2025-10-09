@@ -19,14 +19,9 @@
 
 #pragma once
 
-// This file requires C++20 concepts and std::formatter
-// Disable for C++17 compatibility
-#if __cplusplus >= 202002L
-
-#include <concepts>
+// This file provides formatter specializations for both C++17 and C++20+
 #include "../format_compat.h"
 #include <map>
-#include <ranges>
 #include <sstream>
 #include <string_view>
 #include <unordered_map>
@@ -34,6 +29,10 @@
 #include <vector>
 
 #include "iceberg/util/formatter.h"
+
+#if __cplusplus >= 202002L
+#include <concepts>
+#include <ranges>
 
 /// \brief Concept for smart pointer types
 template <typename T>
@@ -44,9 +43,32 @@ concept SmartPointerType = requires(T t) {
   typename T::element_type;
 };
 
+#else  // C++17 mode
+
+// C++17 compatible helper functions
+
+/// \brief Helper to check if type has operator-> (duck typing for smart pointers)
+template <typename T>
+struct is_smart_pointer {
+  template <typename U>
+  static auto test(int) -> decltype(std::declval<U>().operator->(), std::true_type{});
+  template <typename>
+  static std::false_type test(...);
+  using type = decltype(test<T>(0));
+  static constexpr bool value = type::value;
+};
+
+template <typename T>
+constexpr bool is_smart_pointer_v = is_smart_pointer<T>::value;
+
+#endif
+
+namespace iceberg {
+
 /// \brief Helper function to format an item using concepts to differentiate types
 template <typename T>
 std::string FormatItem(const T& item) {
+#if __cplusplus >= 202002L
   if constexpr (SmartPointerType<T>) {
     if (item) {
       return compat::format("{}", *item);
@@ -56,12 +78,23 @@ std::string FormatItem(const T& item) {
   } else {
     return compat::format("{}", item);
   }
+#else  // C++17 mode
+  if constexpr (is_smart_pointer_v<T>) {
+    if (item) {
+      return compat::format("{}", *item);
+    } else {
+      return "null";
+    }
+  } else {
+    return compat::format("{}", item);
+  }
+#endif
 }
 
 /// \brief Generic function to join a range of elements with a separator and wrap with
 /// delimiters
 template <typename Range>
-std::string FormatRange(const Range& range, std::string_view separator,
+std::string FormatContainerRange(const Range& range, std::string_view separator,
                         std::string_view prefix, std::string_view suffix) {
   if (range.empty()) {
     return compat::format("{}{}", prefix, suffix);
@@ -94,8 +127,10 @@ std::string FormatMap(const MapType& map) {
     const auto& value = pair.second;
     formatted_pairs.push_back(compat::format("{}: {}", FormatItem(key), FormatItem(value)));
   }
-  return FormatRange(formatted_pairs, ", ", "{", "}");
+  return FormatContainerRange(formatted_pairs, ", ", "{", "}");
 }
+
+#if __cplusplus >= 202002L
 
 /// \brief std::formatter specialization for std::map
 template <typename K, typename V>
@@ -123,7 +158,7 @@ struct std::formatter<std::vector<T>> : std::formatter<std::string_view> {
     auto formatted_range =
         vec | std::views::transform([](const auto& item) { return FormatItem(item); });
     return std::formatter<std::string_view>::format(
-        FormatRange(formatted_range, ", ", "[", "]"), ctx);
+        FormatContainerRange(formatted_range, ", ", "[", "]"), ctx);
   }
 };
 
@@ -135,7 +170,7 @@ struct std::formatter<std::span<T, Extent>> : std::formatter<std::string_view> {
     auto formatted_range =
         span | std::views::transform([](const auto& item) { return FormatItem(item); });
     return std::formatter<std::string_view>::format(
-        FormatRange(formatted_range, ", ", "[", "]"), ctx);
+        FormatContainerRange(formatted_range, ", ", "[", "]"), ctx);
   }
 };
 
@@ -149,8 +184,71 @@ struct std::formatter<std::unordered_set<T, Hash, KeyEqual, Allocator>>
     auto formatted_range =
         set | std::views::transform([](const auto& item) { return FormatItem(item); });
     return std::formatter<std::string_view>::format(
-        FormatRange(formatted_range, ", ", "[", "]"), ctx);
+        FormatContainerRange(formatted_range, ", ", "[", "]"), ctx);
   }
 };
 
+#else  // C++17 mode - use fmt::formatter specializations
+
+/// \brief Helper function to format vectors in C++17
+template <typename T>
+std::string FormatVector(const std::vector<T>& vec) {
+  std::vector<std::string> formatted_items;
+  formatted_items.reserve(vec.size());
+  for (const auto& item : vec) {
+    formatted_items.push_back(FormatItem(item));
+  }
+  return FormatContainerRange(formatted_items, ", ", "[", "]");
+}
+
+/// \brief Helper function to format unordered_set in C++17
+template <typename T, typename Hash, typename KeyEqual, typename Allocator>
+std::string FormatUnorderedSet(const std::unordered_set<T, Hash, KeyEqual, Allocator>& set) {
+  std::vector<std::string> formatted_items;
+  formatted_items.reserve(set.size());
+  for (const auto& item : set) {
+    formatted_items.push_back(FormatItem(item));
+  }
+  return FormatContainerRange(formatted_items, ", ", "[", "]");
+}
+
 #endif // C++20 or later
+
+} // namespace iceberg
+
+// For C++17 mode, provide fmt::formatter specializations
+#if __cplusplus < 202002L
+
+template <typename K, typename V>
+struct fmt::formatter<std::map<K, V>> : fmt::formatter<std::string_view> {
+  template <typename FormatContext>
+  auto format(const std::map<K, V>& map, FormatContext& ctx) -> decltype(ctx.out()) {
+    return fmt::formatter<std::string_view>::format(iceberg::FormatMap(map), ctx);
+  }
+};
+
+template <typename K, typename V>
+struct fmt::formatter<std::unordered_map<K, V>> : fmt::formatter<std::string_view> {
+  template <typename FormatContext>
+  auto format(const std::unordered_map<K, V>& map, FormatContext& ctx) -> decltype(ctx.out()) {
+    return fmt::formatter<std::string_view>::format(iceberg::FormatMap(map), ctx);
+  }
+};
+
+template <typename T>
+struct fmt::formatter<std::vector<T>> : fmt::formatter<std::string_view> {
+  template <typename FormatContext>
+  auto format(const std::vector<T>& vec, FormatContext& ctx) -> decltype(ctx.out()) {
+    return fmt::formatter<std::string_view>::format(iceberg::FormatVector(vec), ctx);
+  }
+};
+
+template <typename T, typename Hash, typename KeyEqual, typename Allocator>
+struct fmt::formatter<std::unordered_set<T, Hash, KeyEqual, Allocator>> : fmt::formatter<std::string_view> {
+  template <typename FormatContext>
+  auto format(const std::unordered_set<T, Hash, KeyEqual, Allocator>& set, FormatContext& ctx) -> decltype(ctx.out()) {
+    return fmt::formatter<std::string_view>::format(iceberg::FormatUnorderedSet(set), ctx);
+  }
+};
+
+#endif

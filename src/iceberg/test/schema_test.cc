@@ -60,7 +60,9 @@ TEST(SchemaTest, Basics) {
   ASSERT_THAT(schema.GetFieldByName("foo"), ::testing::Optional(field1));
   ASSERT_THAT(schema.GetFieldByName("bar"), ::testing::Optional(field2));
 
-  ASSERT_EQ(std::nullopt, schema.GetFieldById(0));
+    auto null_result = schema.GetFieldById(0);
+    ASSERT_TRUE(null_result.has_value());
+  ASSERT_EQ(std::nullopt, null_result.value());
   auto result = schema.GetFieldByIndex(2);
   ASSERT_THAT(result, IsError(iceberg::ErrorKind::kInvalidArgument));
   ASSERT_THAT(result,
@@ -69,7 +71,9 @@ TEST(SchemaTest, Basics) {
   ASSERT_THAT(result, IsError(iceberg::ErrorKind::kInvalidArgument));
   ASSERT_THAT(result,
               iceberg::HasErrorMessage("Invalid index -1 to get field from struct"));
-  ASSERT_EQ(std::nullopt, schema.GetFieldByName("element"));
+  auto name_result = schema.GetFieldByName("element");
+    ASSERT_TRUE(name_result.has_value());
+    ASSERT_EQ(std::nullopt, name_result.value());
   ASSERT_EQ(0, schema.IdentifierFieldIds().size());
   auto identifier_field_names = schema.IdentifierFieldNames();
   ASSERT_THAT(identifier_field_names, iceberg::IsOk());

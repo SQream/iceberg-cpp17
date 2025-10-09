@@ -119,6 +119,7 @@ class ICEBERG_EXPORT NameMapping {
   const MappedFields& AsMappedFields() const;
 
   ICEBERG_EXPORT friend bool operator==(const NameMapping& lhs, const NameMapping& rhs);
+  ICEBERG_EXPORT friend bool operator!=(const NameMapping& lhs, const NameMapping& rhs);
 
  private:
   explicit NameMapping(std::unique_ptr<MappedFields> mapping);

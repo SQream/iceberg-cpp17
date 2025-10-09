@@ -63,10 +63,9 @@ class ComparisonLiteralTest
 TEST_P(ComparisonLiteralTest, ComparisonTest) {
   const auto& param = GetParam();
 
-  EXPECT_EQ(param.small_literal <=> param.equal_literal,
-            std::partial_ordering::equivalent);
-  EXPECT_EQ(param.small_literal <=> param.large_literal, std::partial_ordering::less);
-  EXPECT_EQ(param.large_literal <=> param.small_literal, std::partial_ordering::greater);
+  EXPECT_TRUE(param.small_literal == param.equal_literal);
+  EXPECT_TRUE(param.small_literal < param.large_literal);
+  EXPECT_TRUE(param.large_literal > param.small_literal);
 }
 
 // Parameter struct for cast tests
@@ -93,7 +92,88 @@ TEST(LiteralTest, CrossTypeComparison) {
   auto string_literal = Literal::String("42");
 
   // Different types should return unordered
-  EXPECT_EQ(int_literal <=> string_literal, std::partial_ordering::unordered);
+  // Different types cannot be compared - both < and > should be false
+  EXPECT_FALSE(int_literal < string_literal);
+  EXPECT_FALSE(int_literal > string_literal);
+  EXPECT_FALSE(int_literal == string_literal);
+}
+
+// Overflow tests
+TEST(LiteralTest, LongCastToOverflow) {
+  // Test overflow cases
+  auto max_long =
+      Literal::Long(static_cast<int64_t>(std::numeric_limits<int32_t>::max()) + 1);
+  auto min_long =
+      Literal::Long(static_cast<int64_t>(std::numeric_limits<int32_t>::min()) - 1);
+
+  auto max_result = max_long.CastTo(int32());
+  ASSERT_THAT(max_result, IsOk());
+  EXPECT_TRUE(max_result->IsAboveMax());
+
+  auto min_result = min_long.CastTo(int32());
+  ASSERT_THAT(min_result, IsOk());
+  EXPECT_TRUE(min_result->IsBelowMin());
+
+  max_result = max_long.CastTo(date());
+  ASSERT_THAT(max_result, IsOk());
+  EXPECT_TRUE(max_result->IsAboveMax());
+
+  min_result = min_long.CastTo(date());
+  ASSERT_THAT(min_result, IsOk());
+  EXPECT_TRUE(min_result->IsBelowMin());
+}
+
+TEST(LiteralTest, DoubleCastToOverflow) {
+  // Test overflow cases for Double to Float
+  auto max_double = Literal::Double(double{std::numeric_limits<float>::max()} * 2);
+  auto min_double = Literal::Double(-double{std::numeric_limits<float>::max()} * 2);
+
+  auto max_result = max_double.CastTo(float32());
+  ASSERT_THAT(max_result, IsOk());
+  EXPECT_TRUE(max_result->IsAboveMax());
+
+  auto min_result = min_double.CastTo(float32());
+  ASSERT_THAT(min_result, IsOk());
+  EXPECT_TRUE(min_result->IsBelowMin());
+}
+
+// Error cases for casts
+TEST(LiteralTest, CastToError) {
+  std::vector<uint8_t> data = {0x01, 0x02, 0x03, 0x04};
+  auto binary_literal = Literal::Binary(data);
+  auto empty_binary = Literal::Binary({});
+
+  EXPECT_EQ(binary_literal.type()->type_id(), TypeId::kBinary);
+  EXPECT_EQ(empty_binary.type()->type_id(), TypeId::kBinary);
+
+  EXPECT_EQ(binary_literal.ToString(), "010203FF");
+  EXPECT_EQ(empty_binary.ToString(), "");
+}
+
+TEST(LiteralTest, BinaryComparison) {
+  std::vector<uint8_t> data1 = {0x01, 0x02};
+  std::vector<uint8_t> data2 = {0x01, 0x03};
+  std::vector<uint8_t> data3 = {0x01, 0x02};
+
+  auto binary1 = Literal::Binary(data1);
+  auto binary2 = Literal::Binary(data2);
+  auto binary3 = Literal::Binary(data3);
+
+  EXPECT_EQ(binary1 <=> binary3, std::partial_ordering::equivalent);
+  EXPECT_EQ(binary1 <=> binary2, std::partial_ordering::less);
+  EXPECT_EQ(binary2 <=> binary1, std::partial_ordering::greater);
+}
+
+// Cross-type comparison tests
+TEST(LiteralTest, CrossTypeComparison) {
+  auto int_literal = Literal::Int(42);
+  auto string_literal = Literal::String("42");
+
+  // Different types should return unordered
+  // Different types cannot be compared - both < and > should be false
+  EXPECT_FALSE(int_literal < string_literal);
+  EXPECT_FALSE(int_literal > string_literal);
+  EXPECT_FALSE(int_literal == string_literal);
 }
 
 // Overflow tests
@@ -170,13 +250,13 @@ TEST(LiteralTest, FloatSpecialValuesComparison) {
   auto pos_nan = Literal::Float(std::numeric_limits<float>::quiet_NaN());
 
   // Test the ordering: -NaN < -Infinity < -value < -0 < 0 < value < Infinity < NaN
-  EXPECT_EQ(neg_nan <=> neg_inf, std::partial_ordering::less);
-  EXPECT_EQ(neg_inf <=> neg_value, std::partial_ordering::less);
-  EXPECT_EQ(neg_value <=> neg_zero, std::partial_ordering::less);
-  EXPECT_EQ(neg_zero <=> pos_zero, std::partial_ordering::less);
-  EXPECT_EQ(pos_zero <=> pos_value, std::partial_ordering::less);
-  EXPECT_EQ(pos_value <=> pos_inf, std::partial_ordering::less);
-  EXPECT_EQ(pos_inf <=> pos_nan, std::partial_ordering::less);
+  EXPECT_TRUE(neg_nan < neg_inf);
+  EXPECT_TRUE(neg_inf < neg_value);
+  EXPECT_TRUE(neg_value < neg_zero);
+  EXPECT_TRUE(neg_zero < pos_zero);
+  EXPECT_TRUE(pos_zero < pos_value);
+  EXPECT_TRUE(pos_value < pos_inf);
+  EXPECT_TRUE(pos_inf < pos_nan);
 }
 
 TEST(LiteralTest, FloatNaNComparison) {
@@ -185,8 +265,8 @@ TEST(LiteralTest, FloatNaNComparison) {
   auto signaling_nan = Literal::Float(std::numeric_limits<float>::signaling_NaN());
 
   // NaN should be equal to itself in strong ordering
-  EXPECT_EQ(nan1 <=> nan2, std::partial_ordering::equivalent);
-  EXPECT_EQ(nan1 <=> signaling_nan, std::partial_ordering::equivalent);
+  EXPECT_TRUE(nan1 == nan2);
+  EXPECT_TRUE(nan1 == signaling_nan);
 }
 
 TEST(LiteralTest, FloatInfinityComparison) {
@@ -195,9 +275,9 @@ TEST(LiteralTest, FloatInfinityComparison) {
   auto max_value = Literal::Float(std::numeric_limits<float>::max());
   auto min_value = Literal::Float(std::numeric_limits<float>::lowest());
 
-  EXPECT_EQ(neg_inf <=> min_value, std::partial_ordering::less);
-  EXPECT_EQ(max_value <=> pos_inf, std::partial_ordering::less);
-  EXPECT_EQ(neg_inf <=> pos_inf, std::partial_ordering::less);
+  EXPECT_TRUE(neg_inf < min_value);
+  EXPECT_TRUE(max_value < pos_inf);
+  EXPECT_TRUE(neg_inf < pos_inf);
 }
 
 TEST(LiteralTest, FloatZeroComparison) {
@@ -205,7 +285,7 @@ TEST(LiteralTest, FloatZeroComparison) {
   auto pos_zero = Literal::Float(0.0f);
 
   // -0 should be less than +0
-  EXPECT_EQ(neg_zero <=> pos_zero, std::partial_ordering::less);
+  EXPECT_TRUE(neg_zero < pos_zero);
 }
 
 // Double special values tests
@@ -221,13 +301,13 @@ TEST(LiteralTest, DoubleSpecialValuesComparison) {
   auto pos_nan = Literal::Double(std::numeric_limits<double>::quiet_NaN());
 
   // Test the ordering: -NaN < -Infinity < -value < -0 < 0 < value < Infinity < NaN
-  EXPECT_EQ(neg_nan <=> neg_inf, std::partial_ordering::less);
-  EXPECT_EQ(neg_inf <=> neg_value, std::partial_ordering::less);
-  EXPECT_EQ(neg_value <=> neg_zero, std::partial_ordering::less);
-  EXPECT_EQ(neg_zero <=> pos_zero, std::partial_ordering::less);
-  EXPECT_EQ(pos_zero <=> pos_value, std::partial_ordering::less);
-  EXPECT_EQ(pos_value <=> pos_inf, std::partial_ordering::less);
-  EXPECT_EQ(pos_inf <=> pos_nan, std::partial_ordering::less);
+  EXPECT_TRUE(neg_nan < neg_inf);
+  EXPECT_TRUE(neg_inf < neg_value);
+  EXPECT_TRUE(neg_value < neg_zero);
+  EXPECT_TRUE(neg_zero < pos_zero);
+  EXPECT_TRUE(pos_zero < pos_value);
+  EXPECT_TRUE(pos_value < pos_inf);
+  EXPECT_TRUE(pos_inf < pos_nan);
 }
 
 TEST(LiteralTest, DoubleNaNComparison) {
@@ -236,8 +316,8 @@ TEST(LiteralTest, DoubleNaNComparison) {
   auto signaling_nan = Literal::Double(std::numeric_limits<double>::signaling_NaN());
 
   // NaN should be equal to itself in strong ordering
-  EXPECT_EQ(nan1 <=> nan2, std::partial_ordering::equivalent);
-  EXPECT_EQ(nan1 <=> signaling_nan, std::partial_ordering::equivalent);
+  EXPECT_TRUE(nan1 == nan2);
+  EXPECT_TRUE(nan1 == signaling_nan);
 }
 
 TEST(LiteralTest, DoubleInfinityComparison) {
@@ -246,16 +326,17 @@ TEST(LiteralTest, DoubleInfinityComparison) {
   auto max_value = Literal::Double(std::numeric_limits<double>::max());
   auto min_value = Literal::Double(std::numeric_limits<double>::lowest());
 
-  EXPECT_EQ(neg_inf <=> min_value, std::partial_ordering::less);
-  EXPECT_EQ(max_value <=> pos_inf, std::partial_ordering::less);
-  EXPECT_EQ(neg_inf <=> pos_inf, std::partial_ordering::less);
+  EXPECT_TRUE(neg_inf < min_value);
+  EXPECT_TRUE(max_value < pos_inf);
+  EXPECT_TRUE(neg_inf < pos_inf);
 }
 
 TEST(LiteralTest, DoubleZeroComparison) {
   auto neg_zero = Literal::Double(-0.0);
   auto pos_zero = Literal::Double(0.0);
 
-  EXPECT_EQ(neg_zero <=> pos_zero, std::partial_ordering::less);
+  // -0 should be less than +0
+  EXPECT_TRUE(neg_zero < pos_zero);
 }
 
 TEST(LiteralTest, UuidComparison) {

@@ -80,6 +80,10 @@ class ICEBERG_EXPORT PartitionSpec : public util::Formattable {
     return lhs.Equals(rhs);
   }
 
+  friend bool operator!=(const PartitionSpec& lhs, const PartitionSpec& rhs) {
+    return !lhs.Equals(rhs);
+  }
+
   /// \brief Validates the partition spec against a schema.
   /// \param schema The schema to validate against.
   /// \param allow_missing_fields Whether to skip validation for partition fields whose

@@ -19,12 +19,18 @@
 
 #include <iostream>
 
+#ifdef ICEBERG_BUILD_BUNDLE
 #include "iceberg/arrow/arrow_file_io.h"
 #include "iceberg/avro/avro_register.h"
+#include "iceberg/parquet/parquet_register.h"
+#else
+#include "external_arrow_file_io.h"
+#endif
 #include "iceberg/catalog/memory/in_memory_catalog.h"
 #include "iceberg/manifest/manifest_entry.h"
 #include "iceberg/parquet/parquet_register.h"
 #include "iceberg/table.h"
+#include "iceberg/table_identifier.h"
 #include "iceberg/table_scan.h"
 
 int main(int argc, char** argv) {
@@ -39,20 +45,28 @@ int main(int argc, char** argv) {
   const std::string table_location = argv[3];
   const std::unordered_map<std::string, std::string> properties;
 
+#ifdef ICEBERG_BUILD_BUNDLE
   iceberg::avro::RegisterAll();
   iceberg::parquet::RegisterAll();
+#endif
 
+#ifdef ICEBERG_BUILD_BUNDLE
   auto catalog = iceberg::InMemoryCatalog::Make("test", iceberg::arrow::MakeLocalFileIO(),
                                                 warehouse_location, properties);
+#else
+  auto catalog = iceberg::InMemoryCatalog::Make("test", iceberg::example::MakeExternalArrowFileIO(),
+                                                warehouse_location, properties);
+#endif
 
-  auto register_result = catalog->RegisterTable({.name = table_name}, table_location);
+  iceberg::TableIdentifier table_id{{}, table_name};
+  auto register_result = catalog->RegisterTable(table_id, table_location);
   if (!register_result.has_value()) {
     std::cerr << "Failed to register table: " << register_result.error().message
               << std::endl;
     return 1;
   }
 
-  auto load_result = catalog->LoadTable({.name = table_name});
+  auto load_result = catalog->LoadTable(table_id);
   if (!load_result.has_value()) {
     std::cerr << "Failed to load table: " << load_result.error().message << std::endl;
     return 1;

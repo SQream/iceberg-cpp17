@@ -1,6 +1,7 @@
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
+ * or more conttemplate <typename T>
+struct fmt::formatter<T, typename std::enable_if_t<has_ToString_v<T>, char>> : fmt::formatter<std::string_view> {butor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
@@ -56,4 +57,34 @@ struct std::formatter<T> : std::formatter<std::string_view> {
   }
 };
 
+#else // C++17 mode - provide fmt::formatter specializations
+
+// SFINAE helper to detect ToString function
+template <typename T>
+struct has_ToString {
+  template <typename U>
+  static auto test(int) -> decltype(ToString(std::declval<const U&>()), std::true_type{});
+  template <typename>
+  static std::false_type test(...);
+  using type = decltype(test<T>(0));
+  static constexpr bool value = type::value;
+};
+
+template <typename T>
+constexpr bool has_ToString_v = has_ToString<T>::value;
+
 #endif // C++20 or later
+
+
+// For C++17 mode, provide fmt::formatter specializations outside any namespace
+#if __cplusplus < 202002L
+
+template <typename T>
+struct fmt::formatter<T, typename std::enable_if_t<has_ToString_v<T>, char>> : fmt::formatter<std::string_view> {
+  template <typename FormatContext>
+  auto format(const T& value, FormatContext& ctx) -> decltype(ctx.out()) {
+    return fmt::formatter<std::string_view>::format(ToString(value), ctx);
+  }
+};
+
+#endif

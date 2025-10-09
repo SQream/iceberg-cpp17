@@ -78,6 +78,9 @@ class ICEBERG_EXPORT SchemaField : public iceberg::util::Formattable {
   friend bool operator==(const SchemaField& lhs, const SchemaField& rhs) {
     return lhs.Equals(rhs);
   }
+  friend bool operator!=(const SchemaField& lhs, const SchemaField& rhs) {
+    return !(lhs == rhs);
+  }
 
   SchemaField AsRequired() const {
     auto copy = *this;

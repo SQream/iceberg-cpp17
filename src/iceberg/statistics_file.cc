@@ -34,7 +34,7 @@ std::string ToString(const BlobMetadata& blob_metadata) {
   // Format fields vector
   repr += ",fields=[";
   for (size_t i = 0; i < blob_metadata.fields.size(); ++i) {
-    if (i > 0) repr += ",";
+    if (i > 0) repr += ", ";
     repr += std::to_string(blob_metadata.fields[i]);
   }
   repr += "]";
@@ -43,8 +43,8 @@ std::string ToString(const BlobMetadata& blob_metadata) {
   repr += ",properties={";
   bool first = true;
   for (const auto& pair : blob_metadata.properties) {
-    if (!first) repr += ",";
-    repr += pair.first + ":" + pair.second;
+    if (!first) repr += ", ";
+    repr += pair.first + ": " + pair.second;
     first = false;
   }
   repr += "}";
@@ -62,7 +62,7 @@ std::string ToString(const StatisticsFile& statistics_file) {
   // Format blob_metadata vector
   repr += ",blobMetadata=[";
   for (size_t i = 0; i < statistics_file.blob_metadata.size(); ++i) {
-    if (i > 0) repr += ",";
+    if (i > 0) repr += ", ";
     repr += ToString(statistics_file.blob_metadata[i]);
   }
   repr += "]";

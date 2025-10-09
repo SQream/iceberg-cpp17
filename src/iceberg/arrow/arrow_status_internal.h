@@ -40,8 +40,8 @@ inline ErrorKind ToErrorKind(const ::arrow::Status& status) {
 #define ICEBERG_ARROW_ASSIGN_OR_RETURN_IMPL(result_name, lhs, rexpr, error_transform) \
   auto&& result_name = (rexpr);                                                       \
   if (!result_name.ok()) {                                                            \
-    return std::unexpected<Error>{{.kind = error_transform(result_name.status()),     \
-                                   .message = result_name.status().ToString()}};      \
+    Error err_val{error_transform(result_name.status()), result_name.status().ToString()};           \
+    return compat::unexpected<Error>(err_val);                                        \
   }                                                                                   \
   lhs = std::move(result_name).ValueOrDie();
 
@@ -54,8 +54,8 @@ inline ErrorKind ToErrorKind(const ::arrow::Status& status) {
   do {                                                                               \
     auto&& _status = (expr);                                                         \
     if (!_status.ok()) {                                                             \
-      return std::unexpected<Error>{{.kind = ::iceberg::arrow::ToErrorKind(_status), \
-                                     .message = _status.ToString()}};                \
+      Error err_val{::iceberg::arrow::ToErrorKind(_status), _status.ToString()};    \
+      return compat::unexpected<Error>(err_val);                                    \
     }                                                                                \
   } while (0)
 

@@ -22,7 +22,6 @@
 #include <arrow/array/builder_nested.h>
 #include <arrow/array/builder_primitive.h>
 #include <arrow/extension_type.h>
-#include <arrow/json/from_string.h>
 #include <arrow/type.h>
 #include <arrow/util/decimal.h>
 #include <avro/Generic.hh>
@@ -574,7 +573,7 @@ Status ExtractDatumFromArray(const ::arrow::Array& array, int64_t index,
       auto& fixed_datum = datum->value<::avro::GenericFixed>();
       auto& bytes = fixed_datum.value();
       bytes.assign(decimal_value.begin(), decimal_value.end());
-      std::reverse(bytes);
+      std::reverse(bytes.begin(), bytes.end());
       return {};
     }
 

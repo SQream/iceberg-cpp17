@@ -107,14 +107,14 @@ TEST_F(SnapshotTest, ConstructionAndFieldAccess) {
 
 TEST_F(SnapshotTest, EqualityComparison) {
   // Test the == and != operators
-  Snapshot snapshot1(12345, {}, 1, TimePointMsFromUnixMs(1615569200000),
-                     "s3://example/manifest_list.avro", summary1, {});
+  Snapshot snapshot1{12345, {}, 1, TimePointMsFromUnixMs(1615569200000),
+                     "s3://example/manifest_list.avro", summary1, {}};
 
-  Snapshot snapshot2(12345, {}, 1, TimePointMsFromUnixMs(1615569200000),
-                     "s3://example/manifest_list.avro", summary2, {});
+  Snapshot snapshot2{12345, {}, 1, TimePointMsFromUnixMs(1615569200000),
+                     "s3://example/manifest_list.avro", summary2, {}};
 
-  Snapshot snapshot3(67890, {}, 1, TimePointMsFromUnixMs(1615569200000),
-                     "s3://example/manifest_list.avro", summary3, {});
+  Snapshot snapshot3{67890, {}, 1, TimePointMsFromUnixMs(1615569200000),
+                     "s3://example/manifest_list.avro", summary3, {}};
 
   EXPECT_EQ(snapshot1, snapshot2);
   EXPECT_NE(snapshot1, snapshot3);

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <arrow/io/interfaces.h>
+#include <arrow/result.h>
 #include <avro/Stream.hh>
 
 namespace iceberg::avro {

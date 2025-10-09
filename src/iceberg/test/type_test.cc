@@ -87,7 +87,7 @@ TEST_P(TypeTest, ToString) {
 
 TEST_P(TypeTest, StdFormat) {
   const auto& test_case = GetParam();
-  ASSERT_EQ(test_case.repr, compat::format("{}", *test_case.type));
+  ASSERT_EQ(test_case.repr, test_case.type->ToString());
 }
 
 const static std::array<TypeTestCase, 16> kPrimitiveTypes = {{
@@ -262,7 +262,7 @@ TEST(TypeTest, Equality) {
 
   for (size_t i = 0; i < alltypes.size(); i++) {
     for (size_t j = 0; j < alltypes.size(); j++) {
-      SCOPED_TRACE(compat::format("{} == {}", *alltypes[i], *alltypes[j]));
+      SCOPED_TRACE(alltypes[i]->ToString() + " == " + alltypes[j]->ToString());
 
       if (i == j) {
         ASSERT_EQ(*alltypes[i], *alltypes[j]);
@@ -325,7 +325,9 @@ TEST(TypeTest, List) {
     ASSERT_THAT(list.GetFieldByIndex(0), ::testing::Optional(field));
     ASSERT_THAT(list.GetFieldByName("element"), ::testing::Optional(field));
 
-    ASSERT_EQ(std::nullopt, list.GetFieldById(0));
+    auto null_result = list.GetFieldById(0);
+    ASSERT_TRUE(null_result.has_value());
+    ASSERT_EQ(std::nullopt, null_result.value());
     result = list.GetFieldByIndex(1);
     ASSERT_THAT(result, IsError(iceberg::ErrorKind::kInvalidArgument));
     ASSERT_THAT(result,
@@ -334,7 +336,8 @@ TEST(TypeTest, List) {
     ASSERT_THAT(result, IsError(iceberg::ErrorKind::kInvalidArgument));
     ASSERT_THAT(result,
                 iceberg::HasErrorMessage("Invalid index -1 to get field from list"));
-    ASSERT_EQ(std::nullopt, list.GetFieldByName("foo"));
+    ASSERT_TRUE(list.GetFieldByName("foo").has_value());
+    ASSERT_EQ(std::nullopt, list.GetFieldByName("foo").value());
   }
   ASSERT_THAT(
       []() {
@@ -361,7 +364,9 @@ TEST(TypeTest, Map) {
     ASSERT_THAT(map.GetFieldByName("key"), ::testing::Optional(key));
     ASSERT_THAT(map.GetFieldByName("value"), ::testing::Optional(value));
 
-    ASSERT_EQ(std::nullopt, map.GetFieldById(0));
+    auto map_result = map.GetFieldById(0);
+    ASSERT_TRUE(map_result.has_value());
+    ASSERT_EQ(std::nullopt, map_result.value());
     auto result = map.GetFieldByIndex(2);
     ASSERT_THAT(result, IsError(iceberg::ErrorKind::kInvalidArgument));
     ASSERT_THAT(result,
@@ -370,7 +375,8 @@ TEST(TypeTest, Map) {
     ASSERT_THAT(result, IsError(iceberg::ErrorKind::kInvalidArgument));
     ASSERT_THAT(result,
                 iceberg::HasErrorMessage("Invalid index -1 to get field from map"));
-    ASSERT_EQ(std::nullopt, map.GetFieldByName("element"));
+    ASSERT_TRUE(map.GetFieldByName("element").has_value());
+    ASSERT_EQ(std::nullopt, map.GetFieldByName("element").value());
   }
   ASSERT_THAT(
       []() {
@@ -406,7 +412,9 @@ TEST(TypeTest, Struct) {
     ASSERT_THAT(struct_.GetFieldByName("foo"), ::testing::Optional(field1));
     ASSERT_THAT(struct_.GetFieldByName("bar"), ::testing::Optional(field2));
 
-    ASSERT_EQ(std::nullopt, struct_.GetFieldById(0));
+    auto struct_result = struct_.GetFieldById(0);
+    ASSERT_TRUE(struct_result.has_value());
+    ASSERT_EQ(std::nullopt, struct_result.value());
     auto result = struct_.GetFieldByIndex(2);
     ASSERT_THAT(result, IsError(iceberg::ErrorKind::kInvalidArgument));
     ASSERT_THAT(result,
@@ -415,7 +423,8 @@ TEST(TypeTest, Struct) {
     ASSERT_THAT(result, IsError(iceberg::ErrorKind::kInvalidArgument));
     ASSERT_THAT(result,
                 iceberg::HasErrorMessage("Invalid index -1 to get field from struct"));
-    ASSERT_EQ(std::nullopt, struct_.GetFieldByName("element"));
+    ASSERT_TRUE(struct_.GetFieldByName("element").has_value());
+    ASSERT_EQ(std::nullopt, struct_.GetFieldByName("element").value());
   }
 }
 
@@ -426,7 +435,9 @@ TEST(TypeTest, StructTypeGetFieldByName) {
 
   // Case-sensitive: exact match
   ASSERT_THAT(struct_.GetFieldByName("Foo"), ::testing::Optional(field1));
-  ASSERT_THAT(struct_.GetFieldByName("foo"), ::testing::Eq(std::nullopt));
+  auto foo_result = struct_.GetFieldByName("foo");
+  ASSERT_TRUE(foo_result.has_value());
+  ASSERT_EQ(std::nullopt, foo_result.value());
 
   // Case-insensitive
   ASSERT_THAT(struct_.GetFieldByName("foo", false), ::testing::Optional(field1));
@@ -435,7 +446,9 @@ TEST(TypeTest, StructTypeGetFieldByName) {
   ASSERT_THAT(struct_.GetFieldByName("bar", false), ::testing::Optional(field2));
   ASSERT_THAT(struct_.GetFieldByName("BaR", false), ::testing::Optional(field2));
   ASSERT_THAT(struct_.GetFieldByName("BAR", false), ::testing::Optional(field2));
-  ASSERT_THAT(struct_.GetFieldByName("baz", false), ::testing::Eq(std::nullopt));
+  auto baz_result = struct_.GetFieldByName("baz", false);
+  ASSERT_TRUE(baz_result.has_value());
+  ASSERT_EQ(std::nullopt, baz_result.value());
 }
 
 TEST(TypeTest, ListTypeGetFieldByName) {
@@ -444,14 +457,18 @@ TEST(TypeTest, ListTypeGetFieldByName) {
 
   // Case-sensitive: exact match
   ASSERT_THAT(list.GetFieldByName("element"), ::testing::Optional(element));
-  ASSERT_THAT(list.GetFieldByName("Element"), ::testing::Eq(std::nullopt));
+  auto element_result = list.GetFieldByName("Element");
+  ASSERT_TRUE(element_result.has_value());
+  ASSERT_EQ(std::nullopt, element_result.value());
 
   // Case-insensitive
   ASSERT_THAT(list.GetFieldByName("element", false), ::testing::Optional(element));
   ASSERT_THAT(list.GetFieldByName("Element", false), ::testing::Optional(element));
   ASSERT_THAT(list.GetFieldByName("ELEMENT", false), ::testing::Optional(element));
   ASSERT_THAT(list.GetFieldByName("eLeMeNt", false), ::testing::Optional(element));
-  ASSERT_THAT(list.GetFieldByName("foo", false), ::testing::Eq(std::nullopt));
+  auto foo_list_result = list.GetFieldByName("foo", false);
+  ASSERT_TRUE(foo_list_result.has_value());
+  ASSERT_EQ(std::nullopt, foo_list_result.value());
 }
 
 TEST(TypeTest, MapTypeGetFieldByName) {
@@ -461,9 +478,13 @@ TEST(TypeTest, MapTypeGetFieldByName) {
 
   // Case-sensitive: exact match
   ASSERT_THAT(map.GetFieldByName("key"), ::testing::Optional(key));
-  ASSERT_THAT(map.GetFieldByName("Key"), ::testing::Eq(std::nullopt));
+  auto key_result = map.GetFieldByName("Key");
+  ASSERT_TRUE(key_result.has_value());
+  ASSERT_EQ(std::nullopt, key_result.value());
   ASSERT_THAT(map.GetFieldByName("value"), ::testing::Optional(value));
-  ASSERT_THAT(map.GetFieldByName("Value"), ::testing::Eq(std::nullopt));
+  auto value_result = map.GetFieldByName("Value");
+  ASSERT_TRUE(value_result.has_value());
+  ASSERT_EQ(std::nullopt, value_result.value());
 
   // Case-insensitive
   ASSERT_THAT(map.GetFieldByName("Key", false), ::testing::Optional(key));
@@ -473,7 +494,9 @@ TEST(TypeTest, MapTypeGetFieldByName) {
   ASSERT_THAT(map.GetFieldByName("Value", false), ::testing::Optional(value));
   ASSERT_THAT(map.GetFieldByName("VALUE", false), ::testing::Optional(value));
   ASSERT_THAT(map.GetFieldByName("vAlUe", false), ::testing::Optional(value));
-  ASSERT_THAT(map.GetFieldByName("foo", false), ::testing::Eq(std::nullopt));
+  auto foo_map_result = map.GetFieldByName("foo", false);
+  ASSERT_TRUE(foo_map_result.has_value());
+  ASSERT_EQ(std::nullopt, foo_map_result.value());
 }
 
 TEST(TypeTest, StructDuplicateId) {

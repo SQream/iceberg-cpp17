@@ -20,11 +20,22 @@ cmake_minimum_required(VERSION 3.25)
 
 project(example)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(iceberg CONFIG REQUIRED)
 
 add_executable(demo_example demo_example.cc)
 
-target_link_libraries(demo_example PRIVATE iceberg::iceberg_bundle_static
-                                           iceberg::iceberg_rest_static)
+# Check if iceberg was built with bundle support
+if(TARGET iceberg::iceberg_bundle_static)
+  # Use bundle build
+  target_compile_definitions(demo_example PRIVATE ICEBERG_BUILD_BUNDLE=1)
+  target_link_libraries(demo_example PRIVATE iceberg::iceberg_bundle_static)
+else()
+  # Use external Arrow - only the basic iceberg_static is available in this build
+  find_package(Arrow REQUIRED)
+  find_package(ZLIB REQUIRED)
+  target_link_libraries(demo_example PRIVATE iceberg::iceberg_static
+                                             Arrow::arrow_shared
+                                             ZLIB::ZLIB)
+endif()

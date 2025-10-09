@@ -62,6 +62,10 @@ class ICEBERG_EXPORT PartitionField : public util::Formattable {
     return lhs.Equals(rhs);
   }
 
+  friend bool operator!=(const PartitionField& lhs, const PartitionField& rhs) {
+    return !lhs.Equals(rhs);
+  }
+
  private:
   /// \brief Compare two fields for equality.
   [[nodiscard]] bool Equals(const PartitionField& other) const;

@@ -452,6 +452,10 @@ struct ICEBERG_EXPORT Snapshot {
     return lhs.Equals(rhs);
   }
 
+  friend bool operator!=(const Snapshot& lhs, const Snapshot& rhs) {
+    return !lhs.Equals(rhs);
+  }
+
  private:
   /// \brief Compare two snapshots for equality.
   bool Equals(const Snapshot& other) const;

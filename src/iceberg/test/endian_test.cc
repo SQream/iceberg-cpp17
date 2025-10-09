@@ -67,8 +67,8 @@ TEST(EndianTest, ByteWiseValidation) {
   uint32_t little_endian_int = ToLittleEndian(original_int);
   uint32_t big_endian_int = ToBigEndian(original_int);
 
-  auto little_int_bytes = std::bit_cast<std::array<uint8_t, 4>>(little_endian_int);
-  auto big_int_bytes = std::bit_cast<std::array<uint8_t, 4>>(big_endian_int);
+  auto little_int_bytes = bit_cast<std::array<uint8_t, 4>>(little_endian_int);
+  auto big_int_bytes = bit_cast<std::array<uint8_t, 4>>(big_endian_int);
 
   EXPECT_EQ(little_int_bytes, (std::array<uint8_t, 4>{0x78, 0x56, 0x34, 0x12}));
   EXPECT_EQ(big_int_bytes, (std::array<uint8_t, 4>{0x12, 0x34, 0x56, 0x78}));
@@ -77,8 +77,8 @@ TEST(EndianTest, ByteWiseValidation) {
   float little_endian_float = ToLittleEndian(original_float);
   float big_endian_float = ToBigEndian(original_float);
 
-  auto little_float_bytes = std::bit_cast<std::array<uint8_t, 4>>(little_endian_float);
-  auto big_float_bytes = std::bit_cast<std::array<uint8_t, 4>>(big_endian_float);
+  auto little_float_bytes = bit_cast<std::array<uint8_t, 4>>(little_endian_float);
+  auto big_float_bytes = bit_cast<std::array<uint8_t, 4>>(big_endian_float);
 
   EXPECT_EQ(little_float_bytes, (std::array<uint8_t, 4>{0xC3, 0xF5, 0x48, 0x40}));
   EXPECT_EQ(big_float_bytes, (std::array<uint8_t, 4>{0x40, 0x48, 0xF5, 0xC3}));

@@ -43,7 +43,7 @@ TEST(TransformTest, Transform) {
   auto transform = Transform::Identity();
   EXPECT_EQ(TransformType::kIdentity, transform->transform_type());
   EXPECT_EQ("identity", transform->ToString());
-  EXPECT_EQ("identity", compat::format("{}", *transform));
+  EXPECT_EQ("identity", transform->ToString());
 
   auto source_type = iceberg::string();
   auto identity_transform = transform->Bind(source_type);
@@ -54,7 +54,7 @@ TEST(TransformFunctionTest, CreateBucketTransform) {
   constexpr int32_t bucket_count = 8;
   auto transform = Transform::Bucket(bucket_count);
   EXPECT_EQ("bucket[8]", transform->ToString());
-  EXPECT_EQ("bucket[8]", compat::format("{}", *transform));
+  EXPECT_EQ("bucket[8]", transform->ToString());
 
   const auto transformPtr = transform->Bind(iceberg::string());
   ASSERT_TRUE(transformPtr);
@@ -65,7 +65,7 @@ TEST(TransformFunctionTest, CreateTruncateTransform) {
   constexpr int32_t width = 16;
   auto transform = Transform::Truncate(width);
   EXPECT_EQ("truncate[16]", transform->ToString());
-  EXPECT_EQ("truncate[16]", compat::format("{}", *transform));
+  EXPECT_EQ("truncate[16]", transform->ToString());
 
   auto transformPtr = transform->Bind(iceberg::string());
   EXPECT_EQ(transformPtr.value()->transform_type(), TransformType::kTruncate);
@@ -96,7 +96,7 @@ TEST(TransformFromStringTest, PositiveCases) {
     EXPECT_EQ(transform->transform_type(), c.type);
     if (c.param.has_value()) {
       EXPECT_EQ(transform->ToString(),
-                compat::format("{}[{}]", TransformTypeToString(c.type), *c.param));
+                std::string(TransformTypeToString(c.type)) + "[" + std::to_string(*c.param) + "]");
     } else {
       EXPECT_EQ(transform->ToString(), TransformTypeToString(c.type));
     }

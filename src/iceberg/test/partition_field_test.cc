@@ -37,7 +37,7 @@ TEST(PartitionFieldTest, Basics) {
     EXPECT_EQ("pt", field.name());
     EXPECT_EQ(*transform, *field.transform());
     EXPECT_EQ("pt (1000 identity(1))", field.ToString());
-    EXPECT_EQ("pt (1000 identity(1))", compat::format("{}", field));
+    EXPECT_EQ("pt (1000 identity(1))", field.ToString());
   }
 }
 

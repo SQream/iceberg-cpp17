@@ -250,6 +250,10 @@ bool operator==(const NameMapping& lhs, const NameMapping& rhs) {
   return lhs.AsMappedFields() == rhs.AsMappedFields();
 }
 
+bool operator!=(const NameMapping& lhs, const NameMapping& rhs) {
+  return !(lhs == rhs);
+}
+
 std::string ToString(const MappedField& field) {
   // Convert unordered_set to string manually for C++17 compatibility
   std::string names_str = "[";

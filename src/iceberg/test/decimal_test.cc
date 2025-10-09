@@ -21,7 +21,6 @@
 
 #include <algorithm>
 #include <array>
-#include <bit>
 #include <cstdint>
 
 #include <gmock/gmock.h>
@@ -53,7 +52,7 @@ TEST(DecimalTest, Basics) {
 
   std::string string_value("-23049223942343532412");
   Decimal result(string_value);
-  Decimal expected(static_cast<int64_t>(-230492239423435324));
+  Decimal expected(static_cast<long long>(-230492239423435324));
   ASSERT_EQ(result, expected * 100 - 12);
   ASSERT_NE(result.high(), 0);
 
@@ -152,7 +151,7 @@ TEST(DecimalTest, SmallValues) {
             .expected = 12345000LL,
             .expected_precision = 8,
             .expected_scale = 0}}) {
-    AssertDecimalFromString(tv.s, Decimal(tv.expected), tv.expected_precision,
+    AssertDecimalFromString(tv.s, Decimal(static_cast<long long>(tv.expected)), tv.expected_precision,
                             tv.expected_scale);
   }
 }
@@ -405,7 +404,7 @@ TEST(DecimalTest, ToString) {
             .scale = 25,
             .expected_string = "-1.234567890123456789E-7"},
        }) {
-    const Decimal value(t.test_value);
+    const Decimal value(static_cast<long long>(t.test_value));
     auto result = value.ToString(t.scale);
     ASSERT_THAT(result, IsOk())
         << "Failed to convert Decimal to string: " << value.ToIntegerString()
@@ -438,9 +437,12 @@ TEST(DecimalTest, FromBigEndian) {
     Decimal value(start);
     for (int ii = 0; ii < Decimal::kByteWidth; ++ii) {
       auto native_endian = value.ToBytes();
-      if constexpr (std::endian::native == std::endian::little) {
+      // Check endianness at runtime
+      constexpr uint32_t endian_test = 0x01020304;
+      const bool is_little_endian = (*reinterpret_cast<const uint8_t*>(&endian_test) == 0x04);
+      if (is_little_endian) {
         // convert to big endian
-        std::reverse(native_endian);
+        std::reverse(native_endian.begin(), native_endian.end());
       }
       // Limit the number of bytes we are passing to make
       // sure that it works correctly. That's why all of the
@@ -456,9 +458,10 @@ TEST(DecimalTest, FromBigEndian) {
       auto negated = -value;
       native_endian = negated.ToBytes();
 
-      if constexpr (std::endian::native == std::endian::little) {
+      // Check if we're on a little-endian system (runtime check for C++17)
+      if (is_little_endian) {
         // convert to big endian
-        std::reverse(native_endian);
+        std::reverse(native_endian.begin(), native_endian.end());
       }
 
       result = Decimal::FromBigEndian(native_endian.data() + WidthMinusOne - ii, ii + 1);
@@ -470,9 +473,10 @@ TEST(DecimalTest, FromBigEndian) {
       auto complement = ~value;
       native_endian = complement.ToBytes();
 
-      if constexpr (std::endian::native == std::endian::little) {
+      // Check if we're on a little-endian system (runtime check for C++17)
+      if (is_little_endian) {
         // convert to big endian
-        std::reverse(native_endian);
+        std::reverse(native_endian.begin(), native_endian.end());
       }
       result = Decimal::FromBigEndian(native_endian.data(), Decimal::kByteWidth);
       ASSERT_THAT(result, IsOk());

@@ -22,6 +22,7 @@
 #include <cstring>
 #include <span>
 #include <string>
+#include <type_traits>
 
 #include "iceberg/util/decimal.h"
 #include "iceberg/util/endian.h"
@@ -31,7 +32,7 @@
 namespace iceberg {
 
 /// \brief Write a value in little-endian format and return as vector.
-template <EndianConvertible T>
+template <typename T, typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
 std::vector<uint8_t> WriteLittleEndian(T value) {
   value = ToLittleEndian(value);
   const auto* bytes = reinterpret_cast<const uint8_t*>(&value);
@@ -41,7 +42,7 @@ std::vector<uint8_t> WriteLittleEndian(T value) {
 }
 
 /// \brief Read a value in little-endian format from the data.
-template <EndianConvertible T>
+template <typename T, typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
 Result<T> ReadLittleEndian(std::span<const uint8_t> data) {
   if (data.size() != sizeof(T)) [[unlikely]] {
     return InvalidArgument("Insufficient data to read {} bytes, got {}", sizeof(T),

@@ -19,6 +19,7 @@
 
 #include "iceberg/transform.h"
 
+#include "iceberg/cpp17_compat.h"
 #include "iceberg/format_compat.h"
 #include <regex>
 #include <utility>
@@ -97,12 +98,17 @@ Result<std::shared_ptr<TransformFunction>> Transform::Bind(
   auto type_str = TransformTypeToString(transform_type_);
 
   switch (transform_type_) {
-    case TransformType::kIdentity:
-      return IdentityTransform::Make(source_type);
+    case TransformType::kIdentity: {
+      auto result = IdentityTransform::Make(source_type);
+      if (!result.has_value()) return compat::unexpected<Error>(result.error());
+      return std::shared_ptr<TransformFunction>(result.value().release());
+    }
 
     case TransformType::kBucket: {
       if (auto param = std::get_if<int32_t>(&param_)) {
-        return BucketTransform::Make(source_type, *param);
+        auto result = BucketTransform::Make(source_type, *param);
+        if (!result.has_value()) return compat::unexpected<Error>(result.error());
+        return std::shared_ptr<TransformFunction>(result.value().release());
       }
       return InvalidArgument("Bucket requires int32 param, none found in transform '{}'",
                              type_str);
@@ -110,22 +116,39 @@ Result<std::shared_ptr<TransformFunction>> Transform::Bind(
 
     case TransformType::kTruncate: {
       if (auto param = std::get_if<int32_t>(&param_)) {
-        return TruncateTransform::Make(source_type, *param);
+        auto result = TruncateTransform::Make(source_type, *param);
+        if (!result.has_value()) return compat::unexpected<Error>(result.error());
+        return std::shared_ptr<TransformFunction>(result.value().release());
       }
       return InvalidArgument(
           "Truncate requires int32 param, none found in transform '{}'", type_str);
     }
 
-    case TransformType::kYear:
-      return YearTransform::Make(source_type);
-    case TransformType::kMonth:
-      return MonthTransform::Make(source_type);
-    case TransformType::kDay:
-      return DayTransform::Make(source_type);
-    case TransformType::kHour:
-      return HourTransform::Make(source_type);
-    case TransformType::kVoid:
-      return VoidTransform::Make(source_type);
+    case TransformType::kYear: {
+      auto result = YearTransform::Make(source_type);
+      if (!result.has_value()) return compat::unexpected<Error>(result.error());
+      return std::shared_ptr<TransformFunction>(result.value().release());
+    }
+    case TransformType::kMonth: {
+      auto result = MonthTransform::Make(source_type);
+      if (!result.has_value()) return compat::unexpected<Error>(result.error());
+      return std::shared_ptr<TransformFunction>(result.value().release());
+    }
+    case TransformType::kDay: {
+      auto result = DayTransform::Make(source_type);
+      if (!result.has_value()) return compat::unexpected<Error>(result.error());
+      return std::shared_ptr<TransformFunction>(result.value().release());
+    }
+    case TransformType::kHour: {
+      auto result = HourTransform::Make(source_type);
+      if (!result.has_value()) return compat::unexpected<Error>(result.error());
+      return std::shared_ptr<TransformFunction>(result.value().release());
+    }
+    case TransformType::kVoid: {
+      auto result = VoidTransform::Make(source_type);
+      if (!result.has_value()) return compat::unexpected<Error>(result.error());
+      return std::shared_ptr<TransformFunction>(result.value().release());
+    }
 
     default:
       return NotSupported("Unsupported transform type: '{}'", type_str);

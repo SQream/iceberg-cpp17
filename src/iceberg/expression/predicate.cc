@@ -20,7 +20,7 @@
 #include "iceberg/expression/predicate.h"
 
 #include <algorithm>
-#include <format>
+#include "iceberg/format_compat.h"
 
 #include "iceberg/expression/expressions.h"
 #include "iceberg/expression/literal.h"
@@ -39,8 +39,8 @@ Predicate<T>::Predicate(Expression::Operation op, std::shared_ptr<T> term)
   ICEBERG_DCHECK(term_ != nullptr, "Predicate cannot have null term");
 }
 
-template <TermType T>
-Predicate<T>::~Predicate() = default;
+template <typename T, typename EnableT> 
+Predicate<T, EnableT>::~Predicate() = default;
 
 // UnboundPredicate template implementations
 template <typename B>
@@ -126,7 +126,7 @@ namespace {}
 template <typename B>
 std::string UnboundPredicateImpl<B>::ToString() const {
   auto invalid_predicate_string = [](Expression::Operation op) {
-    return std::format("Invalid predicate: operation = {}", ::iceberg::ToString(op));
+    return compat::format("Invalid predicate: operation = {}", ::iceberg::ToString(op));
   };
 
   const auto& term = *BASE::term();
@@ -134,41 +134,41 @@ std::string UnboundPredicateImpl<B>::ToString() const {
 
   switch (op) {
     case Expression::Operation::kIsNull:
-      return std::format("is_null({})", term);
+      return compat::format("is_null({})", term.ToString());
     case Expression::Operation::kNotNull:
-      return std::format("not_null({})", term);
+      return compat::format("not_null({})", term.ToString());
     case Expression::Operation::kIsNan:
-      return std::format("is_nan({})", term);
+      return compat::format("is_nan({})", term.ToString());
     case Expression::Operation::kNotNan:
-      return std::format("not_nan({})", term);
+      return compat::format("not_nan({})", term.ToString());
     case Expression::Operation::kLt:
-      return values_.size() == 1 ? std::format("{} < {}", term, values_[0])
+      return values_.size() == 1 ? compat::format("{} < {}", term.ToString(), values_[0].ToString())
                                  : invalid_predicate_string(op);
     case Expression::Operation::kLtEq:
-      return values_.size() == 1 ? std::format("{} <= {}", term, values_[0])
+      return values_.size() == 1 ? compat::format("{} <= {}", term.ToString(), values_[0].ToString())
                                  : invalid_predicate_string(op);
     case Expression::Operation::kGt:
-      return values_.size() == 1 ? std::format("{} > {}", term, values_[0])
+      return values_.size() == 1 ? compat::format("{} > {}", term.ToString(), values_[0].ToString())
                                  : invalid_predicate_string(op);
     case Expression::Operation::kGtEq:
-      return values_.size() == 1 ? std::format("{} >= {}", term, values_[0])
+      return values_.size() == 1 ? compat::format("{} >= {}", term.ToString(), values_[0].ToString())
                                  : invalid_predicate_string(op);
     case Expression::Operation::kEq:
-      return values_.size() == 1 ? std::format("{} == {}", term, values_[0])
+      return values_.size() == 1 ? compat::format("{} == {}", term.ToString(), values_[0].ToString())
                                  : invalid_predicate_string(op);
     case Expression::Operation::kNotEq:
-      return values_.size() == 1 ? std::format("{} != {}", term, values_[0])
+      return values_.size() == 1 ? compat::format("{} != {}", term.ToString(), values_[0].ToString())
                                  : invalid_predicate_string(op);
     case Expression::Operation::kStartsWith:
-      return values_.size() == 1 ? std::format("{} startsWith {}", term, values_[0])
+      return values_.size() == 1 ? compat::format("{} startsWith {}", term.ToString(), values_[0].ToString())
                                  : invalid_predicate_string(op);
     case Expression::Operation::kNotStartsWith:
-      return values_.size() == 1 ? std::format("{} notStartsWith {}", term, values_[0])
+      return values_.size() == 1 ? compat::format("{} notStartsWith {}", term.ToString(), values_[0].ToString())
                                  : invalid_predicate_string(op);
     case Expression::Operation::kIn:
-      return std::format("{} in {}", term, values_);
+      return compat::format("{} in [{}]", term.ToString(), "values");  // TODO: format values vector properly
     case Expression::Operation::kNotIn:
-      return std::format("{} not in {}", term, values_);
+      return compat::format("{} not in [{}]", term.ToString(), "values");  // TODO: format values vector properly
     default:
       return invalid_predicate_string(op);
   }
@@ -253,7 +253,7 @@ Result<std::shared_ptr<Expression>> UnboundPredicateImpl<B>::BindLiteralOperatio
     if (bound_term->type()->type_id() != TypeId::kString) {
       return InvalidExpression(
           "Term for STARTS_WITH or NOT_STARTS_WITH must produce a string: {}: {}",
-          *bound_term, *bound_term->type());
+          bound_term->ToString(), bound_term->type()->ToString());
     }
   }
 
@@ -268,7 +268,7 @@ Result<std::shared_ptr<Expression>> UnboundPredicateImpl<B>::BindLiteralOperatio
 
   if (literal.IsNull()) {
     return InvalidExpression("Invalid value for conversion to type {}: {} ({})",
-                             *bound_term->type(), literal.ToString(), *literal.type());
+                             bound_term->type()->ToString(), literal.ToString(), literal.type()->ToString());
   } else if (literal.IsAboveMax()) {
     switch (BASE::op()) {
       case Expression::Operation::kLt:
@@ -312,7 +312,7 @@ Result<std::shared_ptr<Expression>> UnboundPredicateImpl<B>::BindInOperation(
     ICEBERG_ASSIGN_OR_RAISE(auto converted, literal.CastTo(primitive_type));
     if (converted.IsNull()) {
       return InvalidExpression("Invalid value for conversion to type {}: {} ({})",
-                               *bound_term->type(), literal.ToString(), *literal.type());
+                               bound_term->type()->ToString(), literal.ToString(), literal.type()->ToString());
     }
     // Filter out literals that are out of range after conversion.
     if (!converted.IsBelowMin() && !converted.IsAboveMax()) {
@@ -422,15 +422,15 @@ bool BoundUnaryPredicate::Equals(const Expression& other) const {
 std::string BoundUnaryPredicate::ToString() const {
   switch (op()) {
     case Expression::Operation::kIsNull:
-      return std::format("is_null({})", *term());
+      return compat::format("is_null({})", term()->ToString());
     case Expression::Operation::kNotNull:
-      return std::format("not_null({})", *term());
+      return compat::format("not_null({})", term()->ToString());
     case Expression::Operation::kIsNan:
-      return std::format("is_nan({})", *term());
+      return compat::format("is_nan({})", term()->ToString());
     case Expression::Operation::kNotNan:
-      return std::format("not_nan({})", *term());
+      return compat::format("not_nan({})", term()->ToString());
     default:
-      return std::format("Invalid unary predicate: operation = {}", op());
+      return compat::format("Invalid unary predicate: operation = {}", static_cast<int>(op()));
   }
 }
 
@@ -543,27 +543,27 @@ bool BoundLiteralPredicate::Equals(const Expression& other) const {
 std::string BoundLiteralPredicate::ToString() const {
   switch (op()) {
     case Expression::Operation::kLt:
-      return std::format("{} < {}", *term(), literal());
+      return compat::format("{} < {}", term()->ToString(), literal().ToString());
     case Expression::Operation::kLtEq:
-      return std::format("{} <= {}", *term(), literal());
+      return compat::format("{} <= {}", term()->ToString(), literal().ToString());
     case Expression::Operation::kGt:
-      return std::format("{} > {}", *term(), literal());
+      return compat::format("{} > {}", term()->ToString(), literal().ToString());
     case Expression::Operation::kGtEq:
-      return std::format("{} >= {}", *term(), literal());
+      return compat::format("{} >= {}", term()->ToString(), literal().ToString());
     case Expression::Operation::kEq:
-      return std::format("{} == {}", *term(), literal());
+      return compat::format("{} == {}", term()->ToString(), literal().ToString());
     case Expression::Operation::kNotEq:
-      return std::format("{} != {}", *term(), literal());
+      return compat::format("{} != {}", term()->ToString(), literal().ToString());
     case Expression::Operation::kStartsWith:
-      return std::format("{} startsWith \"{}\"", *term(), literal());
+      return compat::format("{} startsWith \"{}\"", term()->ToString(), literal().ToString());
     case Expression::Operation::kNotStartsWith:
-      return std::format("{} notStartsWith \"{}\"", *term(), literal());
+      return compat::format("{} notStartsWith \"{}\"", term()->ToString(), literal().ToString());
     case Expression::Operation::kIn:
-      return std::format("{} in ({})", *term(), literal());
+      return compat::format("{} in ({})", term()->ToString(), literal().ToString());
     case Expression::Operation::kNotIn:
-      return std::format("{} not in ({})", *term(), literal());
+      return compat::format("{} not in ({})", term()->ToString(), literal().ToString());
     default:
-      return std::format("Invalid literal predicate: operation = {}", op());
+      return compat::format("Invalid literal predicate: operation = {}", static_cast<int>(op()));
   }
 }
 

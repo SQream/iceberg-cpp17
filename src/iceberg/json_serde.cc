@@ -223,185 +223,7 @@ constexpr std::string_view kRequirementAssertDefaultSortOrderID =
 constexpr std::string_view kLastAssignedFieldId = "last-assigned-field-id";
 constexpr std::string_view kLastAssignedPartitionId = "last-assigned-partition-id";
 
-template <typename T>
-void SetOptionalField(nlohmann::json& json, std::string_view key,
-                      const std::optional<T>& value) {
-  if (value.has_value()) {
-    json[key] = *value;
-  }
-}
-
-std::string SafeDumpJson(const nlohmann::json& json) {
-  return json.dump(/*indent=*/-1, /*indent_char=*/' ', /*ensure_ascii=*/false,
-                   nlohmann::detail::error_handler_t::ignore);
-}
-
-template <typename T>
-Result<T> GetJsonValueImpl(const nlohmann::json& json, std::string_view key) {
-  try {
-    return json.at(key).get<T>();
-  } catch (const std::exception& ex) {
-    return JsonParseError("Failed to parse '{}' from {}: {}", key, SafeDumpJson(json),
-                          ex.what());
-  }
-}
-
-template <typename T>
-Result<std::optional<T>> GetJsonValueOptional(const nlohmann::json& json,
-                                              std::string_view key) {
-  if (!json.contains(key)) {
-    return std::nullopt;
-  }
-  ICEBERG_ASSIGN_OR_RAISE(auto value, GetJsonValueImpl<T>(json, key));
-  return std::make_optional(std::move(value));
-}
-
-template <typename T>
-Result<T> GetJsonValue(const nlohmann::json& json, std::string_view key) {
-  if (!json.contains(key)) {
-    return JsonParseError("Missing '{}' in {}", key, SafeDumpJson(json));
-  }
-  return GetJsonValueImpl<T>(json, key);
-}
-
-template <typename T>
-Result<T> GetJsonValueOrDefault(const nlohmann::json& json, std::string_view key,
-                                T default_value = T{}) {
-  if (!json.contains(key)) {
-    return default_value;
-  }
-  return GetJsonValueImpl<T>(json, key);
-}
-
-/// \brief Convert a list of items to a json array.
-///
-/// Note that ToJson(const T&) is required for this function to work.
-template <typename T>
-nlohmann::json::array_t ToJsonList(const std::vector<T>& list) {
-  return std::accumulate(list.cbegin(), list.cend(), nlohmann::json::array(),
-                         [](nlohmann::json::array_t arr, const T& item) {
-                           arr.push_back(ToJson(item));
-                           return arr;
-                         });
-}
-
-/// \brief Overload of the above function for a list of shared pointers.
-template <typename T>
-nlohmann::json::array_t ToJsonList(const std::vector<std::shared_ptr<T>>& list) {
-  return std::accumulate(list.cbegin(), list.cend(), nlohmann::json::array(),
-                         [](nlohmann::json::array_t arr, const std::shared_ptr<T>& item) {
-                           arr.push_back(ToJson(*item));
-                           return arr;
-                         });
-}
-
-/// \brief Parse a list of items from a JSON object.
-///
-/// \param[in] json The JSON object to parse.
-/// \param[in] key The key to parse.
-/// \param[in] from_json The function to parse an item from a JSON object.
-/// \return The list of items.
-template <typename T>
-Result<std::vector<T>> FromJsonList(
-    const nlohmann::json& json, std::string_view key,
-    const std::function<Result<T>(const nlohmann::json&)>& from_json) {
-  std::vector<T> list{};
-  if (json.contains(key)) {
-    ICEBERG_ASSIGN_OR_RAISE(auto list_json, GetJsonValue<nlohmann::json>(json, key));
-    if (!list_json.is_array()) {
-      return JsonParseError("Cannot parse '{}' from non-array: {}", key,
-                            SafeDumpJson(list_json));
-    }
-    for (const auto& entry_json : list_json) {
-      ICEBERG_ASSIGN_OR_RAISE(auto entry, from_json(entry_json));
-      list.emplace_back(std::move(entry));
-    }
-  }
-  return list;
-}
-
-/// \brief Parse a list of items from a JSON object.
-///
-/// \param[in] json The JSON object to parse.
-/// \param[in] key The key to parse.
-/// \param[in] from_json The function to parse an item from a JSON object.
-/// \return The list of items.
-template <typename T>
-Result<std::vector<std::shared_ptr<T>>> FromJsonList(
-    const nlohmann::json& json, std::string_view key,
-    const std::function<Result<std::shared_ptr<T>>(const nlohmann::json&)>& from_json) {
-  std::vector<std::shared_ptr<T>> list{};
-  if (json.contains(key)) {
-    ICEBERG_ASSIGN_OR_RAISE(auto list_json, GetJsonValue<nlohmann::json>(json, key));
-    if (!list_json.is_array()) {
-      return JsonParseError("Cannot parse '{}' from non-array: {}", key,
-                            SafeDumpJson(list_json));
-    }
-    for (const auto& entry_json : list_json) {
-      ICEBERG_ASSIGN_OR_RAISE(auto entry, from_json(entry_json));
-      list.emplace_back(std::move(entry));
-    }
-  }
-  return list;
-}
-
-/// \brief Convert a map of type <std::string, T> to a json object.
-///
-/// Note that ToJson(const T&) is required for this function to work.
-template <typename T>
-nlohmann::json::object_t ToJsonMap(const std::unordered_map<std::string, T>& map) {
-  return std::accumulate(map.cbegin(), map.cend(), nlohmann::json::object(),
-                         [](nlohmann::json::object_t obj, const auto& item) {
-                           obj[item.first] = ToJson(item.second);
-                           return obj;
-                         });
-}
-
-/// \brief Overload of the above function for a map of type <std::string,
-/// std::shared_ptr<T>>.
-template <typename T>
-nlohmann::json::object_t ToJsonMap(
-    const std::unordered_map<std::string, std::shared_ptr<T>>& map) {
-  return std::accumulate(map.cbegin(), map.cend(), nlohmann::json::object(),
-                         [](nlohmann::json::object_t obj, const auto& item) {
-                           obj[item.first] = ToJson(*item.second);
-                           return obj;
-                         });
-}
-
-/// \brief Parse a map of type <std::string, T> from a JSON object.
-///
-/// \param[in] json The JSON object to parse.
-/// \param[in] key The key to parse.
-/// \param[in] from_json The function to parse an item from a JSON object.
-/// \return The map of items.
-template <typename T = std::string>
-Result<std::unordered_map<std::string, T>> FromJsonMap(
-    const nlohmann::json& json, std::string_view key,
-    const std::function<Result<T>(const nlohmann::json&)>& from_json =
-        [](const nlohmann::json& json) -> Result<T> {
-      static_assert(std::is_same_v<T, std::string>, "T must be std::string");
-      try {
-        return json.get<std::string>();
-      } catch (const std::exception& ex) {
-        return JsonParseError("Cannot parse {} to a string value: {}", SafeDumpJson(json),
-                              ex.what());
-      }
-    }) {
-  std::unordered_map<std::string, T> map{};
-  if (json.contains(key)) {
-    ICEBERG_ASSIGN_OR_RAISE(auto map_json, GetJsonValue<nlohmann::json>(json, key));
-    if (!map_json.is_object()) {
-      return JsonParseError("Cannot parse '{}' from non-object: {}", key,
-                            SafeDumpJson(map_json));
-    }
-    for (const auto& [key, value] : map_json.items()) {
-      ICEBERG_ASSIGN_OR_RAISE(auto entry, from_json(value));
-      map[key] = std::move(entry);
-    }
-  }
-  return map;
-}
+// All utility functions are now provided by iceberg/util/json_util_internal.h
 
 }  // namespace
 
@@ -409,8 +231,8 @@ nlohmann::json ToJson(const SortField& sort_field) {
   nlohmann::json json;
   json[kTransform] = sort_field.transform()->ToString();
   json[kSourceId] = sort_field.source_id();
-  json[kDirection] = std::format("{}", sort_field.direction());
-  json[kNullOrder] = std::format("{}", sort_field.null_order());
+  json[kDirection] = compat::format("{}", sort_field.direction());
+  json[kNullOrder] = compat::format("{}", sort_field.null_order());
   return json;
 }
 
@@ -573,7 +395,7 @@ Result<std::string> ToJsonString(const Schema& schema) {
 nlohmann::json ToJson(const SnapshotRef& ref) {
   nlohmann::json json;
   json[kSnapshotId] = ref.snapshot_id;
-  json[kType] = std::format("{}", ref.type());
+  json[kType] = compat::format("{}", ref.type());
   if (ref.type() == SnapshotRefType::kBranch) {
     const auto& branch = std::get<SnapshotRef::Branch>(ref.retention);
     SetOptionalField(json, kMinSnapshotsToKeep, branch.min_snapshots_to_keep);
@@ -902,10 +724,10 @@ Result<std::unique_ptr<Snapshot>> SnapshotFromJson(const nlohmann::json& json) {
                               SafeDumpJson(value));
       }
       if (key == SnapshotSummaryFields::kOperation &&
-          kValidDataOperation.find(value.get<std::string>()) == kValidDataOperation.end()) {
+          kValidDataOperation.find((value.get<std::string>())) == kValidDataOperation.end()) {
         return JsonParseError("Invalid snapshot operation: {}", SafeDumpJson(value));
       }
-      summary[key] = value.get<std::string>();
+      summary[key] = (value.get<std::string>());
     }
     // If summary is available but operation is missing, set operation to overwrite.
     if (summary.find(SnapshotSummaryFields::kOperation) == summary.end()) {
@@ -1349,8 +1171,8 @@ Result<std::unique_ptr<TableMetadata>> TableMetadataFromJson(const nlohmann::jso
 
   ICEBERG_ASSIGN_OR_RAISE(auto last_updated_ms,
                           GetJsonValue<int64_t>(json, kLastUpdatedMs));
-  table_metadata->last_updated_ms =
-      TimePointMs{std::chrono::milliseconds(last_updated_ms)};
+  ICEBERG_ASSIGN_OR_RAISE(table_metadata->last_updated_ms,
+                          TimePointMsFromUnixMs(last_updated_ms));
 
   if (json.contains(kRefs)) {
     ICEBERG_ASSIGN_OR_RAISE(

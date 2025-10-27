@@ -33,8 +33,8 @@ namespace iceberg {
 
 /// \brief A predicate is a boolean expression that tests a term against some criteria.
 ///
-/// \tparam TermType The type of the term being tested
-template <TermType T>
+/// \tparam T The type of the term being tested (must derive from Term)
+template <typename T, typename = typename std::enable_if_t<std::is_base_of_v<Term, T>>>
 class ICEBERG_EXPORT Predicate : public virtual Expression {
  public:
   ~Predicate() override;

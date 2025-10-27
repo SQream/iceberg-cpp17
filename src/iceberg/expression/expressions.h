@@ -44,11 +44,11 @@ class ICEBERG_EXPORT Expressions {
   // Logical operations
 
   /// \brief Create an AND expression.
-  template <typename... Args>
+  template <typename... Args, 
+            typename = typename std::enable_if_t<std::conjunction_v<std::is_same<Args, std::shared_ptr<Expression>>...>>>
   static std::shared_ptr<Expression> And(std::shared_ptr<Expression> left,
                                          std::shared_ptr<Expression> right,
                                          Args&&... args)
-    requires std::conjunction_v<std::is_same<Args, std::shared_ptr<Expression>>...>
   {
     ICEBERG_ASSIGN_OR_THROW(auto and_expr,
                             iceberg::And::MakeFolded(std::move(left), std::move(right),
@@ -57,10 +57,10 @@ class ICEBERG_EXPORT Expressions {
   }
 
   /// \brief Create an OR expression.
-  template <typename... Args>
+  template <typename... Args,
+            typename = typename std::enable_if_t<std::conjunction_v<std::is_same<Args, std::shared_ptr<Expression>>...>>>
   static std::shared_ptr<Expression> Or(std::shared_ptr<Expression> left,
                                         std::shared_ptr<Expression> right, Args&&... args)
-    requires std::conjunction_v<std::is_same<Args, std::shared_ptr<Expression>>...>
   {
     ICEBERG_ASSIGN_OR_THROW(auto or_expr,
                             iceberg::Or::MakeFolded(std::move(left), std::move(right),

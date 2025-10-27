@@ -60,8 +60,6 @@ Result<Scalar> ExtractValue(const ArrowSchema* schema, const ArrowArray* array,
     case NANOARROW_TYPE_STRING:
     case NANOARROW_TYPE_BINARY:
     case NANOARROW_TYPE_FIXED_SIZE_BINARY:
-    case NANOARROW_TYPE_STRING_VIEW:
-    case NANOARROW_TYPE_BINARY_VIEW:
     case NANOARROW_TYPE_LARGE_STRING:
     case NANOARROW_TYPE_LARGE_BINARY: {
       ArrowStringView value = ArrowArrayViewGetStringUnsafe(array_view, index);

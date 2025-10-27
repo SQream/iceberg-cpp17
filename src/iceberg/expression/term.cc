@@ -19,7 +19,7 @@
 
 #include "iceberg/expression/term.h"
 
-#include <format>
+#include "iceberg/format_compat.h"
 
 #include "iceberg/result.h"
 #include "iceberg/row/struct_like.h"
@@ -72,7 +72,7 @@ Result<std::shared_ptr<BoundReference>> NamedReference::Bind(const Schema& schem
 }
 
 std::string NamedReference::ToString() const {
-  return std::format("ref(name=\"{}\")", field_name_);
+  return compat::format("ref(name=\"{}\")", field_name_);
 }
 
 // BoundReference implementation
@@ -100,7 +100,7 @@ BoundReference::BoundReference(SchemaField field,
 BoundReference::~BoundReference() = default;
 
 std::string BoundReference::ToString() const {
-  return std::format("ref(id={}, type={})", field_.field_id(), field_.type()->ToString());
+  return compat::format("ref(id={}, type={})", field_.field_id(), field_.type()->ToString());
 }
 
 Result<Literal> BoundReference::Evaluate(const StructLike& data) const {
@@ -139,7 +139,7 @@ UnboundTransform::UnboundTransform(std::shared_ptr<NamedReference> ref,
 UnboundTransform::~UnboundTransform() = default;
 
 std::string UnboundTransform::ToString() const {
-  return std::format("{}({})", transform_->ToString(), ref_->ToString());
+  return compat::format("{}({})", transform_->ToString(), ref_->ToString());
 }
 
 Result<std::shared_ptr<BoundTransform>> UnboundTransform::Bind(
@@ -175,7 +175,7 @@ BoundTransform::BoundTransform(std::shared_ptr<BoundReference> ref,
 BoundTransform::~BoundTransform() = default;
 
 std::string BoundTransform::ToString() const {
-  return std::format("{}({})", transform_->ToString(), ref_->ToString());
+  return compat::format("{}({})", transform_->ToString(), ref_->ToString());
 }
 
 Result<Literal> BoundTransform::Evaluate(const StructLike& data) const {

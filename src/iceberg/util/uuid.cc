@@ -26,6 +26,7 @@
 #include <string>
 
 #include "iceberg/exception.h"
+#include "iceberg/format_compat.h"
 #include "iceberg/result.h"
 #include "iceberg/util/formatter.h"  // IWYU pragma: keep
 #include "iceberg/util/int128.h"
@@ -209,7 +210,7 @@ uint8_t Uuid::operator[](size_t index) const {
 }
 
 std::string Uuid::ToString() const {
-  return std::format(
+  return compat::format(
       "{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}"
       "{:02x}{:02x}{:02x}",
       data_[0], data_[1], data_[2], data_[3], data_[4], data_[5], data_[6], data_[7],

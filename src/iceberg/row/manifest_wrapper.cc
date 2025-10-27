@@ -25,8 +25,8 @@
 namespace iceberg {
 
 namespace {
-template <typename T>
-  requires std::is_same_v<T, std::vector<uint8_t>> || std::is_same_v<T, std::string>
+template <typename T,
+          typename = typename std::enable_if_t<std::is_same_v<T, std::vector<uint8_t>> || std::is_same_v<T, std::string>>>
 std::string_view ToView(const T& value) {
   return {reinterpret_cast<const char*>(value.data()), value.size()};  // NOLINT
 }
@@ -52,10 +52,10 @@ Result<Scalar> PartitionFieldSummaryStructLike::GetField(size_t pos) const {
       return FromOptional(summary_.get().contains_nan);
     case 2:
       return FromOptional(
-          summary_.get().lower_bound.transform(ToView<std::vector<uint8_t>>));
+          summary_.get().lower_bound ? std::make_optional(ToView(*summary_.get().lower_bound)) : std::nullopt);
     case 3:
       return FromOptional(
-          summary_.get().upper_bound.transform(ToView<std::vector<uint8_t>>));
+          summary_.get().upper_bound ? std::make_optional(ToView(*summary_.get().upper_bound)) : std::nullopt);
     default:
       return InvalidArgument("Invalid partition field summary index: {}", pos);
   }

@@ -434,8 +434,7 @@ std::string_view ToString(TypeId id) {
     case TypeId::kBinary:
       return "binary";
   }
-
-  std::unreachable();
+  return "unknown";
 }
 
 }  // namespace iceberg

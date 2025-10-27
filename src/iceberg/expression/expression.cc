@@ -202,7 +202,7 @@ std::string_view ToString(Expression::Operation op) {
     case Expression::Operation::kMin:
       return "MIN";
   }
-  std::unreachable();
+  return "UNKNOWN";
 }
 
 Result<Expression::Operation> Negate(Expression::Operation op) {
@@ -251,7 +251,7 @@ Result<Expression::Operation> Negate(Expression::Operation op) {
     case Expression::Operation::kCountNull:
       return InvalidExpression("No negation for operation: {}", op);
   }
-  std::unreachable();
+  return InvalidArgument("Unknown operation for negation: {}", static_cast<int>(op));
 }
 
 }  // namespace iceberg

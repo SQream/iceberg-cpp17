@@ -38,7 +38,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
-set(CMAKE_PREFIX_PATH "/usr/local/sqream-prerequisites/versions/6.02")
+set(CMAKE_PREFIX_PATH "/usr/local/sqream-prerequisites/versions/6.04")
 
 option(ICEBERG_BUILD_STATIC "Build static library" ON)
 option(ICEBERG_BUILD_SHARED "Build shared library" ON)

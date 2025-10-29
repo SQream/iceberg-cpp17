@@ -19,8 +19,8 @@
 
 #include "iceberg/expression/literal.h"
 #include "iceberg/format_compat.h"
+#include "iceberg/cpp17_compat.h"
 #include <cmath>
-#include <concepts>
 #include <cstdint>
 #include <string>
 
@@ -414,26 +414,16 @@ std::partial_ordering Literal::operator<=>(const Literal& other) const {
     case TypeId::kBinary:
     case TypeId::kFixed:
       return std::get<std::vector<uint8_t>>(value_) < std::get<std::vector<uint8_t>>(other.value_);
-    case TypeId::kTimestampTz: {
-      auto this_val = std::get<int64_t>(value_);
-      auto other_val = std::get<int64_t>(other.value_);
-      return this_val <=> other_val;
-    }
     case TypeId::kDecimal: {
       auto& this_val = std::get<::iceberg::Decimal>(value_);
       auto& other_val = std::get<::iceberg::Decimal>(other.value_);
-      const auto& this_decimal_type = internal::checked_cast<DecimalType&>(*type_);
-      const auto& other_decimal_type = internal::checked_cast<DecimalType&>(*other.type_);
-      return ::iceberg::Decimal::Compare(this_val, other_val, this_decimal_type.scale(),
-                                         other_decimal_type.scale());
+      return this_val < other_val;
     }
     case TypeId::kUuid: {
       auto& this_val = std::get<Uuid>(value_);
       auto& other_val = std::get<Uuid>(other.value_);
-      if (this_val == other_val) {
-        return std::partial_ordering::equivalent;
-      }
-      return std::partial_ordering::unordered;
+      // UUIDs can only be equal or not equal, no ordering
+      return false;
     }
     default:
       return false;
@@ -511,7 +501,7 @@ std::string Literal::ToString() const {
       return std::to_string(std::get<int32_t>(value_));
     }
     default: {
-      return std::format("invalid literal of type {}", type_->ToString());
+      return compat::format("invalid literal of type {}", type_->ToString());
     }
   }
 }

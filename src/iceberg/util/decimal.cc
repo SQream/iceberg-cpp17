@@ -25,7 +25,6 @@
 #include "iceberg/util/decimal.h"
 
 #include <algorithm>
-#include <bit>
 #include <charconv>
 #include <climits>
 #include <cmath>
@@ -41,6 +40,28 @@
 #include "iceberg/util/int128.h"
 #include "iceberg/util/macros.h"
 
+// C++17 compatibility for endian and ranges
+namespace compat {
+  // Simple endian detection
+  inline bool is_little_endian() {
+    const uint16_t test = 0x0001;
+    return reinterpret_cast<const uint8_t*>(&test)[0] == 0x01;
+  }
+  
+  template<typename Container>
+  void reverse(Container& container) {
+    std::reverse(container.begin(), container.end());
+  }
+  
+  // C++17 compatible partial_ordering replacement  
+  enum class decimal_ordering {
+    less,
+    equivalent,
+    greater,
+    unordered
+  };
+}
+
 namespace iceberg {
 
 namespace {
@@ -50,10 +71,10 @@ constexpr int32_t kMaxDecimalBytes = 16;
 
 // The maximum decimal value that can be represented with kMaxPrecision digits.
 // 10^38 - 1
-constexpr Decimal kMaxDecimalValue(5421010862427522170LL, 687399551400673279ULL);
+const Decimal kMaxDecimalValue(5421010862427522170LL, 687399551400673279ULL);
 // The mininum decimal value that can be represented with kMaxPrecision digits.
 // - (10^38 - 1)
-constexpr Decimal kMinDecimalValue(-5421010862427522171LL, 17759344522308878337ULL);
+const Decimal kMinDecimalValue(-5421010862427522171LL, 17759344522308878337ULL);
 
 struct DecimalComponents {
   std::string_view while_digits;
@@ -538,8 +559,8 @@ std::vector<uint8_t> Decimal::ToBigEndian() const {
   auto uvalue = static_cast<uint128_t>(data_);
   std::memcpy(bytes.data(), &uvalue, kMaxDecimalBytes);
 
-  if constexpr (std::endian::native == std::endian::little) {
-    std::ranges::reverse(bytes);
+  if (compat::is_little_endian()) {
+    compat::reverse(bytes);
   }
 
   auto is_negative = data_ < 0;
@@ -588,18 +609,21 @@ bool Decimal::FitsInPrecision(int32_t precision) const {
   return Decimal::Abs(*this) < kDecimal128PowersOfTen[precision];
 }
 
-std::partial_ordering Decimal::Compare(const Decimal& lhs, const Decimal& rhs,
-                                       int32_t lhs_scale, int32_t rhs_scale) {
+compat::partial_ordering Decimal::Compare(const Decimal& lhs, const Decimal& rhs,
+                                           int32_t lhs_scale, int32_t rhs_scale) {
   if (lhs_scale == rhs_scale || lhs.data_ == 0 || rhs.data_ == 0) {
-    return lhs <=> rhs;
+    // C++17 compatible comparison
+    if (lhs.data_ < rhs.data_) return compat::partial_ordering::less;
+    if (lhs.data_ > rhs.data_) return compat::partial_ordering::greater;
+    return compat::partial_ordering::equivalent;
   }
 
   // If one is negative and the other is positive, the positive is greater.
   if (lhs.data_ < 0 && rhs.data_ > 0) {
-    return std::partial_ordering::less;
+    return compat::partial_ordering::less;
   }
   if (lhs.data_ > 0 && rhs.data_ < 0) {
-    return std::partial_ordering::greater;
+    return compat::partial_ordering::greater;
   }
 
   // Both are negative
@@ -617,21 +641,22 @@ std::partial_ordering Decimal::Compare(const Decimal& lhs, const Decimal& rhs,
 
   if (delta_scale < 0) {
     // lhs_scale < rhs_scale
-    if (RescaleWouldCauseDataLoss(lhs, -delta_scale, multiplier, &adjusted_lhs))
-        [[unlikely]] {
-      return negative ? std::partial_ordering::less : std::partial_ordering::greater;
+    if (RescaleWouldCauseDataLoss(lhs, -delta_scale, multiplier, &adjusted_lhs)) {
+      return negative ? compat::partial_ordering::less : compat::partial_ordering::greater;
     }
     adjusted_rhs = rhs;
   } else {
     // lhs_scale > rhs_scale
-    if (RescaleWouldCauseDataLoss(rhs, delta_scale, multiplier, &adjusted_rhs))
-        [[unlikely]] {
-      return negative ? std::partial_ordering::greater : std::partial_ordering::less;
+    if (RescaleWouldCauseDataLoss(rhs, delta_scale, multiplier, &adjusted_rhs)) {
+      return negative ? compat::partial_ordering::greater : compat::partial_ordering::less;
     }
     adjusted_lhs = lhs;
   }
 
-  return adjusted_lhs <=> adjusted_rhs;
+  // C++17 compatible comparison
+  if (adjusted_lhs.data_ < adjusted_rhs.data_) return compat::partial_ordering::less;
+  if (adjusted_lhs.data_ > adjusted_rhs.data_) return compat::partial_ordering::greater;
+  return compat::partial_ordering::equivalent;
 }
 
 std::array<uint8_t, Decimal::kByteWidth> Decimal::ToBytes() const {

@@ -31,7 +31,8 @@ namespace iceberg {
 namespace {
 template <TypeId type_id>
 Literal TruncateLiteralImpl(const Literal& literal, int32_t width) {
-  std::unreachable();
+  compat::unreachable();
+  return Literal::Int(0); // Never reached
 }
 
 template <>

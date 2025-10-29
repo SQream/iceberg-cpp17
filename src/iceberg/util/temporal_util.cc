@@ -25,43 +25,118 @@
 
 #include "iceberg/expression/literal.h"
 
+// C++17 compatibility for chrono features
+namespace compat {
+  using namespace std::chrono;
+  
+  // Simple year/month/day structure for C++17
+  struct year_month_day {
+    int year_val;
+    int month_val;
+    int day_val;
+    
+    year_month_day(int y, int m, int d) : year_val(y), month_val(m), day_val(d) {}
+    
+    constexpr int year() const { return year_val; }
+    constexpr unsigned month() const { return month_val; }
+    constexpr unsigned day() const { return day_val; }
+  };
+  
+  using days = std::chrono::duration<int, std::ratio<86400>>;
+  using hours = std::chrono::hours;
+  using microseconds = std::chrono::microseconds;
+  
+  // Convert days since epoch to year/month/day
+  inline year_month_day DateToYmd(int32_t days_since_epoch) {
+    // Unix epoch: 1970-01-01
+    // Simple approximation - can be made more accurate if needed
+    const int days_per_year = 365;
+    const int days_per_4_years = days_per_year * 4 + 1; // accounting for leap years
+    
+    int year = 1970;
+    int remaining_days = days_since_epoch;
+    
+    // Handle years
+    while (remaining_days >= days_per_4_years) {
+      year += 4;
+      remaining_days -= days_per_4_years;
+    }
+    while (remaining_days >= days_per_year) {
+      year += 1;
+      remaining_days -= days_per_year;
+      // Simple leap year check
+      if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+        if (remaining_days >= 0) {
+          remaining_days -= 1; // account for leap day
+        }
+      }
+    }
+    
+    // Handle months (simplified)
+    int month = 1;
+    int days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+      days_in_month[1] = 29; // leap year
+    }
+    
+    while (remaining_days >= days_in_month[month - 1]) {
+      remaining_days -= days_in_month[month - 1];
+      month++;
+      if (month > 12) {
+        month = 1;
+        year++;
+        // Recalculate leap year for new year
+        days_in_month[1] = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) ? 29 : 28;
+      }
+    }
+    
+    return year_month_day(year, month, remaining_days + 1);
+  }
+  
+  // Convert microseconds since epoch to year/month/day
+  inline year_month_day TimestampToYmd(int64_t micros_since_epoch) {
+    int32_t days_since_epoch = static_cast<int32_t>(micros_since_epoch / (1000000LL * 86400LL));
+    return DateToYmd(days_since_epoch);
+  }
+  
+  // Convert timestamp to duration units
+  template <typename Duration>
+  inline int32_t TimestampToDuration(int64_t micros_since_epoch) {
+    if constexpr (std::is_same_v<Duration, days>) {
+      return static_cast<int32_t>(micros_since_epoch / (1000000LL * 86400LL));
+    } else if constexpr (std::is_same_v<Duration, hours>) {
+      return static_cast<int32_t>(micros_since_epoch / (1000000LL * 3600LL));
+    } else {
+      static_assert(std::is_same_v<Duration, days> || std::is_same_v<Duration, hours>, 
+                    "Only days and hours are supported");
+    }
+  }
+}
+
 namespace iceberg {
 
 namespace {
 
 using namespace std::chrono;  // NOLINT
 
-constexpr auto kEpochYmd = year{1970} / January / 1;
-constexpr auto kEpochDays = sys_days(kEpochYmd);
-
-inline constexpr year_month_day DateToYmd(int32_t days_since_epoch) {
-  return {kEpochDays + days{days_since_epoch}};
-}
-
-inline constexpr year_month_day TimestampToYmd(int64_t micros_since_epoch) {
-  return {floor<days>(sys_time<microseconds>(microseconds{micros_since_epoch}))};
-}
-
-template <typename Duration>
-  requires std::is_same_v<Duration, days> || std::is_same_v<Duration, hours>
-inline constexpr int32_t TimestampToDuration(int64_t micros_since_epoch) {
-  return static_cast<int32_t>(
-      floor<Duration>(
-          sys_time<microseconds>(microseconds{micros_since_epoch}).time_since_epoch())
-          .count());
-}
+// Use compat implementations for C++17
+using compat::year_month_day;
+using compat::DateToYmd;
+using compat::TimestampToYmd;
+using compat::TimestampToDuration;
+using compat::days;
+using compat::hours;
 
 inline constexpr int32_t MonthsSinceEpoch(const year_month_day& ymd) {
-  auto delta = ymd.year() - kEpochYmd.year();
-  // Calculate the month as months from 1970-01
-  // Note: January is month 1, so we subtract 1 to get zero-based month count.
-  return static_cast<int32_t>(delta.count() * 12 + static_cast<unsigned>(ymd.month()) -
-                              1);
+  // Simple calculation: years since 1970 * 12 + month difference
+  int years_since_epoch = ymd.year() - 1970;
+  return years_since_epoch * 12 + (ymd.month() - 1);
 }
 
 template <TypeId type_id>
 Result<Literal> ExtractYearImpl(const Literal& literal) {
-  std::unreachable();
+  compat::unreachable();
+  return Literal::Int(0); // Never reached
 }
 
 template <>
@@ -85,7 +160,8 @@ Result<Literal> ExtractYearImpl<TypeId::kTimestampTz>(const Literal& literal) {
 
 template <TypeId type_id>
 Result<Literal> ExtractMonthImpl(const Literal& literal) {
-  std::unreachable();
+  compat::unreachable();
+  return Literal::Int(0); // Never reached
 }
 
 template <>
@@ -109,7 +185,8 @@ Result<Literal> ExtractMonthImpl<TypeId::kTimestampTz>(const Literal& literal) {
 
 template <TypeId type_id>
 Result<Literal> ExtractDayImpl(const Literal& literal) {
-  std::unreachable();
+  compat::unreachable();
+  return Literal::Int(0); // Never reached
 }
 
 template <>
@@ -130,7 +207,8 @@ Result<Literal> ExtractDayImpl<TypeId::kTimestampTz>(const Literal& literal) {
 
 template <TypeId type_id>
 Result<Literal> ExtractHourImpl(const Literal& literal) {
-  std::unreachable();
+  compat::unreachable();
+  return Literal::Int(0); // Never reached
 }
 
 template <>

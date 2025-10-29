@@ -54,15 +54,21 @@ Status AppendField(ArrowArray* array, double value) {
 }
 
 Status AppendField(ArrowArray* array, std::string_view value) {
-  ArrowStringView view(value.data(), value.size());
+  ArrowStringView view;
+  view.data = value.data();
+  view.size_bytes = value.size();
   ICEBERG_NANOARROW_RETURN_UNEXPECTED(ArrowArrayAppendString(array, view));
   return {};
 }
 
+Status AppendField(ArrowArray* array, const std::string& value) {
+  return AppendField(array, std::string_view(value));
+}
+
 Status AppendField(ArrowArray* array, std::span<const uint8_t> value) {
-  ArrowBufferViewData data;
-  data.as_char = reinterpret_cast<const char*>(value.data());
-  ArrowBufferView view(data, value.size());
+  ArrowBufferView view;
+  view.data.as_char = reinterpret_cast<const char*>(value.data());
+  view.size_bytes = value.size();
   ICEBERG_NANOARROW_RETURN_UNEXPECTED(ArrowArrayAppendBytes(array, view));
   return {};
 }

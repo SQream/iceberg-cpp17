@@ -22,6 +22,7 @@
 #include <gtest/gtest.h>
 
 #include "iceberg/expression/literal.h"
+#include "iceberg/test/matchers.h"
 
 namespace iceberg {
 
@@ -29,25 +30,39 @@ namespace iceberg {
 // https://iceberg.apache.org/spec/#truncate-transform-details
 TEST(TruncateUtilTest, TruncateLiteral) {
   // Integer
-  EXPECT_EQ(TruncateUtils::TruncateLiteral(Literal::Int(1), 10), Literal::Int(0));
-  EXPECT_EQ(TruncateUtils::TruncateLiteral(Literal::Int(-1), 10), Literal::Int(-10));
-  EXPECT_EQ(TruncateUtils::TruncateLiteral(Literal::Long(1), 10), Literal::Long(0));
-  EXPECT_EQ(TruncateUtils::TruncateLiteral(Literal::Long(-1), 10), Literal::Long(-10));
+  auto result1 = TruncateUtils::TruncateLiteral(Literal::Int(1), 10);
+  EXPECT_THAT(result1, IsOk());
+  EXPECT_EQ(result1.value(), Literal::Int(0));
+  
+  auto result2 = TruncateUtils::TruncateLiteral(Literal::Int(-1), 10);
+  EXPECT_THAT(result2, IsOk());
+  EXPECT_EQ(result2.value(), Literal::Int(-10));
+  
+  auto result3 = TruncateUtils::TruncateLiteral(Literal::Long(1), 10);
+  EXPECT_THAT(result3, IsOk());
+  EXPECT_EQ(result3.value(), Literal::Long(0));
+  
+  auto result4 = TruncateUtils::TruncateLiteral(Literal::Long(-1), 10);
+  EXPECT_THAT(result4, IsOk());
+  EXPECT_EQ(result4.value(), Literal::Long(-10));
 
   // Decimal
-  EXPECT_EQ(TruncateUtils::TruncateLiteral(Literal::Decimal(1065, 4, 2), 50),
-            Literal::Decimal(1050, 4, 2));
+  auto result5 = TruncateUtils::TruncateLiteral(Literal::Decimal(1065, 4, 2), 50);
+  EXPECT_THAT(result5, IsOk());
+  EXPECT_EQ(result5.value(), Literal::Decimal(1050, 4, 2));
 
   // String
-  EXPECT_EQ(TruncateUtils::TruncateLiteral(Literal::String("iceberg"), 3),
-            Literal::String("ice"));
+  auto result6 = TruncateUtils::TruncateLiteral(Literal::String("iceberg"), 3);
+  EXPECT_THAT(result6, IsOk());
+  EXPECT_EQ(result6.value(), Literal::String("ice"));
 
   // Binary
   std::string data = "\x01\x02\x03\x04\x05";
   std::string expected = "\x01\x02\x03";
-  EXPECT_EQ(TruncateUtils::TruncateLiteral(
-                Literal::Binary(std::vector<uint8_t>(data.begin(), data.end())), 3),
-            Literal::Binary(std::vector<uint8_t>(expected.begin(), expected.end())));
+  auto result7 = TruncateUtils::TruncateLiteral(
+      Literal::Binary(std::vector<uint8_t>(data.begin(), data.end())), 3);
+  EXPECT_THAT(result7, IsOk());
+  EXPECT_EQ(result7.value(), Literal::Binary(std::vector<uint8_t>(expected.begin(), expected.end())));
 }
 
 }  // namespace iceberg

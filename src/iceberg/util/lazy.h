@@ -38,15 +38,13 @@ class Lazy {
 
   template <typename R, typename... Args>
   struct Trait<R (*)(Args...)> {
-    using ReturnType = R::value_type;
+    using ReturnType = typename R::value_type;
   };
 
-  using T = Trait<decltype(InitFunc)>::ReturnType;
+  using T = typename Trait<decltype(InitFunc)>::ReturnType;
 
  public:
   template <typename... Args>
-    requires std::invocable<decltype(InitFunc), Args...> &&
-             std::same_as<std::invoke_result_t<decltype(InitFunc), Args...>, Result<T>>
   Result<std::reference_wrapper<T>> Get(Args&&... args) const {
     Result<T> result;
     std::call_once(flag_, [&result, this, &args...]() {

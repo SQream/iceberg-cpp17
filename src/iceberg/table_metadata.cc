@@ -1694,7 +1694,7 @@ TableMetadataBuilder& TableMetadataBuilder::RemoveRef(const std::string& name) {
 
 TableMetadataBuilder& TableMetadataBuilder::RemoveSnapshots(
     const std::vector<std::shared_ptr<Snapshot>>& snapshots_to_remove) {
-  throw IcebergError(std::format("{} not implemented", __FUNCTION__));
+  throw IcebergError(compat::format("{} not implemented", __FUNCTION__));
 }
 
 TableMetadataBuilder& TableMetadataBuilder::RemoveSnapshots(
@@ -1704,7 +1704,7 @@ TableMetadataBuilder& TableMetadataBuilder::RemoveSnapshots(
 }
 
 TableMetadataBuilder& TableMetadataBuilder::SuppressHistoricalSnapshots() {
-  throw IcebergError(std::format("{} not implemented", __FUNCTION__));
+  throw IcebergError(compat::format("{} not implemented", __FUNCTION__));
 }
 
 TableMetadataBuilder& TableMetadataBuilder::SetStatistics(
@@ -1750,11 +1750,11 @@ TableMetadataBuilder& TableMetadataBuilder::SetLocation(std::string_view locatio
 
 TableMetadataBuilder& TableMetadataBuilder::AddEncryptionKey(
     std::shared_ptr<EncryptedKey> key) {
-  throw IcebergError(std::format("{} not implemented", __FUNCTION__));
+  throw IcebergError(compat::format("{} not implemented", __FUNCTION__));
 }
 
 TableMetadataBuilder& TableMetadataBuilder::RemoveEncryptionKey(std::string_view key_id) {
-  throw IcebergError(std::format("{} not implemented", __FUNCTION__));
+  throw IcebergError(compat::format("{} not implemented", __FUNCTION__));
 }
 
 Result<std::unique_ptr<TableMetadata>> TableMetadataBuilder::Build() {

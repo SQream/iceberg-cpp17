@@ -142,7 +142,7 @@ Not::Not(std::shared_ptr<Expression> child) : child_(std::move(child)) {
   ICEBERG_DCHECK(child_ != nullptr, "Not expression cannot have null child");
 }
 
-std::string Not::ToString() const { return std::format("not({})", child_->ToString()); }
+std::string Not::ToString() const { return compat::format("not({})", child_->ToString()); }
 
 Result<std::shared_ptr<Expression>> Not::Negate() const { return child_; }
 

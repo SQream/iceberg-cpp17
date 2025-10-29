@@ -33,6 +33,7 @@
 #include <type_traits>
 #include <vector>
 
+#include "iceberg/cpp17_compat.h"
 #include "iceberg/iceberg_export.h"
 #include "iceberg/result.h"
 #include "iceberg/util/formattable.h"
@@ -170,6 +171,15 @@ class ICEBERG_EXPORT Decimal : public util::Formattable {
   /// \return error status if the length is an invalid value
   static Result<Decimal> FromBigEndian(const uint8_t* data, int32_t length);
 
+  /// \brief Compare two Decimal values with different scales
+  /// \param lhs The left-hand side Decimal value
+  /// \param rhs The right-hand side Decimal value  
+  /// \param lhs_scale The scale of the left-hand side value
+  /// \param rhs_scale The scale of the right-hand side value
+  /// \return A comparison result compatible with std::partial_ordering
+  static compat::partial_ordering Compare(const Decimal& lhs, const Decimal& rhs,
+                                           int32_t lhs_scale, int32_t rhs_scale);
+
   /// \brief Convert Decimal's unscaled value to two’s-complement big-endian binary, using
   ///        the minimum number of bytes for the value.
   /// \return A vector containing the big-endian bytes.
@@ -227,25 +237,6 @@ class ICEBERG_EXPORT Decimal : public util::Formattable {
 
   ICEBERG_EXPORT friend Decimal operator-(const Decimal& operand);
   ICEBERG_EXPORT friend Decimal operator~(const Decimal& operand);
-
-  ICEBERG_EXPORT friend bool operator<(const Decimal& lhs, const Decimal& rhs) {
-    if (lhs.high() != rhs.high()) {
-      return lhs.high() < rhs.high();
-    }
-    return lhs.low() < rhs.low();
-  }
-
-  ICEBERG_EXPORT friend bool operator<=(const Decimal& lhs, const Decimal& rhs) {
-    return lhs < rhs || lhs == rhs;
-  }
-
-  ICEBERG_EXPORT friend bool operator>(const Decimal& lhs, const Decimal& rhs) {
-    return !(lhs <= rhs);
-  }
-
-  ICEBERG_EXPORT friend bool operator>=(const Decimal& lhs, const Decimal& rhs) {
-    return !(lhs < rhs);
-  }
 
   ICEBERG_EXPORT friend Decimal operator+(const Decimal& lhs, const Decimal& rhs);
   ICEBERG_EXPORT friend Decimal operator-(const Decimal& lhs, const Decimal& rhs);

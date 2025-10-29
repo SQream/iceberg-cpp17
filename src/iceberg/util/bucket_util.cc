@@ -30,7 +30,8 @@ namespace iceberg {
 namespace {
 template <TypeId type_id>
 int32_t HashLiteral(const Literal& literal) {
-  std::unreachable();
+  compat::unreachable();
+  return 0; // Never reached
 }
 
 template <>

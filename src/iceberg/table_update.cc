@@ -19,6 +19,7 @@
 
 #include "iceberg/table_update.h"
 
+#include "iceberg/format_compat.h"
 #include "iceberg/schema.h"
 #include "iceberg/snapshot.h"
 #include "iceberg/sort_order.h"

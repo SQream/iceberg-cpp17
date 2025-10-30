@@ -22,6 +22,8 @@
 #include <sstream>
 #include <string_view>
 
+#include "iceberg/util/formatter.h"
+
 #include <arrow/type.h>
 #include <avro/CustomAttributes.hh>
 #include <avro/LogicalType.hh>
@@ -632,6 +634,10 @@ Result<FieldProjection> ProjectStruct(const StructType& struct_type,
   struct NodeInfo {
     size_t local_index;
     ::avro::NodePtr field_node;
+    
+    // Constructor for C++17 compatibility with unordered_map::emplace
+    NodeInfo(size_t index, const ::avro::NodePtr& node) 
+      : local_index(index), field_node(node) {}
   };
   std::unordered_map<int32_t, NodeInfo> node_info_map;
   node_info_map.reserve(avro_node->leaves());

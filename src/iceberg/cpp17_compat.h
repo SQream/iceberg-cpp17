@@ -315,6 +315,66 @@ class expected<void, E> {
   E error_;
 };
 
+// Equality operators for expected
+template <class T, class E>
+constexpr bool operator==(const expected<T, E>& lhs, const expected<T, E>& rhs) {
+  if (lhs.has_value() != rhs.has_value()) {
+    return false;
+  }
+  if (lhs.has_value()) {
+    return lhs.value() == rhs.value();
+  } else {
+    return lhs.error() == rhs.error();
+  }
+}
+
+template <class T, class E>
+constexpr bool operator!=(const expected<T, E>& lhs, const expected<T, E>& rhs) {
+  return !(lhs == rhs);
+}
+
+// Equality with value type
+template <class T, class E, class U>
+constexpr bool operator==(const expected<T, E>& lhs, const U& rhs) {
+  return lhs.has_value() && lhs.value() == rhs;
+}
+
+template <class T, class E, class U>
+constexpr bool operator==(const U& lhs, const expected<T, E>& rhs) {
+  return rhs.has_value() && lhs == rhs.value();
+}
+
+template <class T, class E, class U>
+constexpr bool operator!=(const expected<T, E>& lhs, const U& rhs) {
+  return !(lhs == rhs);
+}
+
+template <class T, class E, class U>
+constexpr bool operator!=(const U& lhs, const expected<T, E>& rhs) {
+  return !(lhs == rhs);
+}
+
+// Equality with unexpected
+template <class T, class E>
+constexpr bool operator==(const expected<T, E>& lhs, const unexpected<E>& rhs) {
+  return !lhs.has_value() && lhs.error() == rhs.error();
+}
+
+template <class T, class E>
+constexpr bool operator==(const unexpected<E>& lhs, const expected<T, E>& rhs) {
+  return !rhs.has_value() && lhs.error() == rhs.error();
+}
+
+template <class T, class E>
+constexpr bool operator!=(const expected<T, E>& lhs, const unexpected<E>& rhs) {
+  return !(lhs == rhs);
+}
+
+template <class T, class E>
+constexpr bool operator!=(const unexpected<E>& lhs, const expected<T, E>& rhs) {
+  return !(lhs == rhs);
+}
+
 // std::unreachable replacement
 [[noreturn]] inline void unreachable() {
   __builtin_unreachable();

@@ -406,7 +406,7 @@ std::vector<int32_t> SelectedColumnIndices(const SchemaProjection& projection) {
   for (const auto& field : projection.fields) {
     CollectColumnIds(field, &column_ids);
   }
-  std::sort(column_ids);
+  std::sort(column_ids.begin(), column_ids.end());
   return column_ids;
 }
 

@@ -103,11 +103,7 @@ function(resolve_arrow_dependency)
                        URL ${ARROW_SOURCE_URL}
                        URL_HASH "SHA256=${ICEBERG_ARROW_BUILD_SHA256_CHECKSUM}"
                        SOURCE_SUBDIR
-                       cpp
-                       FIND_PACKAGE_ARGS
-                       NAMES
-                       Arrow
-                       CONFIG)
+                       cpp)
 
   fetchcontent_makeavailable(VendoredArrow)
 

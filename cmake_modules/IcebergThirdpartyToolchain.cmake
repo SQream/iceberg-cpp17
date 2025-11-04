@@ -66,6 +66,8 @@ macro(prepare_fetchcontent)
   set(CMAKE_COMPILE_WARNING_AS_ERROR FALSE)
   set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY TRUE)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+  # Force CXX11 ABI consistently across all dependencies
+  add_compile_definitions(_GLIBCXX_USE_CXX11_ABI=1)
   # Use "NEW" for CMP0077 by default.
   #
   # https://cmake.org/cmake/help/latest/policy/CMP0077.html

@@ -22,7 +22,6 @@
 /// \file iceberg/util/lazy.h
 /// Lazy initialization utility.
 
-#include <concepts>
 #include <functional>
 #include <mutex>
 
@@ -45,7 +44,7 @@ class Lazy {
 
  public:
   template <typename... Args>
-  Result<std::reference_wrapper<T>> Get(Args&&... args) const {
+  Result<std::reference_wrapper<const T>> Get(Args&&... args) const {
     Result<T> result;
     std::call_once(flag_, [&result, this, &args...]() {
       result = InitFunc(std::forward<Args>(args)...);
@@ -54,7 +53,7 @@ class Lazy {
       }
     });
     ICEBERG_RETURN_UNEXPECTED(result);
-    return std::ref(value_);
+    return std::cref(value_);
   }
 
  private:

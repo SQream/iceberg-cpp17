@@ -66,7 +66,8 @@ Result<std::shared_ptr<Expression>> And::Negate() const {
   // De Morgan's law: not(A and B) = (not A) or (not B)
   ICEBERG_ASSIGN_OR_RAISE(auto left_negated, left_->Negate());
   ICEBERG_ASSIGN_OR_RAISE(auto right_negated, right_->Negate());
-  return Or::Make(std::move(left_negated), std::move(right_negated));
+  ICEBERG_ASSIGN_OR_RAISE(auto or_expr, Or::Make(std::move(left_negated), std::move(right_negated)));
+  return std::shared_ptr<Expression>(std::move(or_expr));
 }
 
 bool And::Equals(const Expression& expr) const {
@@ -100,7 +101,8 @@ Result<std::shared_ptr<Expression>> Or::Negate() const {
   // De Morgan's law: not(A or B) = (not A) and (not B)
   ICEBERG_ASSIGN_OR_RAISE(auto left_negated, left_->Negate());
   ICEBERG_ASSIGN_OR_RAISE(auto right_negated, right_->Negate());
-  return And::Make(std::move(left_negated), std::move(right_negated));
+  ICEBERG_ASSIGN_OR_RAISE(auto and_expr, And::Make(std::move(left_negated), std::move(right_negated)));
+  return std::shared_ptr<Expression>(std::move(and_expr));
 }
 
 bool Or::Equals(const Expression& expr) const {
@@ -135,7 +137,8 @@ Result<std::shared_ptr<Expression>> Not::MakeFolded(std::shared_ptr<Expression> 
     return not_expr.child();
   }
 
-  return Not::Make(std::move(child));
+  ICEBERG_ASSIGN_OR_RAISE(auto not_result, Not::Make(std::move(child)));
+  return std::shared_ptr<Expression>(std::move(not_result));
 }
 
 Not::Not(std::shared_ptr<Expression> child) : child_(std::move(child)) {

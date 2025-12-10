@@ -35,7 +35,7 @@
 namespace iceberg {
 
 /// \brief Base aggregate holding an operation and a term.
-template <TermType T>
+template <typename T, typename = std::enable_if_t<is_term_type_v<T>>>
 class ICEBERG_EXPORT Aggregate : public virtual Expression {
  public:
   ~Aggregate() override = default;

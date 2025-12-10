@@ -97,7 +97,7 @@ class EvalVisitor : public BoundVisitor<bool> {
   Result<bool> In(const std::shared_ptr<Bound>& expr,
                   const BoundSetPredicate::LiteralSet& literal_set) override {
     ICEBERG_ASSIGN_OR_RAISE(auto value, expr->Evaluate(row_));
-    return literal_set.contains(value);
+    return literal_set.find(value) != literal_set.end();
   }
 
   Result<bool> NotIn(const std::shared_ptr<Bound>& expr,
@@ -118,7 +118,8 @@ class EvalVisitor : public BoundVisitor<bool> {
 
     const auto& str_value = std::get<std::string>(value.value());
     const auto& str_prefix = std::get<std::string>(lit.value());
-    return str_value.starts_with(str_prefix);
+    return str_value.size() >= str_prefix.size() &&
+           str_value.compare(0, str_prefix.size(), str_prefix) == 0;
   }
 
   Result<bool> NotStartsWith(const std::shared_ptr<Bound>& expr,

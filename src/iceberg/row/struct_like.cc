@@ -94,8 +94,14 @@ StructLikeAccessor::StructLikeAccessor(std::shared_ptr<Type> type,
         ICEBERG_ASSIGN_OR_RAISE(auto field,
                                 current_struct_like->GetField(position_path_[i]));
         if (!std::holds_alternative<std::shared_ptr<StructLike>>(field)) {
-          return InvalidSchema("Encountered non-struct in the position path [{}]",
-                               position_path_);
+          std::string path_str = "[";
+          for (size_t j = 0; j < position_path_.size(); ++j) {
+            if (j > 0) path_str += ", ";
+            path_str += std::to_string(position_path_[j]);
+          }
+          path_str += "]";
+          return InvalidSchema("Encountered non-struct in the position path {}",
+                               path_str);
         }
         backups.push_back(std::get<std::shared_ptr<StructLike>>(field));
         current_struct_like = backups.back().get();
@@ -163,7 +169,8 @@ Result<Literal> StructLikeAccessor::GetLiteral(const StructLike& struct_like) co
                           type_->ToString());
   }
 
-  std::unreachable();
+  compat::unreachable();
+  return NotSupported("Unreachable");  // Never reached but silences warning
 }
 
 }  // namespace iceberg

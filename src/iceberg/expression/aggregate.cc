@@ -20,13 +20,13 @@
 #include "iceberg/expression/aggregate.h"
 
 #include <algorithm>
-#include <format>
 #include <map>
 #include <memory>
 #include <optional>
 #include <string_view>
 #include <vector>
 
+#include "iceberg/format_compat.h"
 #include "iceberg/expression/literal.h"
 #include "iceberg/manifest/manifest_entry.h"
 #include "iceberg/row/struct_like.h"
@@ -37,6 +37,12 @@
 namespace iceberg {
 
 namespace {
+
+// C++17 compatible contains helper for std::map (C++20 adds map::contains)
+template <typename Map, typename Key>
+bool map_contains(const Map& m, const Key& key) {
+  return m.find(key) != m.end();
+}
 
 std::shared_ptr<PrimitiveType> GetPrimitiveType(const BoundTerm& term) {
   ICEBERG_DCHECK(term.type()->is_primitive(), "Value aggregate term should be primitive");
@@ -123,12 +129,12 @@ class MaxAggregator : public BoundAggregate::Aggregator {
       return {};
     }
 
-    if (auto ordering = value <=> current_;
-        ordering == std::partial_ordering::unordered) {
+    auto ordering = value.Compare(current_);
+    if (ordering == compat::partial_ordering::unordered) {
       valid_ = false;
       return InvalidArgument("Cannot compare literal {} with current value {}",
                              value.ToString(), current_.ToString());
-    } else if (ordering == std::partial_ordering::greater) {
+    } else if (ordering == compat::partial_ordering::greater) {
       current_ = std::move(value);
     }
 
@@ -153,12 +159,12 @@ class MaxAggregator : public BoundAggregate::Aggregator {
       return {};
     }
 
-    if (auto ordering = value <=> current_;
-        ordering == std::partial_ordering::unordered) {
+    auto ordering = value.Compare(current_);
+    if (ordering == compat::partial_ordering::unordered) {
       valid_ = false;
       return InvalidArgument("Cannot compare literal {} with current value {}",
                              value.ToString(), current_.ToString());
-    } else if (ordering == std::partial_ordering::greater) {
+    } else if (ordering == compat::partial_ordering::greater) {
       current_ = std::move(value);
     }
     return {};
@@ -195,12 +201,12 @@ class MinAggregator : public BoundAggregate::Aggregator {
       return {};
     }
 
-    if (auto ordering = value <=> current_;
-        ordering == std::partial_ordering::unordered) {
+    auto ordering = value.Compare(current_);
+    if (ordering == compat::partial_ordering::unordered) {
       valid_ = false;
       return InvalidArgument("Cannot compare literal {} with current value {}",
                              value.ToString(), current_.ToString());
-    } else if (ordering == std::partial_ordering::less) {
+    } else if (ordering == compat::partial_ordering::less) {
       current_ = std::move(value);
     }
     return {};
@@ -224,12 +230,12 @@ class MinAggregator : public BoundAggregate::Aggregator {
       return {};
     }
 
-    if (auto ordering = value <=> current_;
-        ordering == std::partial_ordering::unordered) {
+    auto ordering = value.Compare(current_);
+    if (ordering == compat::partial_ordering::unordered) {
       valid_ = false;
       return InvalidArgument("Cannot compare literal {} with current value {}",
                              value.ToString(), current_.ToString());
-    } else if (ordering == std::partial_ordering::less) {
+    } else if (ordering == compat::partial_ordering::less) {
       current_ = std::move(value);
     }
     return {};
@@ -268,36 +274,38 @@ int32_t GetFieldId(const std::shared_ptr<BoundTerm>& term) {
 
 }  // namespace
 
-template <TermType T>
-std::string Aggregate<T>::ToString() const {
+template <typename T, typename EnableT>
+std::string Aggregate<T, EnableT>::ToString() const {
   ICEBERG_DCHECK(IsSupportedOp(op()), "Unexpected aggregate operation");
   ICEBERG_DCHECK(op() == Expression::Operation::kCountStar || term() != nullptr,
                  "Aggregate term should not be null except for COUNT(*)");
 
   switch (op()) {
     case Expression::Operation::kCount:
-      return std::format("count({})", term()->ToString());
+      return compat::format("count({})", term()->ToString());
     case Expression::Operation::kCountNull:
-      return std::format("count_if({} is null)", term()->ToString());
+      return compat::format("count_if({} is null)", term()->ToString());
     case Expression::Operation::kCountStar:
       return "count(*)";
     case Expression::Operation::kMax:
-      return std::format("max({})", term()->ToString());
+      return compat::format("max({})", term()->ToString());
     case Expression::Operation::kMin:
-      return std::format("min({})", term()->ToString());
+      return compat::format("min({})", term()->ToString());
     default:
-      return std::format("Invalid aggregate: {}", ::iceberg::ToString(op()));
+      return compat::format("Invalid aggregate: {}", ::iceberg::ToString(op()));
   }
 }
 
 // -------------------- CountAggregate --------------------
 
 Result<Literal> CountAggregate::Evaluate(const StructLike& data) const {
-  return CountFor(data).transform(Literal::Long);
+  ICEBERG_ASSIGN_OR_RAISE(auto count, CountFor(data));
+  return Literal::Long(count);
 }
 
 Result<Literal> CountAggregate::Evaluate(const DataFile& file) const {
-  return CountFor(file).transform(Literal::Long);
+  ICEBERG_ASSIGN_OR_RAISE(auto count, CountFor(file));
+  return Literal::Long(count);
 }
 
 std::unique_ptr<BoundAggregate::Aggregator> CountAggregate::NewAggregator() const {
@@ -317,8 +325,8 @@ Result<std::unique_ptr<CountNonNullAggregate>> CountNonNullAggregate::Make(
 }
 
 Result<int64_t> CountNonNullAggregate::CountFor(const StructLike& data) const {
-  return term()->Evaluate(data).transform(
-      [](const auto& val) { return val.IsNull() ? 0 : 1; });
+  ICEBERG_ASSIGN_OR_RAISE(auto val, term()->Evaluate(data));
+  return val.IsNull() ? 0 : 1;
 }
 
 Result<int64_t> CountNonNullAggregate::CountFor(const DataFile& file) const {
@@ -333,8 +341,8 @@ Result<int64_t> CountNonNullAggregate::CountFor(const DataFile& file) const {
 
 bool CountNonNullAggregate::HasValue(const DataFile& file) const {
   auto field_id = GetFieldId(term());
-  return file.value_counts.contains(field_id) &&
-         file.null_value_counts.contains(field_id);
+  return map_contains(file.value_counts, field_id) &&
+         map_contains(file.null_value_counts, field_id);
 }
 
 CountNullAggregate::CountNullAggregate(std::shared_ptr<BoundTerm> term)
@@ -349,8 +357,8 @@ Result<std::unique_ptr<CountNullAggregate>> CountNullAggregate::Make(
 }
 
 Result<int64_t> CountNullAggregate::CountFor(const StructLike& data) const {
-  return term()->Evaluate(data).transform(
-      [](const auto& val) { return val.IsNull() ? 1 : 0; });
+  ICEBERG_ASSIGN_OR_RAISE(auto val, term()->Evaluate(data));
+  return val.IsNull() ? 1 : 0;
 }
 
 Result<int64_t> CountNullAggregate::CountFor(const DataFile& file) const {
@@ -362,7 +370,7 @@ Result<int64_t> CountNullAggregate::CountFor(const DataFile& file) const {
 }
 
 bool CountNullAggregate::HasValue(const DataFile& file) const {
-  return file.null_value_counts.contains(GetFieldId(term()));
+  return map_contains(file.null_value_counts, GetFieldId(term()));
 }
 
 CountStarAggregate::CountStarAggregate()
@@ -417,7 +425,7 @@ std::unique_ptr<BoundAggregate::Aggregator> MaxAggregate::NewAggregator() const 
 
 bool MaxAggregate::HasValue(const DataFile& file) const {
   auto field_id = GetFieldId(term());
-  bool has_bound = file.upper_bounds.contains(field_id);
+  bool has_bound = map_contains(file.upper_bounds, field_id);
   auto value_count = GetMapValue(file.value_counts, field_id);
   auto null_count = GetMapValue(file.null_value_counts, field_id);
   bool all_null = value_count.has_value() && *value_count > 0 && null_count.has_value() &&
@@ -455,7 +463,7 @@ std::unique_ptr<BoundAggregate::Aggregator> MinAggregate::NewAggregator() const 
 
 bool MinAggregate::HasValue(const DataFile& file) const {
   auto field_id = GetFieldId(term());
-  bool has_bound = file.lower_bounds.contains(field_id);
+  bool has_bound = map_contains(file.lower_bounds, field_id);
   auto value_count = GetMapValue(file.value_counts, field_id);
   auto null_count = GetMapValue(file.null_value_counts, field_id);
   bool all_null = value_count.has_value() && *value_count > 0 && null_count.has_value() &&
@@ -477,16 +485,26 @@ Result<std::shared_ptr<Expression>> UnboundAggregateImpl<B>::Bind(
   }
 
   switch (this->op()) {
-    case Expression::Operation::kCountStar:
-      return CountStarAggregate::Make();
-    case Expression::Operation::kCount:
-      return CountNonNullAggregate::Make(std::move(bound_term));
-    case Expression::Operation::kCountNull:
-      return CountNullAggregate::Make(std::move(bound_term));
-    case Expression::Operation::kMax:
-      return MaxAggregate::Make(std::move(bound_term));
-    case Expression::Operation::kMin:
-      return MinAggregate::Make(std::move(bound_term));
+    case Expression::Operation::kCountStar: {
+      ICEBERG_ASSIGN_OR_RAISE(auto agg, CountStarAggregate::Make());
+      return std::shared_ptr<Expression>(std::move(agg));
+    }
+    case Expression::Operation::kCount: {
+      ICEBERG_ASSIGN_OR_RAISE(auto agg, CountNonNullAggregate::Make(std::move(bound_term)));
+      return std::shared_ptr<Expression>(std::move(agg));
+    }
+    case Expression::Operation::kCountNull: {
+      ICEBERG_ASSIGN_OR_RAISE(auto agg, CountNullAggregate::Make(std::move(bound_term)));
+      return std::shared_ptr<Expression>(std::move(agg));
+    }
+    case Expression::Operation::kMax: {
+      ICEBERG_ASSIGN_OR_RAISE(auto agg, MaxAggregate::Make(std::move(bound_term)));
+      return std::shared_ptr<Expression>(std::move(agg));
+    }
+    case Expression::Operation::kMin: {
+      ICEBERG_ASSIGN_OR_RAISE(auto agg, MinAggregate::Make(std::move(bound_term)));
+      return std::shared_ptr<Expression>(std::move(agg));
+    }
     default:
       return NotSupported("Unsupported aggregate operation: {}",
                           ::iceberg::ToString(this->op()));
@@ -558,7 +576,8 @@ class AggregateEvaluatorImpl : public AggregateEvaluator {
   }
 
   bool AllAggregatorsValid() const override {
-    return std::ranges::all_of(aggregators_, &BoundAggregate::Aggregator::IsValid);
+    return std::all_of(aggregators_.begin(), aggregators_.end(),
+                       [](const auto& agg) { return agg->IsValid(); });
   }
 
  private:

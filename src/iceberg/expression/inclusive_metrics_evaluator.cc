@@ -244,11 +244,12 @@ class InclusiveMetricsVisitor : public BoundVisitor<bool> {
       // NaN indicates unreliable bounds. See the InclusiveMetricsEvaluator docs for more.
       return kRowsMightMatch;
     }
-    auto literals_view = literal_set | std::views::filter([&](const Literal& lit) {
-                           return lower.value() <= lit;
-                         });
+    // Filter literals >= lower bound
+    std::vector<Literal> literals_filtered;
+    std::copy_if(literal_set.begin(), literal_set.end(), std::back_inserter(literals_filtered),
+                 [&](const Literal& lit) { return lower.value() <= lit; });
     // if all values are less than lower bound, rows cannot match
-    if (literals_view.empty()) {
+    if (literals_filtered.empty()) {
       return kRowCannotMatch;
     }
 
@@ -256,11 +257,12 @@ class InclusiveMetricsVisitor : public BoundVisitor<bool> {
     if (!upper.has_value() || upper->IsNull()) {
       return kRowsMightMatch;
     }
-    auto filtered_view = literals_view | std::views::filter([&](const Literal& lit) {
-                           return upper.value() >= lit;
-                         });
+    // Filter literals <= upper bound
+    std::vector<Literal> final_filtered;
+    std::copy_if(literals_filtered.begin(), literals_filtered.end(), std::back_inserter(final_filtered),
+                 [&](const Literal& lit) { return upper.value() >= lit; });
     // if remaining values are greater than upper bound, rows cannot match
-    if (filtered_view.empty()) {
+    if (final_filtered.empty()) {
       return kRowCannotMatch;
     }
 
@@ -352,12 +354,12 @@ class InclusiveMetricsVisitor : public BoundVisitor<bool> {
       return kRowsMightMatch;
     }
 
-    if (lower_str.starts_with(prefix)) {
+    if (lower_str.size() >= prefix.size() && lower_str.compare(0, prefix.size(), prefix) == 0) {
       // if upper is shorter than the prefix then upper can't start with the prefix
       if (upper_str.size() < prefix.size()) {
         return kRowsMightMatch;
       }
-      if (upper_str.starts_with(prefix)) {
+      if (upper_str.size() >= prefix.size() && upper_str.compare(0, prefix.size(), prefix) == 0) {
         // both bounds match the prefix, so all rows must match the prefix and therefore
         // do not satisfy the predicate
         return kRowCannotMatch;
@@ -370,7 +372,7 @@ class InclusiveMetricsVisitor : public BoundVisitor<bool> {
  private:
   bool MayContainNull(int32_t id) {
     return data_file_.null_value_counts.empty() ||
-           !data_file_.null_value_counts.contains(id) ||
+           data_file_.null_value_counts.find(id) == data_file_.null_value_counts.end() ||
            data_file_.null_value_counts.at(id) != 0;
   }
 
@@ -423,8 +425,9 @@ class InclusiveMetricsVisitor : public BoundVisitor<bool> {
       return NotSupported("Lower bound of non-primitive type is not supported.");
     }
     auto primitive_type = internal::checked_pointer_cast<PrimitiveType>(type);
-    if (data_file_.lower_bounds.contains(id)) {
-      return Literal::Deserialize(data_file_.lower_bounds.at(id), primitive_type);
+    if (data_file_.lower_bounds.find(id) != data_file_.lower_bounds.end()) {
+      ICEBERG_ASSIGN_OR_RAISE(auto lit, Literal::Deserialize(data_file_.lower_bounds.at(id), primitive_type));
+      return std::optional<Literal>(std::move(lit));
     }
 
     return std::nullopt;
@@ -437,8 +440,9 @@ class InclusiveMetricsVisitor : public BoundVisitor<bool> {
       return NotSupported("Upper bound of non-primitive type is not supported.");
     }
     auto primitive_type = internal::checked_pointer_cast<PrimitiveType>(type);
-    if (data_file_.upper_bounds.contains(id)) {
-      return Literal::Deserialize(data_file_.upper_bounds.at(id), primitive_type);
+    if (data_file_.upper_bounds.find(id) != data_file_.upper_bounds.end()) {
+      ICEBERG_ASSIGN_OR_RAISE(auto lit, Literal::Deserialize(data_file_.upper_bounds.at(id), primitive_type));
+      return std::optional<Literal>(std::move(lit));
     }
 
     return std::nullopt;
@@ -451,7 +455,8 @@ class InclusiveMetricsVisitor : public BoundVisitor<bool> {
       if (lower.has_value()) {
         ICEBERG_ASSIGN_OR_RAISE(auto transform_func,
                                 transform->Bind(boundTransform.reference()->type()));
-        return transform_func->Transform(lower.value());
+        ICEBERG_ASSIGN_OR_RAISE(auto transformed, transform_func->Transform(lower.value()));
+        return std::optional<Literal>(std::move(transformed));
       }
     }
 
@@ -465,7 +470,8 @@ class InclusiveMetricsVisitor : public BoundVisitor<bool> {
       if (upper.has_value()) {
         ICEBERG_ASSIGN_OR_RAISE(auto transform_func,
                                 transform->Bind(boundTransform.reference()->type()));
-        return transform_func->Transform(upper.value());
+        ICEBERG_ASSIGN_OR_RAISE(auto transformed, transform_func->Transform(upper.value()));
+        return std::optional<Literal>(std::move(transformed));
       }
     }
 

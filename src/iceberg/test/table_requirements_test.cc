@@ -70,7 +70,7 @@ std::shared_ptr<Schema> CreateTestSchema(int32_t schema_id = 0) {
 template <typename T>
 int CountRequirementsOfType(
     const std::vector<std::unique_ptr<TableRequirement>>& requirements) {
-  return std::ranges::count_if(requirements, [](const auto& req) {
+  return std::count_if(requirements.begin(), requirements.end(), [](const auto& req) {
     return dynamic_cast<T*>(req.get()) != nullptr;
   });
 }

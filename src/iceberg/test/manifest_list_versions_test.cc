@@ -28,6 +28,7 @@
 #include "iceberg/arrow/arrow_file_io.h"
 #include "iceberg/avro/avro_register.h"
 #include "iceberg/file_reader.h"
+#include "iceberg/format_compat.h"
 #include "iceberg/file_writer.h"
 #include "iceberg/manifest/manifest_list.h"
 #include "iceberg/manifest/manifest_reader.h"
@@ -99,7 +100,7 @@ class TestManifestListVersions : public ::testing::Test {
   }
 
   static std::string CreateManifestListPath() {
-    return std::format("manifest-list-{}.avro",
+    return compat::format("manifest-list-{}.avro",
                        std::chrono::system_clock::now().time_since_epoch().count());
   }
 

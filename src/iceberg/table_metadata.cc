@@ -26,7 +26,6 @@
 #include "iceberg/format_compat.h"
 #include <memory>
 #include <optional>
-#include <ranges>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -421,34 +420,40 @@ Result<TableMetadataCache::SnapshotsMapRef> TableMetadataCache::GetSnapshotsById
 
 Result<TableMetadataCache::SchemasMap> TableMetadataCache::InitSchemasMap(
     const TableMetadata* metadata) {
-  return metadata->schemas | std::views::transform([](const auto& schema) {
-           return std::make_pair(schema->schema_id(), schema);
-         }) |
-         std::ranges::to<SchemasMap>();
+  SchemasMap result;
+  for (const auto& schema : metadata->schemas) {
+    if (schema->schema_id().has_value()) {
+      result.emplace(schema->schema_id().value(), schema);
+    }
+  }
+  return result;
 }
 
 Result<TableMetadataCache::PartitionSpecsMap> TableMetadataCache::InitPartitionSpecsMap(
     const TableMetadata* metadata) {
-  return metadata->partition_specs | std::views::transform([](const auto& spec) {
-           return std::make_pair(spec->spec_id(), spec);
-         }) |
-         std::ranges::to<PartitionSpecsMap>();
+  PartitionSpecsMap result;
+  for (const auto& spec : metadata->partition_specs) {
+    result.emplace(spec->spec_id(), spec);
+  }
+  return result;
 }
 
 Result<TableMetadataCache::SortOrdersMap> TableMetadataCache::InitSortOrdersMap(
     const TableMetadata* metadata) {
-  return metadata->sort_orders | std::views::transform([](const auto& order) {
-           return std::make_pair(order->order_id(), order);
-         }) |
-         std::ranges::to<SortOrdersMap>();
+  SortOrdersMap result;
+  for (const auto& order : metadata->sort_orders) {
+    result.emplace(order->order_id(), order);
+  }
+  return result;
 }
 
 Result<TableMetadataCache::SnapshotsMap> TableMetadataCache::InitSnapshotMap(
     const TableMetadata* metadata) {
-  return metadata->snapshots | std::views::transform([](const auto& snapshot) {
-           return std::make_pair(snapshot->snapshot_id, snapshot);
-         }) |
-         std::ranges::to<SnapshotsMap>();
+  SnapshotsMap result;
+  for (const auto& snapshot : metadata->snapshots) {
+    result.emplace(snapshot->snapshot_id, snapshot);
+  }
+  return result;
 }
 
 Result<MetadataFileCodecType> TableMetadataUtil::Codec::FromString(
@@ -477,7 +482,8 @@ Result<MetadataFileCodecType> TableMetadataUtil::Codec::FromFileName(
   }
 
   std::string_view file_name_without_suffix = file_name.substr(0, pos);
-  if (file_name_without_suffix.ends_with(kGzipTableMetadataFileExtension)) {
+  if (file_name_without_suffix.length() >= kGzipTableMetadataFileExtension.length() &&
+      file_name_without_suffix.substr(file_name_without_suffix.length() - kGzipTableMetadataFileExtension.length()) == kGzipTableMetadataFileExtension) {
     return MetadataFileCodecType::kGzip;
   }
   return MetadataFileCodecType::kNone;

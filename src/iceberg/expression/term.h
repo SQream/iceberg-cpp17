@@ -46,8 +46,12 @@ class ICEBERG_EXPORT Term : public util::Formattable {
   virtual bool is_unbound() const = 0;
 };
 
+// C++17 compatible type trait to replace C++20 concept
 template <typename T>
-concept TermType = std::derived_from<T, Term>;
+struct is_term_type : std::is_base_of<Term, T> {};
+
+template <typename T>
+constexpr bool is_term_type_v = is_term_type<T>::value;
 
 /// \brief Base class for unbound terms.
 ///

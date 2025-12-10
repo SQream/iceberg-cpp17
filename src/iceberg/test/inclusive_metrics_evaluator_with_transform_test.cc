@@ -195,7 +195,7 @@ TEST_F(InclusiveMetricsEvaluatorWithTransformTest, MissingColumn) {
       ToBoundTransform(Expressions::Truncate("missing", 10)), Literal::Long(20));
   auto result = InclusiveMetricsEvaluator::Make(expr, *schema_, true);
   ASSERT_FALSE(result.has_value()) << result.error().message;
-  ASSERT_TRUE(result.error().message.contains("Cannot find field 'missing'"))
+  ASSERT_TRUE(result.error().message.find("Cannot find field 'missing'") != std::string::npos)
       << result.error().message;
 }
 
@@ -400,7 +400,7 @@ TEST_F(InclusiveMetricsEvaluatorWithTransformTest, CaseSensitiveIntegerNotEqRewr
   auto expr = Expressions::Not(Expressions::Equal(day_ts, Literal::Long(5)));
   auto result = InclusiveMetricsEvaluator::Make(expr, *schema_, true);
   ASSERT_FALSE(result.has_value()) << result.error().message;
-  ASSERT_TRUE(result.error().message.contains("Cannot find field 'TS'"))
+  ASSERT_TRUE(result.error().message.find("Cannot find field 'TS'") != std::string::npos)
       << result.error().message;
 }
 

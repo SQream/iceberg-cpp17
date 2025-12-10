@@ -23,12 +23,12 @@
 
 #include <array>
 #include <cstring>
-#include <format>
 #include <iostream>
-#include <print>
 #include <stdexcept>
 
 #include <sys/wait.h>
+
+#include "iceberg/format_compat.h"
 
 namespace iceberg {
 
@@ -55,7 +55,7 @@ Command& Command::Env(const std::string& key, const std::string& val) {
 }
 
 void Command::RunCommand(const std::string& desc) const {
-  std::println("[INFO] Starting to {}, command: {} {}", desc, program_, FormatArgs());
+  compat::println("[INFO] Starting to {}, command: {} {}", desc, program_, FormatArgs());
 
   std::cout.flush();
   std::cerr.flush();
@@ -63,8 +63,8 @@ void Command::RunCommand(const std::string& desc) const {
   pid_t pid = fork();
 
   if (pid == -1) {
-    std::println(stderr, "[ERROR] Fork failed: {}", std::strerror(errno));
-    throw std::runtime_error(std::format("Fork failed: {}", std::strerror(errno)));
+    compat::println(stderr, "[ERROR] Fork failed: {}", std::strerror(errno));
+    throw std::runtime_error(compat::format("Fork failed: {}", std::strerror(errno)));
   }
 
   // --- Child Process ---
@@ -73,7 +73,7 @@ void Command::RunCommand(const std::string& desc) const {
       std::error_code ec;
       std::filesystem::current_path(cwd_, ec);
       if (ec) {
-        std::println(stderr, "Failed to change directory to '{}': {}", cwd_.string(),
+        compat::println(stderr, "Failed to change directory to '{}': {}", cwd_.string(),
                      ec.message());
         _exit(126);  // Command invoked cannot execute
       }
@@ -94,15 +94,15 @@ void Command::RunCommand(const std::string& desc) const {
 
     execvp(program_.c_str(), argv.data());
 
-    std::println(stderr, "execvp failed: {}", std::strerror(errno));
+    compat::println(stderr, "execvp failed: {}", std::strerror(errno));
     _exit(127);
   }
 
   // --- Parent Process ---
   int status = 0;
   if (waitpid(pid, &status, 0) == -1) {
-    std::println(stderr, "[ERROR] waitpid failed: {}", std::strerror(errno));
-    throw std::runtime_error(std::format("waitpid failed: {}", std::strerror(errno)));
+    compat::println(stderr, "[ERROR] waitpid failed: {}", std::strerror(errno));
+    throw std::runtime_error(compat::format("waitpid failed: {}", std::strerror(errno)));
   }
 
   int exit_code = -1;
@@ -113,12 +113,12 @@ void Command::RunCommand(const std::string& desc) const {
   }
 
   if (exit_code == 0) {
-    std::println("[INFO] {} succeed!", desc);
+    compat::println("[INFO] {} succeed!", desc);
     return;
   } else {
-    std::println(stderr, "[ERROR] {} failed. Exit code: {}", desc, exit_code);
+    compat::println(stderr, "[ERROR] {} failed. Exit code: {}", desc, exit_code);
     throw std::runtime_error(
-        std::format("{} failed with exit code: {}", desc, exit_code));
+        compat::format("{} failed with exit code: {}", desc, exit_code));
   }
 }
 

@@ -608,7 +608,7 @@ TEST_F(StrictMetricsEvaluatorMigratedTest, MissingColumn) {
   auto expr = Expressions::LessThan("missing", Literal::Long(5));
   auto evaluator = StrictMetricsEvaluator::Make(expr, schema_, true);
   ASSERT_FALSE(evaluator.has_value());
-  EXPECT_TRUE(evaluator.error().message.contains("Cannot find field 'missing'"))
+  EXPECT_TRUE(evaluator.error().message.find("Cannot find field 'missing'") != std::string::npos)
       << evaluator.error().message;
 }
 

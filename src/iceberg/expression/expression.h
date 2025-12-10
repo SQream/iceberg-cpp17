@@ -154,11 +154,11 @@ class ICEBERG_EXPORT And : public Expression {
   /// error if left or right is nullptr
   /// \note A folded And expression is an expression that is equivalent to the original
   /// expression, but with the And operation removed. For example, (true and x) = x.
-  template <typename... Args>
+  template <typename... Args,
+            typename = std::enable_if_t<std::conjunction_v<std::is_same<Args, std::shared_ptr<Expression>>...>>>
   static Result<std::shared_ptr<Expression>> MakeFolded(std::shared_ptr<Expression> left,
                                                         std::shared_ptr<Expression> right,
                                                         Args&&... args)
-    requires std::conjunction_v<std::is_same<Args, std::shared_ptr<Expression>>...>
   {
     if constexpr (sizeof...(args) == 0) {
       if (left->op() == Expression::Operation::kFalse ||
@@ -174,7 +174,8 @@ class ICEBERG_EXPORT And : public Expression {
         return left;
       }
 
-      return And::Make(std::move(left), std::move(right));
+      ICEBERG_ASSIGN_OR_RAISE(auto and_result, And::Make(std::move(left), std::move(right)));
+      return std::shared_ptr<Expression>(std::move(and_result));
     } else {
       ICEBERG_ASSIGN_OR_THROW(auto and_expr,
                               And::Make(std::move(left), std::move(right)));
@@ -230,11 +231,11 @@ class ICEBERG_EXPORT Or : public Expression {
   /// error if left or right is nullptr
   /// \note A folded Or expression is an expression that is equivalent to the original
   /// expression, but with the Or operation removed. For example, (false or x) = x.
-  template <typename... Args>
+  template <typename... Args,
+            typename = std::enable_if_t<std::conjunction_v<std::is_same<Args, std::shared_ptr<Expression>>...>>>
   static Result<std::shared_ptr<Expression>> MakeFolded(std::shared_ptr<Expression> left,
                                                         std::shared_ptr<Expression> right,
                                                         Args&&... args)
-    requires std::conjunction_v<std::is_same<Args, std::shared_ptr<Expression>>...>
   {
     if constexpr (sizeof...(args) == 0) {
       if (left->op() == Expression::Operation::kTrue ||
@@ -250,7 +251,8 @@ class ICEBERG_EXPORT Or : public Expression {
         return left;
       }
 
-      return Or::Make(std::move(left), std::move(right));
+      ICEBERG_ASSIGN_OR_RAISE(auto or_result, Or::Make(std::move(left), std::move(right)));
+      return std::shared_ptr<Expression>(std::move(or_result));
     } else {
       ICEBERG_ASSIGN_OR_THROW(auto or_expr, Or::Make(std::move(left), std::move(right)));
 

@@ -1,0 +1,63 @@
+[  0%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/isadetection.c.o
+[  0%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/array_util.c.o
+[  0%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/bitset_util.c.o
+[  1%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/art/art.c.o
+[  1%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/bitset.c.o
+[  1%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/array.c.o
+[  1%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/bitset.c.o
+[  1%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/containers.c.o
+[  1%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/convert.c.o
+[  2%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/mixed_intersection.c.o
+[  2%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/mixed_union.c.o
+[  2%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/mixed_equal.c.o
+[  2%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/mixed_subset.c.o
+[  2%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/mixed_negation.c.o
+[  2%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/mixed_xor.c.o
+[  3%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/mixed_andnot.c.o
+[  3%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/containers/run.c.o
+[  3%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/memory.c.o
+[  3%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/roaring.c.o
+[  3%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/roaring64.c.o
+[  4%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/roaring_priority_queue.c.o
+[  4%] Building C object _deps/croaring-build/src/CMakeFiles/roaring.dir/roaring_array.c.o
+[  4%] Linking C static library libiceberg_vendored_croaring.a
+[  4%] Built target roaring
+[  4%] Building CXX object src/iceberg/CMakeFiles/iceberg_shared.dir/arrow_c_data_guard_internal.cc.o
+[  4%] Building CXX object src/iceberg/CMakeFiles/iceberg_shared.dir/catalog/memory/in_memory_catalog.cc.o
+In file included from /home/johnny/git/sqream/iceberg-cpp17/src/iceberg/table_metadata.h:34,
+                 from /home/johnny/git/sqream/iceberg-cpp17/src/iceberg/catalog/memory/in_memory_catalog.cc:27:
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:92:18: error: expected identifier before ‘this’
+   92 |   auto& AddError(this auto& self, ErrorKind kind, std::string message) {
+      |                  ^~~~
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:92:18: error: expected ‘,’ or ‘...’ before ‘this’
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:105:18: error: expected identifier before ‘this’
+  105 |   auto& AddError(this auto& self, Error err) {
+      |                  ^~~~
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:105:18: error: expected ‘,’ or ‘...’ before ‘this’
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:105:9: error: ‘auto& iceberg::ErrorCollector::AddError(int)’ cannot be overloaded with ‘auto& iceberg::ErrorCollector::AddError(int)’
+  105 |   auto& AddError(this auto& self, Error err) {
+      |         ^~~~~~~~
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:92:9: note: previous declaration ‘auto& iceberg::ErrorCollector::AddError(int)’
+   92 |   auto& AddError(this auto& self, ErrorKind kind, std::string message) {
+      |         ^~~~~~~~
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h: In member function ‘auto& iceberg::ErrorCollector::AddError(int)’:
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:93:5: error: ‘self’ was not declared in this scope
+   93 |     self.errors_.emplace_back(kind, std::move(message));
+      |     ^~~~
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:93:31: error: ‘kind’ was not declared in this scope
+   93 |     self.errors_.emplace_back(kind, std::move(message));
+      |                               ^~~~
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:93:47: error: ‘message’ was not declared in this scope
+   93 |     self.errors_.emplace_back(kind, std::move(message));
+      |                                               ^~~~~~~
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h: In member function ‘auto& iceberg::ErrorCollector::AddError(int)’:
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:106:5: error: ‘self’ was not declared in this scope
+  106 |     self.errors_.push_back(std::move(err));
+      |     ^~~~
+/home/johnny/git/sqream/iceberg-cpp17/src/iceberg/util/error_collector.h:106:38: error: ‘err’ was not declared in this scope; did you mean ‘erf’?
+  106 |     self.errors_.push_back(std::move(err));
+      |                                      ^~~
+      |                                      erf
+gmake[2]: *** [src/iceberg/CMakeFiles/iceberg_shared.dir/build.make:90: src/iceberg/CMakeFiles/iceberg_shared.dir/catalog/memory/in_memory_catalog.cc.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:3364: src/iceberg/CMakeFiles/iceberg_shared.dir/all] Error 2
+gmake: *** [Makefile:166: all] Error 2

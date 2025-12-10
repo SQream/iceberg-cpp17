@@ -68,7 +68,8 @@ Result<std::shared_ptr<BoundReference>> NamedReference::Bind(const Schema& schem
   int32_t field_id = field_opt.value().get().field_id();
   ICEBERG_ASSIGN_OR_RAISE(auto accessor, schema.GetAccessorById(field_id));
 
-  return BoundReference::Make(field_opt.value().get(), std::move(accessor));
+  ICEBERG_ASSIGN_OR_RAISE(auto result, BoundReference::Make(field_opt.value().get(), std::move(accessor)));
+  return std::shared_ptr<BoundReference>(std::move(result));
 }
 
 std::string NamedReference::ToString() const {
@@ -146,8 +147,9 @@ Result<std::shared_ptr<BoundTransform>> UnboundTransform::Bind(
     const Schema& schema, bool case_sensitive) const {
   ICEBERG_ASSIGN_OR_RAISE(auto bound_ref, ref_->Bind(schema, case_sensitive));
   ICEBERG_ASSIGN_OR_RAISE(auto transform_func, transform_->Bind(bound_ref->type()));
-  return BoundTransform::Make(std::move(bound_ref), transform_,
-                              std::move(transform_func));
+  ICEBERG_ASSIGN_OR_RAISE(auto result, BoundTransform::Make(std::move(bound_ref), transform_,
+                              std::move(transform_func)));
+  return std::shared_ptr<BoundTransform>(std::move(result));
 }
 
 // BoundTransform implementation

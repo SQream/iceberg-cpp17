@@ -832,9 +832,9 @@ TEST(LiteralTest, LiteralHashUnorderedSet) {
   literal_set.insert(Literal::Int(1));  // Duplicate
 
   EXPECT_EQ(literal_set.size(), 2);
-  EXPECT_TRUE(literal_set.contains(Literal::Int(1)));
-  EXPECT_TRUE(literal_set.contains(Literal::Int(2)));
-  EXPECT_FALSE(literal_set.contains(Literal::Int(3)));
+  EXPECT_TRUE(literal_set.find(Literal::Int(1)) != literal_set.end());
+  EXPECT_TRUE(literal_set.find(Literal::Int(2)) != literal_set.end());
+  EXPECT_FALSE(literal_set.find(Literal::Int(3)) != literal_set.end());
 
   std::unordered_set<Literal, LiteralHash> string_set;
   string_set.insert(Literal::String("a"));

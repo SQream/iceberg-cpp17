@@ -217,7 +217,8 @@ Result<std::unordered_set<int32_t>> MetricsConfig::LimitFieldIds(const Schema& s
 Status MetricsConfig::VerifyReferencedColumns(
     const std::unordered_map<std::string, std::string>& updates, const Schema& schema) {
   for (const auto& [key, value] : updates) {
-    if (!key.starts_with(TableProperties::kMetricModeColumnConfPrefix)) {
+    if (key.compare(0, TableProperties::kMetricModeColumnConfPrefix.size(), 
+                    TableProperties::kMetricModeColumnConfPrefix) != 0) {
       continue;
     }
     auto field_name =

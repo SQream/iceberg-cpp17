@@ -278,8 +278,8 @@ class ICEBERG_EXPORT BoundVisitor : public ExpressionVisitor<R> {
 /// \param expr The expression to traverse
 /// \param visitor The visitor to use for traversal
 /// \return The result produced by the visitor for the root expression node
-template <typename R, typename V>
-  requires std::derived_from<V, ExpressionVisitor<R>>
+template <typename R, typename V,
+          typename = std::enable_if_t<std::is_base_of_v<ExpressionVisitor<R>, V>>>
 Result<R> Visit(const std::shared_ptr<Expression>& expr, V& visitor) {
   ICEBERG_DCHECK(expr != nullptr, "Expression cannot be null");
 

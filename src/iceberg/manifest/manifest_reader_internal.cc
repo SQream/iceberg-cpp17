@@ -435,7 +435,7 @@ Status ParseDataFile(const std::shared_ptr<StructType>& data_file_schema,
         PARSE_PRIMITIVE_FIELD(manifest_entries[row_idx].data_file->first_row_id,
                               view_of_file_field, int64_t);
         if (first_row_id.has_value()) {
-          std::ranges::for_each(manifest_entries, [&first_row_id](ManifestEntry& entry) {
+          std::for_each(manifest_entries.begin(), manifest_entries.end(), [&first_row_id](ManifestEntry& entry) {
             if (entry.status != ManifestStatus::kDeleted &&
                 !entry.data_file->first_row_id.has_value()) {
               entry.data_file->first_row_id = first_row_id.value();
@@ -444,7 +444,7 @@ Status ParseDataFile(const std::shared_ptr<StructType>& data_file_schema,
           });
         } else {
           // data file's first_row_id is null when the manifest's first_row_id is null
-          std::ranges::for_each(manifest_entries, [](ManifestEntry& entry) {
+          std::for_each(manifest_entries.begin(), manifest_entries.end(), [](ManifestEntry& entry) {
             entry.data_file->first_row_id = std::nullopt;
           });
         }

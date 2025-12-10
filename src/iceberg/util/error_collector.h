@@ -103,7 +103,6 @@ class ICEBERG_EXPORT ErrorCollector {
 
   /// \brief Add a specific error and return reference to derived class
   ///
-  /// \param self Deduced reference to the derived class instance
   /// \param kind The kind of error
   /// \param fmt The format string
   /// \param args The arguments to format the message
@@ -120,11 +119,26 @@ class ICEBERG_EXPORT ErrorCollector {
   /// Useful when propagating errors from other components or reusing
   /// error objects without deconstructing and reconstructing them.
   ///
-  /// \param self Deduced reference to the derived class instance
   /// \param err The error to add
   /// \return Reference to the derived class for method chaining
-  auto& AddError(this auto& self, Error err) {
-    self.errors_.push_back(std::move(err));
+  template <typename Derived>
+  Derived& AddError(Error err) {
+    errors_.push_back(std::move(err));
+    return static_cast<Derived&>(*this);
+  }
+
+  /// \brief Add an unexpected result's error and return reference to derived class
+  ///
+  /// Useful for cases like below:
+  /// \code
+  ///   return AddError(InvalidArgument("Invalid value: {}", value));
+  /// \endcode
+  ///
+  /// \param self Deduced reference to the derived class instance
+  /// \param err The unexpected result containing the error to add
+  /// \return Reference to the derived class for method chaining
+  auto& AddError(this auto& self, std::unexpected<Error> err) {
+    self.errors_.push_back(std::move(err.error()));
     return self;
   }
 

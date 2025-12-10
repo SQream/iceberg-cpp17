@@ -102,6 +102,8 @@ struct ReadContext {
   std::shared_ptr<::arrow::Schema> output_arrow_schema_;
   // The reader to read record batches from the Parquet file.
   std::unique_ptr<::arrow::RecordBatchReader> record_batch_reader_;
+  // Shared ownership to keep batch reader alive (for older Arrow API compatibility)
+  std::shared_ptr<::arrow::RecordBatchReader> shared_batch_reader_;
 };
 
 // TODO(gangwu): list of work items
@@ -125,7 +127,7 @@ class ParquetReader::Impl {
     ::parquet::ArrowReaderProperties arrow_reader_properties;
     arrow_reader_properties.set_batch_size(
         options.properties.Get(ReaderProperties::kBatchSize));
-    arrow_reader_properties.set_arrow_extensions_enabled(true);
+    // Note: set_arrow_extensions_enabled not available in this Arrow version
 
     // Open the Parquet file reader
     ICEBERG_ASSIGN_OR_RAISE(input_stream_, OpenInputStream(options));
@@ -249,9 +251,13 @@ class ParquetReader::Impl {
       context_->record_batch_reader_ = std::make_unique<EmptyRecordBatchReader>();
     } else {
       auto column_indices = SelectedColumnIndices(projection_);
-      ICEBERG_ARROW_ASSIGN_OR_RETURN(
-          context_->record_batch_reader_,
-          reader_->GetRecordBatchReader(row_group_indices, column_indices));
+      std::shared_ptr<::arrow::RecordBatchReader> batch_reader;
+      ICEBERG_ARROW_RETURN_NOT_OK(
+          reader_->GetRecordBatchReader(row_group_indices, column_indices, &batch_reader));
+      // Wrap shared_ptr as unique_ptr - the shared_ptr keeps the object alive
+      context_->record_batch_reader_.reset(batch_reader.get());
+      // Store the shared_ptr to keep ownership (prevents deletion)
+      context_->shared_batch_reader_ = std::move(batch_reader);
     }
 
     return {};

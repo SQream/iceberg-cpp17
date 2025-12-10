@@ -135,7 +135,8 @@ class PartitionMap {
   /// \param values The partition values.
   /// \return true if the key exists, false otherwise.
   bool contains(int32_t spec_id, const PartitionValues& values) const {
-    return map_.contains(PartitionKeyRef{spec_id, values});
+    // C++17: heterogeneous lookup not supported for unordered_map, create temporary key
+    return map_.find(PartitionKey{spec_id, values}) != map_.end();
   }
 
   /// \brief Get the value associated with a key.
@@ -144,7 +145,8 @@ class PartitionMap {
   /// \return Reference to the value if found, std::nullopt otherwise.
   std::optional<std::reference_wrapper<V>> get(int32_t spec_id,
                                                const PartitionValues& values) {
-    auto it = map_.find(PartitionKeyRef{spec_id, values});
+    // C++17: heterogeneous lookup not supported for unordered_map, create temporary key
+    auto it = map_.find(PartitionKey{spec_id, values});
     return it != map_.end() ? std::make_optional(std::ref(it->second)) : std::nullopt;
   }
 
@@ -154,7 +156,8 @@ class PartitionMap {
   /// \return Reference to the value if found, std::nullopt otherwise.
   std::optional<std::reference_wrapper<const V>> get(
       int32_t spec_id, const PartitionValues& values) const {
-    auto it = map_.find(PartitionKeyRef{spec_id, values});
+    // C++17: heterogeneous lookup not supported for unordered_map, create temporary key
+    auto it = map_.find(PartitionKey{spec_id, values});
     return it != map_.end() ? std::make_optional(std::cref(it->second)) : std::nullopt;
   }
 
@@ -164,7 +167,8 @@ class PartitionMap {
   /// \param value The value to insert.
   /// \return true if the entry was updated, false if it was inserted.
   bool put(int32_t spec_id, PartitionValues values, V value) {
-    auto it = map_.find(PartitionKeyRef{spec_id, values});
+    // C++17: heterogeneous lookup not supported for unordered_map, create temporary key
+    auto it = map_.find(PartitionKey{spec_id, values});
     if (it != map_.end()) {
       it->second = std::move(value);
       return true;
@@ -178,7 +182,8 @@ class PartitionMap {
   /// \param values The partition values.
   /// \return true if the entry was removed, false if it didn't exist.
   bool remove(int32_t spec_id, const PartitionValues& values) {
-    auto it = map_.find(PartitionKeyRef{spec_id, values});
+    // C++17: heterogeneous lookup not supported for unordered_map, create temporary key
+    auto it = map_.find(PartitionKey{spec_id, values});
     if (it != map_.end()) {
       map_.erase(it);
       return true;
@@ -223,7 +228,8 @@ class PartitionSet {
   /// \param values The partition values.
   /// \return true if the element exists, false otherwise.
   bool contains(int32_t spec_id, const PartitionValues& values) const {
-    return set_.contains(PartitionKeyRef{spec_id, values});
+    // C++17: heterogeneous lookup not supported for unordered_set, create temporary key
+    return set_.find(PartitionKey{spec_id, values}) != set_.end();
   }
 
   /// \brief Add an element to the set.
@@ -240,7 +246,8 @@ class PartitionSet {
   /// \param values The partition values.
   /// \return true if the element was removed, false if it didn't exist.
   bool remove(int32_t spec_id, const PartitionValues& values) {
-    auto it = set_.find(PartitionKeyRef{spec_id, values});
+    // C++17: heterogeneous lookup not supported for unordered_set, create temporary key
+    auto it = set_.find(PartitionKey{spec_id, values});
     if (it != set_.end()) {
       set_.erase(it);
       return true;

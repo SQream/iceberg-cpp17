@@ -44,7 +44,7 @@ std::optional<int32_t> FieldIdFromMetadata(
   if (!metadata) {
     return std::nullopt;
   }
-  int key = metadata->FindKey(kParquetFieldIdKey);
+  int key = metadata->FindKey(std::string(kParquetFieldIdKey));
   if (key < 0) {
     return std::nullopt;
   }

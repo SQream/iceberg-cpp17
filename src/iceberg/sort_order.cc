@@ -58,8 +58,8 @@ bool SortOrder::Satisfies(const SortOrder& other) const {
   }
 
   // this ordering has either more or the same number of sort fields
-  for (const auto& [field, other_field] : std::views::zip(fields_, other.fields_)) {
-    if (!field.Satisfies(other_field)) {
+  for (size_t i = 0; i < other.fields().size(); ++i) {
+    if (!fields_[i].Satisfies(other.fields_[i])) {
       return false;
     }
   }

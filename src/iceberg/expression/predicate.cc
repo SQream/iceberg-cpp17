@@ -33,8 +33,8 @@
 namespace iceberg {
 
 // Predicate template implementations
-template <TermType T>
-Predicate<T>::Predicate(Expression::Operation op, std::shared_ptr<T> term)
+template <typename T, typename EnableT>
+Predicate<T, EnableT>::Predicate(Expression::Operation op, std::shared_ptr<T> term)
     : operation_(op), term_(std::move(term)) {
   ICEBERG_DCHECK(term_ != nullptr, "Predicate cannot have null term");
 }
@@ -177,7 +177,8 @@ std::string UnboundPredicateImpl<B>::ToString() const {
 template <typename B>
 Result<std::shared_ptr<Expression>> UnboundPredicateImpl<B>::Negate() const {
   ICEBERG_ASSIGN_OR_RAISE(auto negated_op, ::iceberg::Negate(BASE::op()));
-  return UnboundPredicateImpl::Make(negated_op, BASE::term(), values_);
+  ICEBERG_ASSIGN_OR_RAISE(auto result, UnboundPredicateImpl::Make(negated_op, BASE::term(), values_));
+  return std::shared_ptr<Expression>(std::move(result));
 }
 
 template <typename B>
@@ -208,7 +209,9 @@ bool StartsWith(const Literal& lhs, const Literal& rhs) {
   const auto& rhs_value = rhs.value();
   if (std::holds_alternative<std::string>(lhs_value) &&
       std::holds_alternative<std::string>(rhs_value)) {
-    return std::get<std::string>(lhs_value).starts_with(std::get<std::string>(rhs_value));
+    const auto& lhs_str = std::get<std::string>(lhs_value);
+    const auto& rhs_str = std::get<std::string>(rhs_value);
+    return lhs_str.size() >= rhs_str.size() && lhs_str.compare(0, rhs_str.size(), rhs_str) == 0;
   }
   return false;
 }
@@ -224,21 +227,28 @@ Result<std::shared_ptr<Expression>> UnboundPredicateImpl<B>::BindUnaryOperation(
         return Expressions::AlwaysFalse();
       }
       // TODO(gangwu): deal with UnknownType
-      return BoundUnaryPredicate::Make(Expression::Operation::kIsNull,
-                                       std::move(bound_term));
+      {
+        ICEBERG_ASSIGN_OR_RAISE(auto pred, BoundUnaryPredicate::Make(Expression::Operation::kIsNull, std::move(bound_term)));
+        return std::shared_ptr<Expression>(std::move(pred));
+      }
     case Expression::Operation::kNotNull:
       if (!bound_term->MayProduceNull()) {
         return Expressions::AlwaysTrue();
       }
-      return BoundUnaryPredicate::Make(Expression::Operation::kNotNull,
-                                       std::move(bound_term));
+      {
+        ICEBERG_ASSIGN_OR_RAISE(auto pred, BoundUnaryPredicate::Make(Expression::Operation::kNotNull, std::move(bound_term)));
+        return std::shared_ptr<Expression>(std::move(pred));
+      }
     case Expression::Operation::kIsNan:
     case Expression::Operation::kNotNan:
       if (!IsFloatingType(bound_term->type()->type_id())) {
         return InvalidExpression("{} cannot be used with a non-floating-point column",
                                  BASE::op());
       }
-      return BoundUnaryPredicate::Make(BASE::op(), std::move(bound_term));
+      {
+        ICEBERG_ASSIGN_OR_RAISE(auto pred, BoundUnaryPredicate::Make(BASE::op(), std::move(bound_term)));
+        return std::shared_ptr<Expression>(std::move(pred));
+      }
 
     default:
       return InvalidExpression("Operation must be IS_NULL, NOT_NULL, IS_NAN, or NOT_NAN");
@@ -298,8 +308,9 @@ Result<std::shared_ptr<Expression>> UnboundPredicateImpl<B>::BindLiteralOperatio
   }
 
   // TODO(gangwu): translate truncate(col) == value to startsWith(value)
-  return BoundLiteralPredicate::Make(BASE::op(), std::move(bound_term),
-                                     std::move(literal));
+  ICEBERG_ASSIGN_OR_RAISE(auto pred, BoundLiteralPredicate::Make(BASE::op(), std::move(bound_term),
+                                   std::move(literal)));
+  return std::shared_ptr<Expression>(std::move(pred));
 }
 
 template <typename B>
@@ -337,12 +348,18 @@ Result<std::shared_ptr<Expression>> UnboundPredicateImpl<B>::BindInOperation(
     const auto& single_literal = converted_literals[0];
     switch (BASE::op()) {
       case Expression::Operation::kIn:
-        return BoundLiteralPredicate::Make(Expression::Operation::kEq,
-                                           std::move(bound_term), single_literal);
+        {
+          ICEBERG_ASSIGN_OR_RAISE(auto pred, BoundLiteralPredicate::Make(Expression::Operation::kEq,
+                                             std::move(bound_term), single_literal));
+          return std::shared_ptr<Expression>(std::move(pred));
+        }
 
       case Expression::Operation::kNotIn:
-        return BoundLiteralPredicate::Make(Expression::Operation::kNotEq,
-                                           std::move(bound_term), single_literal);
+        {
+          ICEBERG_ASSIGN_OR_RAISE(auto pred, BoundLiteralPredicate::Make(Expression::Operation::kNotEq,
+                                             std::move(bound_term), single_literal));
+          return std::shared_ptr<Expression>(std::move(pred));
+        }
 
       default:
         return InvalidExpression("Operation must be IN or NOT_IN");
@@ -350,8 +367,9 @@ Result<std::shared_ptr<Expression>> UnboundPredicateImpl<B>::BindInOperation(
   }
 
   // Multiple literals - create a set predicate
-  return BoundSetPredicate::Make(BASE::op(), std::move(bound_term),
-                                 std::span<const Literal>(converted_literals));
+  ICEBERG_ASSIGN_OR_RAISE(auto pred, BoundSetPredicate::Make(BASE::op(), std::move(bound_term),
+                                 std::span<const Literal>(converted_literals)));
+  return std::shared_ptr<Expression>(std::move(pred));
 }
 
 // BoundPredicate implementation
@@ -403,7 +421,8 @@ Result<bool> BoundUnaryPredicate::Test(const Literal& literal) const {
 
 Result<std::shared_ptr<Expression>> BoundUnaryPredicate::Negate() const {
   ICEBERG_ASSIGN_OR_RAISE(auto negated_op, ::iceberg::Negate(op()));
-  return BoundUnaryPredicate::Make(negated_op, term_);
+  ICEBERG_ASSIGN_OR_RAISE(auto pred, BoundUnaryPredicate::Make(negated_op, term_));
+  return std::shared_ptr<Expression>(std::move(pred));
 }
 
 bool BoundUnaryPredicate::Equals(const Expression& other) const {
@@ -478,7 +497,8 @@ Result<bool> BoundLiteralPredicate::Test(const Literal& value) const {
 
 Result<std::shared_ptr<Expression>> BoundLiteralPredicate::Negate() const {
   ICEBERG_ASSIGN_OR_RAISE(auto negated_op, ::iceberg::Negate(op()));
-  return BoundLiteralPredicate::Make(negated_op, term_, literal_);
+  ICEBERG_ASSIGN_OR_RAISE(auto pred, BoundLiteralPredicate::Make(negated_op, term_, literal_));
+  return std::shared_ptr<Expression>(std::move(pred));
 }
 
 bool BoundLiteralPredicate::Equals(const Expression& other) const {
@@ -499,7 +519,7 @@ bool BoundLiteralPredicate::Equals(const Expression& other) const {
       TypeId::kInt,  TypeId::kLong,      TypeId::kDate,
       TypeId::kTime, TypeId::kTimestamp, TypeId::kTimestampTz};
 
-  if (kIntegralTypes.contains(term_->type()->type_id()) &&
+  if (kIntegralTypes.find(term_->type()->type_id()) != kIntegralTypes.end() &&
       term_->Equals(*other_pred->term())) {
     auto get_long = [](const Literal& lit) -> std::optional<int64_t> {
       const auto& val = lit.value();
@@ -606,9 +626,9 @@ BoundSetPredicate::~BoundSetPredicate() = default;
 Result<bool> BoundSetPredicate::Test(const Literal& value) const {
   switch (op()) {
     case Expression::Operation::kIn:
-      return value_set_.contains(value);
+      return value_set_.find(value) != value_set_.end();
     case Expression::Operation::kNotIn:
-      return !value_set_.contains(value);
+      return value_set_.find(value) == value_set_.end();
     default:
       return InvalidExpression("Invalid operation for BoundSetPredicate: {}", op());
   }
@@ -616,7 +636,8 @@ Result<bool> BoundSetPredicate::Test(const Literal& value) const {
 
 Result<std::shared_ptr<Expression>> BoundSetPredicate::Negate() const {
   ICEBERG_ASSIGN_OR_RAISE(auto negated_op, ::iceberg::Negate(op()));
-  return BoundSetPredicate::Make(negated_op, term_, value_set_);
+  ICEBERG_ASSIGN_OR_RAISE(auto pred, BoundSetPredicate::Make(negated_op, term_, value_set_));
+  return std::shared_ptr<Expression>(std::move(pred));
 }
 
 bool BoundSetPredicate::Equals(const Expression& other) const {
@@ -633,14 +654,25 @@ bool BoundSetPredicate::Equals(const Expression& other) const {
 }
 
 std::string BoundSetPredicate::ToString() const {
+  // Manually format the set
+  std::string set_str = "(";
+  bool first = true;
+  for (const auto& lit : value_set_) {
+    if (!first) {
+      set_str += ", ";
+    }
+    first = false;
+    set_str += lit.ToString();
+  }
+  set_str += ")";
+
   switch (op()) {
     case Expression::Operation::kIn:
-      return std::format("{} in {}", *term(), FormatRange(value_set_, ", ", "(", ")"));
+      return compat::format("{} in {}", *term(), set_str);
     case Expression::Operation::kNotIn:
-      return std::format("{} not in {}", *term(),
-                         FormatRange(value_set_, ", ", "(", ")"));
+      return compat::format("{} not in {}", *term(), set_str);
     default:
-      return std::format("Invalid set predicate: operation = {}", op());
+      return compat::format("Invalid set predicate: operation = {}", op());
   }
 }
 

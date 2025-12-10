@@ -619,7 +619,7 @@ TEST_F(InclusiveMetricsEvaluatorMigratedTest, MissingColumnTest) {
   auto expr = Expressions::LessThan("missing", Literal::Long(5));
   auto result = InclusiveMetricsEvaluator::Make(expr, *schema_, true);
   ASSERT_FALSE(result.has_value()) << result.error().message;
-  ASSERT_TRUE(result.error().message.contains("Cannot find field 'missing' in struct"))
+  ASSERT_TRUE(result.error().message.find("Cannot find field 'missing' in struct") != std::string::npos)
       << result.error().message;
 }
 
@@ -817,7 +817,7 @@ TEST_F(InclusiveMetricsEvaluatorMigratedTest, CaseSensitiveIntegerNotEqRewritten
   auto expr = Expressions::Not(Expressions::Equal("ID", Literal::Long(5)));
   auto result = InclusiveMetricsEvaluator::Make(expr, *schema_, true);
   ASSERT_FALSE(result.has_value()) << result.error().message;
-  ASSERT_TRUE(result.error().message.contains("Cannot find field 'ID' in struct"))
+  ASSERT_TRUE(result.error().message.find("Cannot find field 'ID' in struct") != std::string::npos)
       << result.error().message;
 }
 

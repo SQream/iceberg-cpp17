@@ -47,11 +47,13 @@ UpdateProperties::~UpdateProperties() = default;
 
 UpdateProperties& UpdateProperties::Set(const std::string& key,
                                         const std::string& value) {
-  ICEBERG_BUILDER_CHECK(!removals_.contains(key),
-                        "Cannot set property '{}' that is already marked for removal",
-                        key);
+  if (removals_.find(key) != removals_.end()) {
+    return AddError<UpdateProperties>(
+        ErrorKind::kInvalidArgument,
+        compat::format("Cannot set property '{}' that is already marked for removal", key));
+  }
 
-  if (!TableProperties::reserved_properties().contains(key) ||
+  if (TableProperties::reserved_properties().find(key) == TableProperties::reserved_properties().end() ||
       key == TableProperties::kFormatVersion.key()) {
     updates_.insert_or_assign(key, value);
   }
@@ -60,9 +62,13 @@ UpdateProperties& UpdateProperties::Set(const std::string& key,
 }
 
 UpdateProperties& UpdateProperties::Remove(const std::string& key) {
-  ICEBERG_BUILDER_CHECK(!updates_.contains(key),
-                        "Cannot remove property '{}' that is already marked for update",
-                        key);
+  if (updates_.find(key) != updates_.end()) {
+    return AddError<UpdateProperties>(
+        ErrorKind::kInvalidArgument,
+        compat::format("Cannot remove property '{}' that is already marked for update",
+                    key));
+  }
+
   removals_.insert(key);
   return *this;
 }

@@ -53,8 +53,8 @@ bool SortField::Satisfies(const SortField& other) const {
 
 std::string SortField::ToString() const {
   return transform_->ToString() + "(" + std::to_string(source_id_) + ") "
-    + std::string(SortDirectionToString(direction_))
-    + " " + std::string(NullOrderToString(null_order_));
+    + std::string(iceberg::ToString(direction_))
+    + " " + std::string(iceberg::ToString(null_order_));
 }
 
 bool SortField::Equals(const SortField& other) const {

@@ -136,13 +136,16 @@ class ICEBERG_EXPORT Literal : public util::Formattable {
   Result<Literal> CastTo(const std::shared_ptr<PrimitiveType>& target_type) const;
 
   bool operator==(const Literal& other) const;
+  bool operator!=(const Literal& other) const { return !(*this == other); }
 
   /// \brief Compare two literals of the same primitive type.
   /// \param other The other literal to compare with.
-  /// \return The comparison result as std::partial_ordering. If either side is AboveMax,
+  /// \return The comparison result as compat::partial_ordering. If either side is AboveMax,
   /// BelowMin or Null, the result is unordered.
   /// Note: This comparison cannot be used for sorting literals if any literal is
   /// AboveMax, BelowMin or Null.
+  compat::partial_ordering Compare(const Literal& other) const;
+
   // Comparison operators for C++17 compatibility
   bool operator<(const Literal& other) const;
   bool operator<=(const Literal& other) const;

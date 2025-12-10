@@ -40,8 +40,10 @@ void SetOptionalField(nlohmann::json& json, std::string_view key,
 }
 
 template <typename T>
-  requires requires(const T& t) { t.empty(); }
-void SetContainerField(nlohmann::json& json, std::string_view key, const T& value) {
+typename std::enable_if<
+    std::is_same<decltype(std::declval<const T&>().empty()), bool>::value,
+    void>::type
+SetContainerField(nlohmann::json& json, std::string_view key, const T& value) {
   if (!value.empty()) {
     json[key] = value;
   }

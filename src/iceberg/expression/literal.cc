@@ -30,24 +30,24 @@
 #include "iceberg/util/temporal_util.h"
 
 template <typename T>
-typename std::enable_if<std::is_floating_point<T>::value, std::strong_ordering>::type CompareFloat(T lhs, T rhs) {
+typename std::enable_if<std::is_floating_point<T>::value, compat::strong_ordering>::type CompareFloat(T lhs, T rhs) {
   // Handle NaN cases
   if (std::isnan(lhs) && std::isnan(rhs)) {
     // Both NaN - compare signs: -NaN < NaN
     bool lhs_is_negative = std::signbit(lhs);
     bool rhs_is_negative = std::signbit(rhs);
     if (lhs_is_negative == rhs_is_negative) {
-      return std::strong_ordering::equal;
+      return compat::strong_ordering::equal;
     }
-    return lhs_is_negative ? std::strong_ordering::less : std::strong_ordering::greater;
+    return lhs_is_negative ? compat::strong_ordering::less : compat::strong_ordering::greater;
   }
-  if (std::isnan(lhs)) return std::strong_ordering::greater;  // NaN is greater
-  if (std::isnan(rhs)) return std::strong_ordering::less;
+  if (std::isnan(lhs)) return compat::strong_ordering::greater;  // NaN is greater
+  if (std::isnan(rhs)) return compat::strong_ordering::less;
   
   // Regular comparison
-  if (lhs < rhs) return std::strong_ordering::less;
-  if (lhs > rhs) return std::strong_ordering::greater;
-  return std::strong_ordering::equal;
+  if (lhs < rhs) return compat::strong_ordering::less;
+  if (lhs > rhs) return compat::strong_ordering::greater;
+  return compat::strong_ordering::equal;
 }
 
 namespace iceberg {
@@ -379,55 +379,90 @@ bool Comparable(TypeId lhs, TypeId rhs) {
 
 }  // namespace
 
-// Three-way comparison operator
-std::partial_ordering Literal::operator<=>(const Literal& other) const {
+// C++17 compatible three-way comparison
+compat::partial_ordering Literal::Compare(const Literal& other) const {
   // If types are different, comparison is unordered
   // (Int & Date) (Timestamp & Long) were excluded from this check to allow comparison
   if (!Comparable(type_->type_id(), other.type_->type_id())) {
-    return std::partial_ordering::unordered;
+    return compat::partial_ordering::unordered;
   }
 
   // If either value is AboveMax, BelowMin or null, comparison is unordered
   if (IsAboveMax() || IsBelowMin() || other.IsAboveMax() || other.IsBelowMin() ||
       IsNull() || other.IsNull()) {
-    return false;
+    return compat::partial_ordering::unordered;
   }
+
+  // Helper to convert bool comparison to ordering
+  auto bool_to_ordering = [](bool less, bool equal) -> compat::partial_ordering {
+    if (equal) return compat::partial_ordering::equivalent;
+    if (less) return compat::partial_ordering::less;
+    return compat::partial_ordering::greater;
+  };
 
   // Same type comparison for normal values  
   switch (type_->type_id()) {
-    case TypeId::kBoolean:
-      return std::get<bool>(value_) < std::get<bool>(other.value_);
+    case TypeId::kBoolean: {
+      auto lhs = std::get<bool>(value_);
+      auto rhs = std::get<bool>(other.value_);
+      return bool_to_ordering(lhs < rhs, lhs == rhs);
+    }
     case TypeId::kInt:
-    case TypeId::kDate:
-      return std::get<int32_t>(value_) < std::get<int32_t>(other.value_);
+    case TypeId::kDate: {
+      auto lhs = std::get<int32_t>(value_);
+      auto rhs = std::get<int32_t>(other.value_);
+      return bool_to_ordering(lhs < rhs, lhs == rhs);
+    }
     case TypeId::kLong:
     case TypeId::kTime:
     case TypeId::kTimestamp:
-    case TypeId::kTimestampTz:
-      return std::get<int64_t>(value_) < std::get<int64_t>(other.value_);
-    case TypeId::kFloat:
-      return CompareFloat(std::get<float>(value_), std::get<float>(other.value_)) == std::strong_ordering::less;
-    case TypeId::kDouble:
-      return CompareFloat(std::get<double>(value_), std::get<double>(other.value_)) == std::strong_ordering::less;
-    case TypeId::kString:
-      return std::get<std::string>(value_) < std::get<std::string>(other.value_);
+    case TypeId::kTimestampTz: {
+      auto lhs = std::get<int64_t>(value_);
+      auto rhs = std::get<int64_t>(other.value_);
+      return bool_to_ordering(lhs < rhs, lhs == rhs);
+    }
+    case TypeId::kFloat: {
+      auto cmp = CompareFloat(std::get<float>(value_), std::get<float>(other.value_));
+      if (cmp == compat::strong_ordering::less) return compat::partial_ordering::less;
+      if (cmp == compat::strong_ordering::equal) return compat::partial_ordering::equivalent;
+      return compat::partial_ordering::greater;
+    }
+    case TypeId::kDouble: {
+      auto cmp = CompareFloat(std::get<double>(value_), std::get<double>(other.value_));
+      if (cmp == compat::strong_ordering::less) return compat::partial_ordering::less;
+      if (cmp == compat::strong_ordering::equal) return compat::partial_ordering::equivalent;
+      return compat::partial_ordering::greater;
+    }
+    case TypeId::kString: {
+      auto& lhs = std::get<std::string>(value_);
+      auto& rhs = std::get<std::string>(other.value_);
+      return bool_to_ordering(lhs < rhs, lhs == rhs);
+    }
     case TypeId::kBinary:
-    case TypeId::kFixed:
-      return std::get<std::vector<uint8_t>>(value_) < std::get<std::vector<uint8_t>>(other.value_);
+    case TypeId::kFixed: {
+      auto& lhs = std::get<std::vector<uint8_t>>(value_);
+      auto& rhs = std::get<std::vector<uint8_t>>(other.value_);
+      return bool_to_ordering(lhs < rhs, lhs == rhs);
+    }
     case TypeId::kDecimal: {
-      auto& this_val = std::get<::iceberg::Decimal>(value_);
-      auto& other_val = std::get<::iceberg::Decimal>(other.value_);
-      return this_val < other_val;
+      auto& lhs = std::get<::iceberg::Decimal>(value_);
+      auto& rhs = std::get<::iceberg::Decimal>(other.value_);
+      return bool_to_ordering(lhs < rhs, lhs == rhs);
     }
     case TypeId::kUuid: {
-      auto& this_val = std::get<Uuid>(value_);
-      auto& other_val = std::get<Uuid>(other.value_);
+      auto& lhs = std::get<Uuid>(value_);
+      auto& rhs = std::get<Uuid>(other.value_);
       // UUIDs can only be equal or not equal, no ordering
-      return false;
+      return lhs == rhs ? compat::partial_ordering::equivalent : compat::partial_ordering::unordered;
     }
     default:
-      return false;
+      return compat::partial_ordering::unordered;
   }
+}
+
+bool Literal::operator<(const Literal& other) const {
+  auto cmp = Compare(other);
+  return cmp == compat::partial_ordering::less;
 }
 
 bool Literal::operator<=(const Literal& other) const {

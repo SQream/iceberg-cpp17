@@ -67,6 +67,7 @@ class ICEBERG_EXPORT PartitionValues : public StructLike {
   std::span<const Literal> values() const { return values_; }
 
   bool operator==(const PartitionValues& other) const;
+  bool operator!=(const PartitionValues& other) const { return !(*this == other); }
 
  private:
   std::vector<Literal> values_;

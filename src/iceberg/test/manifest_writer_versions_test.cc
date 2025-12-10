@@ -153,7 +153,7 @@ class ManifestWriterVersionsTest : public ::testing::Test {
   }
 
   static std::string CreateManifestListPath() {
-    return std::format("manifest-list-{}.avro",
+    return compat::format("manifest-list-{}.avro",
                        std::chrono::system_clock::now().time_since_epoch().count());
   }
 
@@ -191,7 +191,7 @@ class ManifestWriterVersionsTest : public ::testing::Test {
   }
 
   static std::string CreateManifestPath() {
-    return std::format("manifest-{}.avro",
+    return compat::format("manifest-{}.avro",
                        std::chrono::system_clock::now().time_since_epoch().count());
   }
 
@@ -293,7 +293,7 @@ class ManifestWriterVersionsTest : public ::testing::Test {
         ASSERT_EQ(manifest.added_rows_count, 0L);
         break;
       default:
-        std::unreachable();
+        compat::unreachable();
     }
 
     ASSERT_EQ(manifest.existing_files_count, 0L);
@@ -323,7 +323,7 @@ class ManifestWriterVersionsTest : public ::testing::Test {
         ASSERT_TRUE(data_file.equality_ids.empty());
         break;
       default:
-        std::unreachable();
+        compat::unreachable();
     }
 
     // Metrics

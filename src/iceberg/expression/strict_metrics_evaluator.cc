@@ -340,12 +340,12 @@ class StrictMetricsVisitor : public BoundVisitor<bool> {
       // similar to the implementation in eq, first check if the lower bound is in the
       // set
       ICEBERG_ASSIGN_OR_RAISE(auto lower, ParseBound(expr, lower_it->second));
-      if (!literal_set.contains(lower)) {
+      if (literal_set.find(lower) == literal_set.end()) {
         return kRowsMightNotMatch;
       }
       // check if the upper bound is in the set
       ICEBERG_ASSIGN_OR_RAISE(auto upper, ParseBound(expr, upper_it->second));
-      if (!literal_set.contains(upper)) {
+      if (literal_set.find(upper) == literal_set.end()) {
         return kRowsMightNotMatch;
       }
       // finally check if the lower bound and the upper bound are equal
@@ -386,9 +386,12 @@ class StrictMetricsVisitor : public BoundVisitor<bool> {
       }
       lower_bound = std::move(lower);
     }
-    auto literals_view = literal_set | std::views::filter([&](const Literal& lit) {
-                           return lower_bound.has_value() && lower_bound.value() <= lit;
-                         });
+    std::vector<Literal> literals_view;
+    for (const auto& lit : literal_set) {
+      if (lower_bound.has_value() && lower_bound.value() <= lit) {
+        literals_view.push_back(lit);
+      }
+    }
     // if all values are less than lower bound, rows must
     // match (notIn).
     if (lower_bound.has_value() && literals_view.empty()) {
@@ -398,9 +401,12 @@ class StrictMetricsVisitor : public BoundVisitor<bool> {
     auto upper_it = data_file_.upper_bounds.find(id);
     if (upper_it != data_file_.upper_bounds.cend()) {
       ICEBERG_ASSIGN_OR_RAISE(auto upper, ParseBound(expr, upper_it->second));
-      auto filtered_view = literals_view | std::views::filter([&](const Literal& lit) {
-                             return upper >= lit;
-                           });
+      std::vector<Literal> filtered_view;
+      for (const auto& lit : literals_view) {
+        if (upper >= lit) {
+          filtered_view.push_back(lit);
+        }
+      }
       if (filtered_view.empty()) {
         // if all remaining values are greater than upper bound,
         // rows must match

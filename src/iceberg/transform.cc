@@ -221,7 +221,8 @@ bool Transform::CanTransform(const Type& source_type) const {
           return false;
       }
   }
-  std::unreachable();
+  compat::unreachable();
+  return false;
 }
 
 bool Transform::PreservesOrder() const {
@@ -238,7 +239,8 @@ bool Transform::PreservesOrder() const {
     case TransformType::kHour:
       return true;
   }
-  std::unreachable();
+  compat::unreachable();
+  return false;
 }
 
 bool Transform::SatisfiesOrderOf(const Transform& other) const {
@@ -267,7 +269,8 @@ bool Transform::SatisfiesOrderOf(const Transform& other) const {
     case TransformType::kVoid:
       return *this == other;
   }
-  std::unreachable();
+  compat::unreachable();
+  return false;
 }
 
 Result<std::unique_ptr<UnboundPredicate>> Transform::Project(
@@ -327,7 +330,8 @@ Result<std::unique_ptr<UnboundPredicate>> Transform::Project(
     case TransformType::kVoid:
       return nullptr;
   }
-  std::unreachable();
+  compat::unreachable();
+  return nullptr;
 }
 
 Result<std::unique_ptr<UnboundPredicate>> Transform::ProjectStrict(
@@ -387,7 +391,8 @@ Result<std::unique_ptr<UnboundPredicate>> Transform::ProjectStrict(
     case TransformType::kVoid:
       return nullptr;
   }
-  std::unreachable();
+  compat::unreachable();
+  return nullptr;
 }
 
 Result<std::string> Transform::ToHumanString(const Literal& value) {

@@ -428,8 +428,11 @@ ICEBERG_EXPORT constexpr std::string_view ToString(DataFile::Content type) noexc
       return "position_deletes";
     case DataFile::Content::kEqualityDeletes:
       return "equality_deletes";
+    default:
+      break;
   }
-  std::unreachable();
+  compat::unreachable();
+  return "";  // Never reached but silences warning
 }
 
 /// \brief Get the relative data file content type from int

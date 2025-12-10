@@ -164,7 +164,7 @@ Status ManifestWriter::WriteEntry(const ManifestEntry& entry) {
       delete_rows_count_ += entry.data_file->record_count;
       break;
     default:
-      std::unreachable();
+      compat::unreachable();
   }
 
   if (entry.IsAlive() && entry.sequence_number.has_value()) {
@@ -193,7 +193,7 @@ Status ManifestWriter::CheckDataFile(const DataFile& file) const {
       }
       break;
     default:
-      std::unreachable();
+      compat::unreachable();
   }
   return {};
 }

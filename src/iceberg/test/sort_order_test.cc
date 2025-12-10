@@ -201,7 +201,7 @@ TEST_F(SortOrderTest, MakeInvalidSortOrderUnsortedId) {
                                     std::vector<SortField>{*sort_field1_});
   EXPECT_THAT(sort_order, IsError(ErrorKind::kInvalidArgument));
   EXPECT_THAT(sort_order,
-              HasErrorMessage(std::format("{} is reserved for unsorted sort order",
+              HasErrorMessage(compat::format("{} is reserved for unsorted sort order",
                                           SortOrder::kUnsortedOrderId)));
 }
 

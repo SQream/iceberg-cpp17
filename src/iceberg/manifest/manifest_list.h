@@ -235,7 +235,24 @@ struct ICEBERG_EXPORT ManifestFile {
       kFirstRowIdFieldId, "first_row_id", int64(),
       "Starting row ID to assign to new rows in ADDED data files");
 
-  bool operator==(const ManifestFile& other) const = default;
+  bool operator==(const ManifestFile& other) const {
+    return manifest_path == other.manifest_path &&
+           manifest_length == other.manifest_length &&
+           partition_spec_id == other.partition_spec_id &&
+           content == other.content &&
+           sequence_number == other.sequence_number &&
+           min_sequence_number == other.min_sequence_number &&
+           added_snapshot_id == other.added_snapshot_id &&
+           added_files_count == other.added_files_count &&
+           existing_files_count == other.existing_files_count &&
+           deleted_files_count == other.deleted_files_count &&
+           added_rows_count == other.added_rows_count &&
+           existing_rows_count == other.existing_rows_count &&
+           deleted_rows_count == other.deleted_rows_count &&
+           partitions == other.partitions &&
+           key_metadata == other.key_metadata &&
+           first_row_id == other.first_row_id;
+  }
 
   static const std::shared_ptr<StructType>& Type();
 };
@@ -269,7 +286,7 @@ ICEBERG_EXPORT inline constexpr std::string_view ToString(ManifestContent type) 
 }
 
 /// \brief Get the relative manifest content type from name
-ICEBERG_EXPORT inline constexpr Result<ManifestContent> ManifestContentFromString(
+ICEBERG_EXPORT inline Result<ManifestContent> ManifestContentFromString(
     std::string_view str) noexcept {
   if (str == "data") return ManifestContent::kData;
   if (str == "deletes") return ManifestContent::kDeletes;

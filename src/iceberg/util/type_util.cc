@@ -206,7 +206,7 @@ Result<std::shared_ptr<Type>> PruneColumnVisitor::Visit(
 }
 
 Result<std::shared_ptr<Type>> PruneColumnVisitor::Visit(const SchemaField& field) const {
-  if (selected_ids_.contains(field.field_id())) {
+  if (selected_ids_.find(field.field_id()) != selected_ids_.end()) {
     return (select_full_types_ || field.type()->is_primitive()) ? field.type()
                                                                 : Visit(field.type());
   }

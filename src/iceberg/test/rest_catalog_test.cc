@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <chrono>
 #include <memory>
-#include <print>
+#include <iostream>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -107,16 +107,15 @@ class RestCatalogIntegrationTest : public ::testing::Test {
     docker_compose_->Up();
 
     // Wait for REST catalog to be ready on localhost
-    std::println("[INFO] Waiting for REST catalog to be ready at localhost:{}...",
-                 kRestCatalogPort);
+    std::cout << "[INFO] Waiting for REST catalog to be ready at localhost:"
+              << kRestCatalogPort << "..." << std::endl;
     for (int i = 0; i < kMaxRetries; ++i) {
       if (CheckServiceReady(kRestCatalogPort)) {
-        std::println("[INFO] REST catalog is ready!");
+        std::cout << "[INFO] REST catalog is ready!" << std::endl;
         return;
       }
-      std::println(
-          "[INFO] Waiting for 1s for REST catalog to be ready... (attempt {}/{})", i + 1,
-          kMaxRetries);
+      std::cout << "[INFO] Waiting for 1s for REST catalog to be ready... (attempt "
+                << (i + 1) << "/" << kMaxRetries << ")" << std::endl;
       std::this_thread::sleep_for(std::chrono::milliseconds(kRetryDelayMs));
     }
     throw std::runtime_error("REST catalog failed to start within {} seconds");
@@ -131,9 +130,9 @@ class RestCatalogIntegrationTest : public ::testing::Test {
   // Helper function to create a REST catalog instance
   Result<std::shared_ptr<RestCatalog>> CreateCatalog() {
     auto config = RestCatalogProperties::default_properties();
-    config
-        ->Set(RestCatalogProperties::kUri,
-              std::format("{}:{}", kLocalhostUri, kRestCatalogPort))
+    // C++17: Replace std::format with string concatenation
+    std::string uri = std::string(kLocalhostUri) + ":" + std::to_string(kRestCatalogPort);
+    config->Set(RestCatalogProperties::kUri, uri)
         .Set(RestCatalogProperties::kName, std::string(kCatalogName))
         .Set(RestCatalogProperties::kWarehouse, std::string(kWarehouseName));
     auto file_io = std::make_shared<test::StdFileIO>();

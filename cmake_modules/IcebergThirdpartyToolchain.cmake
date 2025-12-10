@@ -443,6 +443,8 @@ function(resolve_cpr_dependency)
   set(CPR_ENABLE_CURL_HTTP_ONLY ON)
   set(CPR_ENABLE_SSL ON)
   set(CPR_USE_SYSTEM_CURL OFF)
+  # Enable position-independent code for curl to allow linking into shared libraries
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
   if(DEFINED ENV{ICEBERG_CPR_URL})
     set(CPR_URL "$ENV{ICEBERG_CPR_URL}")

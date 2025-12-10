@@ -120,7 +120,8 @@ class ConfigBase {
   std::unordered_map<std::string, std::string> Extract(std::string_view prefix) const {
     std::unordered_map<std::string, std::string> extracted;
     for (const auto& [key, value] : configs_) {
-      if (key.starts_with(prefix)) {
+      // C++17: Replace starts_with() with compare()
+      if (key.compare(0, prefix.length(), prefix) == 0) {
         extracted[key.substr(prefix.length())] = value;
       }
     }

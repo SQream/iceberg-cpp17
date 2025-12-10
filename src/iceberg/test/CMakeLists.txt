@@ -40,11 +40,19 @@ function(add_iceberg_test test_name)
 
   add_executable(${test_name})
   target_include_directories(${test_name} PRIVATE "${CMAKE_BINARY_DIR}/iceberg/test/")
+  
+  # For tests using system Arrow, prioritize system Arrow include directories
+  if(ARG_USE_BUNDLE)
+    target_include_directories(${test_name} BEFORE PRIVATE /usr/local/sqream-prerequisites/versions/6.04/include)
+  endif()
 
   target_sources(${test_name} PRIVATE ${ARG_SOURCES})
 
   if(ARG_USE_BUNDLE)
     target_link_libraries(${test_name} PRIVATE iceberg_bundle_static GTest::gmock_main)
+    # For static linking with bundled libraries, link system Arrow for missing utility symbols
+    # The vendored Arrow library is incomplete
+    target_link_libraries(${test_name} PRIVATE /usr/local/sqream-prerequisites/versions/6.04/lib64/libarrow.so)
   else()
     target_link_libraries(${test_name} PRIVATE iceberg_static GTest::gmock_main)
   endif()

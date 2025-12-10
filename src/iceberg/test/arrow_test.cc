@@ -22,7 +22,8 @@
 
 #include <arrow/api.h>
 #include <arrow/c/bridge.h>
-#include <arrow/extension/uuid.h>
+// UUID extension not available in system Arrow 6.04
+// #include <arrow/extension/uuid.h>
 #include <arrow/result.h>
 #include <arrow/type_fwd.h>
 #include <arrow/util/key_value_metadata.h>
@@ -65,8 +66,8 @@ TEST_P(ToArrowSchemaTest, PrimitiveType) {
   ASSERT_TRUE(field->type()->Equals(param.arrow_type));
 
   auto metadata = field->metadata();
-  ASSERT_TRUE(metadata->Contains(kParquetFieldIdKey));
-  ASSERT_EQ(metadata->Get(kParquetFieldIdKey), std::to_string(kFieldId));
+  ASSERT_TRUE(metadata->Contains(std::string(kParquetFieldIdKey)));
+  ASSERT_EQ(metadata->Get(std::string(kParquetFieldIdKey)), std::to_string(kFieldId));
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -98,8 +99,9 @@ INSTANTIATE_TEST_SUITE_P(
                            .arrow_type = ::arrow::utf8()},
         ToArrowSchemaParam{.iceberg_type = iceberg::binary(),
                            .arrow_type = ::arrow::binary()},
-        ToArrowSchemaParam{.iceberg_type = iceberg::uuid(),
-                           .arrow_type = ::arrow::extension::uuid()},
+        // UUID extension not available in system Arrow 6.04
+        // ToArrowSchemaParam{.iceberg_type = iceberg::uuid(),
+        //                    .arrow_type = ::arrow::extension::uuid()},
         ToArrowSchemaParam{.iceberg_type = iceberg::fixed(20),
                            .arrow_type = ::arrow::fixed_size_binary(20)}));
 
@@ -113,8 +115,8 @@ void CheckArrowField(const ::arrow::Field& field, ::arrow::Type::type type_id,
 
   auto metadata = field.metadata();
   ASSERT_TRUE(metadata != nullptr);
-  ASSERT_TRUE(metadata->Contains(kParquetFieldIdKey));
-  ASSERT_EQ(metadata->Get(kParquetFieldIdKey), std::to_string(field_id));
+  ASSERT_TRUE(metadata->Contains(std::string(kParquetFieldIdKey)));
+  ASSERT_EQ(metadata->Get(std::string(kParquetFieldIdKey)), std::to_string(field_id));
 }
 
 }  // namespace
@@ -293,8 +295,9 @@ INSTANTIATE_TEST_SUITE_P(
                              .iceberg_type = iceberg::string()},
         FromArrowSchemaParam{.arrow_type = ::arrow::binary(),
                              .iceberg_type = iceberg::binary()},
-        FromArrowSchemaParam{.arrow_type = ::arrow::extension::uuid(),
-                             .iceberg_type = iceberg::uuid()},
+        // UUID extension not available in system Arrow 6.04
+        // FromArrowSchemaParam{.arrow_type = ::arrow::extension::uuid(),
+        //                      .iceberg_type = iceberg::uuid()},
         FromArrowSchemaParam{.arrow_type = ::arrow::fixed_size_binary(20),
                              .iceberg_type = iceberg::fixed(20)}));
 

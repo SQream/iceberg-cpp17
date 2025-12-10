@@ -93,7 +93,8 @@ struct ICEBERG_REST_EXPORT UpdateNamespacePropertiesRequest {
   /// \brief Validates the UpdateNamespacePropertiesRequest.
   Status Validate() const {
     for (const auto& key : removals) {
-      if (updates.contains(key)) {
+      // C++17: Replace contains() with find()
+      if (updates.find(key) != updates.end()) {
         return ValidationFailed("Duplicate key to update and remove: {}", key);
       }
     }

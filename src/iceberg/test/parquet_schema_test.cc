@@ -111,7 +111,8 @@ constexpr std::string_view kParquetFieldIdKey = "PARQUET:field_id";
   parquet_schema_descriptor->Init(parquet_schema);
 
   auto properties = ::parquet::default_arrow_reader_properties();
-  properties.set_arrow_extensions_enabled(true);
+  // Arrow extensions not available in system Arrow 6.04
+  // properties.set_arrow_extensions_enabled(true);
 
   ::parquet::arrow::SchemaManifest manifest;
   auto status = ::parquet::arrow::SchemaManifest::Make(parquet_schema_descriptor.get(),

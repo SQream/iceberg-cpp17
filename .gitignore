@@ -19,6 +19,7 @@ build/
 cmake-build/
 cmake-build-debug/
 cmake-build-release/
+install/
 .DS_Store
 
 # intellij files
@@ -37,5 +38,3 @@ cmake-build-release/
 /subprojects/*
 !/subprojects/packagefiles
 !/subprojects/*.wrap
-
-install/*

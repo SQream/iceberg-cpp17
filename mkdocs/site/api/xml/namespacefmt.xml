@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacefmt" kind="namespace" language="C++">
+    <compoundname>fmt</compoundname>
+    <innerclass refid="structfmt_1_1formatter_3_01std_1_1map_3_01K_00_01V_01_4_01_4" prot="public">fmt::formatter&lt; std::map&lt; K, V &gt; &gt;</innerclass>
+    <innerclass refid="structfmt_1_1formatter_3_01std_1_1unordered__map_3_01K_00_01V_01_4_01_4" prot="public">fmt::formatter&lt; std::unordered_map&lt; K, V &gt; &gt;</innerclass>
+    <innerclass refid="structfmt_1_1formatter_3_01std_1_1unordered__set_3_01T_00_01Hash_00_01KeyEqual_00_01Allocator_01_4_01_4" prot="public">fmt::formatter&lt; std::unordered_set&lt; T, Hash, KeyEqual, Allocator &gt; &gt;</innerclass>
+    <innerclass refid="structfmt_1_1formatter_3_01std_1_1vector_3_01T_01_4_01_4" prot="public">fmt::formatter&lt; std::vector&lt; T &gt; &gt;</innerclass>
+    <innerclass refid="structfmt_1_1formatter_3_01T_00_01typename_01std_1_1enable__if__t_3_01has__ToString__v_3_01T_01_448516d319a7c9d57cb5e2059a95ee0c" prot="public">fmt::formatter&lt; T, typename std::enable_if_t&lt; has_ToString_v&lt; T &gt; &amp;&amp;!is_formattable_v&lt; T &gt;, char &gt; &gt;</innerclass>
+    <innerclass refid="structfmt_1_1formatter_3_01T_00_01typename_01std_1_1enable__if__t_3_01is__formattable__v_3_01T_01_4_00_01char_01_4_01_4" prot="public">fmt::formatter&lt; T, typename std::enable_if_t&lt; is_formattable_v&lt; T &gt;, char &gt; &gt;</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/util/formatter.h" line="55" column="1"/>
+  </compounddef>
+</doxygen>

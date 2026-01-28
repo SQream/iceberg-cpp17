@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structfmt_1_1formatter_3_01std_1_1vector_3_01T_01_4_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>fmt::formatter&lt; std::vector&lt; T &gt; &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">fmt::formatter&lt; std::string_view &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structfmt_1_1formatter_3_01std_1_1vector_3_01T_01_4_01_4_1a147bc7a691573676f6426ac3cc5783d0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FormatContext</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto fmt::formatter&lt; std::vector&lt; T &gt; &gt;::format</definition>
+        <argsstring>(const std::vector&lt; T &gt; &amp;vec, FormatContext &amp;ctx) -&gt; decltype(ctx.out())</argsstring>
+        <name>format</name>
+        <qualifiedname>fmt::formatter&lt; std::vector&lt; T &gt; &gt;::format</qualifiedname>
+        <param>
+          <type>const std::vector&lt; T &gt; &amp;</type>
+          <declname>vec</declname>
+        </param>
+        <param>
+          <type>FormatContext &amp;</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/formatter_internal.h" line="241" column="8" bodyfile="iceberg/util/formatter_internal.h" bodystart="241" bodyend="243"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>fmt::formatter&lt; std::string_view &gt;</label>
+      </node>
+      <node id="1">
+        <label>fmt::formatter&lt; std::vector&lt; T &gt; &gt;</label>
+        <link refid="structfmt_1_1formatter_3_01std_1_1vector_3_01T_01_4_01_4"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>fmt::formatter&lt; std::string_view &gt;</label>
+      </node>
+      <node id="1">
+        <label>fmt::formatter&lt; std::vector&lt; T &gt; &gt;</label>
+        <link refid="structfmt_1_1formatter_3_01std_1_1vector_3_01T_01_4_01_4"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="iceberg/util/formatter_internal.h" line="239" column="1" bodyfile="iceberg/util/formatter_internal.h" bodystart="239" bodyend="244"/>
+    <listofallmembers>
+      <member refid="structfmt_1_1formatter_3_01std_1_1vector_3_01T_01_4_01_4_1a147bc7a691573676f6426ac3cc5783d0" prot="public" virt="non-virtual"><scope>fmt::formatter&lt; std::vector&lt; T &gt; &gt;</scope><name>format</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

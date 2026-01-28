@@ -1,0 +1,305 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4" kind="class" language="C++" prot="public">
+    <compoundname>iceberg::cpp17_compat::expected&lt; void, E &gt;</compoundname>
+    <templateparamlist>
+      <param>
+        <type>class E</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a75d75c91ea4c852673de6ea961e88a9f" prot="public" static="no">
+        <type>void</type>
+        <definition>using iceberg::cpp17_compat::expected&lt; void, E &gt;::value_type =  void</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="270" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="270" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1af154d201e9253b871f929bf874e24c2f" prot="public" static="no">
+        <type>E</type>
+        <definition>using iceberg::cpp17_compat::expected&lt; void, E &gt;::error_type =  E</definition>
+        <argsstring></argsstring>
+        <name>error_type</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::error_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="271" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="271" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a01f5def33bf2ee783815b3dcdb545610" prot="public" static="no">
+        <type><ref refid="classiceberg_1_1cpp17__compat_1_1unexpected" kindref="compound">unexpected</ref>&lt; E &gt;</type>
+        <definition>using iceberg::cpp17_compat::expected&lt; void, E &gt;::unexpected_type =  unexpected&lt;E&gt;</definition>
+        <argsstring></argsstring>
+        <name>unexpected_type</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::unexpected_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="272" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="272" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a058b40e65d83bec7577c82ac65344284" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool iceberg::cpp17_compat::expected&lt; void, E &gt;::has_value_</definition>
+        <argsstring></argsstring>
+        <name>has_value_</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::has_value_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="314" column="8" bodyfile="iceberg/cpp17_compat.h" bodystart="314" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a7c95198e5ebde165ba5452accc3192f9" prot="private" static="no" mutable="no">
+        <type>E</type>
+        <definition>E iceberg::cpp17_compat::expected&lt; void, E &gt;::error_</definition>
+        <argsstring></argsstring>
+        <name>error_</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::error_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="315" column="5" bodyfile="iceberg/cpp17_compat.h" bodystart="315" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a1545f9ac49f91025253de2c4aac058fc" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::expected&lt; void, E &gt;::expected</definition>
+        <argsstring>()</argsstring>
+        <name>expected</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::expected</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="274" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="274" bodyend="274"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1ae95509d1ad4e009cf709222fb611e435" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::expected&lt; void, E &gt;::expected</definition>
+        <argsstring>(const unexpected_type &amp;e)</argsstring>
+        <name>expected</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::expected</qualifiedname>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1unexpected" kindref="compound">unexpected_type</ref> &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="276" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="276" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1ab0e41c88cbc60dd21995f29c586378f8" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::expected&lt; void, E &gt;::expected</definition>
+        <argsstring>(unexpected_type &amp;&amp;e)</argsstring>
+        <name>expected</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::expected</qualifiedname>
+        <param>
+          <type><ref refid="classiceberg_1_1cpp17__compat_1_1unexpected" kindref="compound">unexpected_type</ref> &amp;&amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="278" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="278" bodyend="278"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a0837111a28b5dfe6db3e9d644a574a8e" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::expected&lt; void, E &gt;::has_value</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>has_value</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::has_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="280" column="18" bodyfile="iceberg/cpp17_compat.h" bodystart="280" bodyend="280"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a8efcb0b32766ded978997a34eed2d862" prot="public" static="no" constexpr="yes" const="yes" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::expected&lt; void, E &gt;::operator bool</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator bool</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::operator bool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="281" column="22" bodyfile="iceberg/cpp17_compat.h" bodystart="281" bodyend="281"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1ae0f3ea1753e1fcb3a8d58da16879810d" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr void</type>
+        <definition>constexpr void iceberg::cpp17_compat::expected&lt; void, E &gt;::value</definition>
+        <argsstring>() const</argsstring>
+        <name>value</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="283" column="18" bodyfile="iceberg/cpp17_compat.h" bodystart="283" bodyend="287"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a615465d980b72aa92d4662814981df5e" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" refqual="lvalue" virt="non-virtual">
+        <type>constexpr E &amp;</type>
+        <definition>constexpr E &amp; iceberg::cpp17_compat::expected&lt; void, E &gt;::error</definition>
+        <argsstring>() &amp;</argsstring>
+        <name>error</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="289" column="15" bodyfile="iceberg/cpp17_compat.h" bodystart="289" bodyend="289"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a57395a51f26d9b67e65cfac2887916ca" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" refqual="lvalue" virt="non-virtual">
+        <type>constexpr const E &amp;</type>
+        <definition>constexpr const E &amp; iceberg::cpp17_compat::expected&lt; void, E &gt;::error</definition>
+        <argsstring>() const &amp;</argsstring>
+        <name>error</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="290" column="21" bodyfile="iceberg/cpp17_compat.h" bodystart="290" bodyend="290"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a960620b500509ea2968c2eca39bcfb84" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" refqual="rvalue" virt="non-virtual">
+        <type>constexpr E &amp;&amp;</type>
+        <definition>constexpr E &amp;&amp; iceberg::cpp17_compat::expected&lt; void, E &gt;::error</definition>
+        <argsstring>() &amp;&amp;</argsstring>
+        <name>error</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="291" column="15" bodyfile="iceberg/cpp17_compat.h" bodystart="291" bodyend="291"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a9ca29a01cdf2eea71403406415017637" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" refqual="rvalue" virt="non-virtual">
+        <type>constexpr const E &amp;&amp;</type>
+        <definition>constexpr const E &amp;&amp; iceberg::cpp17_compat::expected&lt; void, E &gt;::error</definition>
+        <argsstring>() const &amp;&amp;</argsstring>
+        <name>error</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="292" column="21" bodyfile="iceberg/cpp17_compat.h" bodystart="292" bodyend="292"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a1be85a90658491730ba6a9fe4b99f586" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" refqual="lvalue" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr auto</type>
+        <definition>constexpr auto iceberg::cpp17_compat::expected&lt; void, E &gt;::and_then</definition>
+        <argsstring>(F &amp;&amp;f) const &amp;-&gt; decltype(f())</argsstring>
+        <name>and_then</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::and_then</qualifiedname>
+        <param>
+          <type>F &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="296" column="18" bodyfile="iceberg/cpp17_compat.h" bodystart="296" bodyend="302"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1aa37303dc5020061a10f27be0ce3ed373" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" refqual="rvalue" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr auto</type>
+        <definition>constexpr auto iceberg::cpp17_compat::expected&lt; void, E &gt;::and_then</definition>
+        <argsstring>(F &amp;&amp;f) &amp;&amp;-&gt; decltype(f())</argsstring>
+        <name>and_then</name>
+        <qualifiedname>iceberg::cpp17_compat::expected&lt; void, E &gt;::and_then</qualifiedname>
+        <param>
+          <type>F &amp;&amp;</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="305" column="18" bodyfile="iceberg/cpp17_compat.h" bodystart="305" bodyend="311"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/cpp17_compat.h" line="268" column="1" bodyfile="iceberg/cpp17_compat.h" bodystart="268" bodyend="316"/>
+    <listofallmembers>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a1be85a90658491730ba6a9fe4b99f586" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>and_then</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1aa37303dc5020061a10f27be0ce3ed373" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>and_then</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a615465d980b72aa92d4662814981df5e" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>error</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a57395a51f26d9b67e65cfac2887916ca" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>error</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a960620b500509ea2968c2eca39bcfb84" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>error</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a9ca29a01cdf2eea71403406415017637" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>error</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a7c95198e5ebde165ba5452accc3192f9" prot="private" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>error_</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1af154d201e9253b871f929bf874e24c2f" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>error_type</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a1545f9ac49f91025253de2c4aac058fc" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>expected</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1ae95509d1ad4e009cf709222fb611e435" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>expected</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1ab0e41c88cbc60dd21995f29c586378f8" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>expected</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a0837111a28b5dfe6db3e9d644a574a8e" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>has_value</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a058b40e65d83bec7577c82ac65344284" prot="private" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>has_value_</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a8efcb0b32766ded978997a34eed2d862" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>operator bool</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a01f5def33bf2ee783815b3dcdb545610" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>unexpected_type</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1ae0f3ea1753e1fcb3a8d58da16879810d" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>value</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4_1a75d75c91ea4c852673de6ea961e88a9f" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::expected&lt; void, E &gt;</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

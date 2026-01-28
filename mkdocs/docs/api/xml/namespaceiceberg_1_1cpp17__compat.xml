@@ -1,0 +1,345 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceiceberg_1_1cpp17__compat" kind="namespace" language="C++">
+    <compoundname>iceberg::cpp17_compat</compoundname>
+    <innerclass refid="classiceberg_1_1cpp17__compat_1_1expected" prot="public">iceberg::cpp17_compat::expected</innerclass>
+    <innerclass refid="classiceberg_1_1cpp17__compat_1_1expected_3_01void_00_01E_01_4" prot="public">iceberg::cpp17_compat::expected&lt; void, E &gt;</innerclass>
+    <innerclass refid="structiceberg_1_1cpp17__compat_1_1partial__ordering" prot="public">iceberg::cpp17_compat::partial_ordering</innerclass>
+    <innerclass refid="classiceberg_1_1cpp17__compat_1_1span" prot="public">iceberg::cpp17_compat::span</innerclass>
+    <innerclass refid="structiceberg_1_1cpp17__compat_1_1strong__ordering" prot="public">iceberg::cpp17_compat::strong_ordering</innerclass>
+    <innerclass refid="classiceberg_1_1cpp17__compat_1_1unexpected" prot="public">iceberg::cpp17_compat::unexpected</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="cpp17__compat_8h_1a3a12f53b327ff90a9bd998c7077e1b4b" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::operator==</definition>
+        <argsstring>(const expected&lt; T, E &gt; &amp;lhs, const expected&lt; T, E &gt; &amp;rhs)</argsstring>
+        <name>operator==</name>
+        <qualifiedname>iceberg::cpp17_compat::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="320" column="16" bodyfile="iceberg/cpp17_compat.h" bodystart="320" bodyend="329"/>
+      </memberdef>
+      <memberdef kind="function" id="cpp17__compat_8h_1a617c9d519f159b0a92c5461fe833d195" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::operator!=</definition>
+        <argsstring>(const expected&lt; T, E &gt; &amp;lhs, const expected&lt; T, E &gt; &amp;rhs)</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>iceberg::cpp17_compat::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="332" column="16" bodyfile="iceberg/cpp17_compat.h" bodystart="332" bodyend="334"/>
+      </memberdef>
+      <memberdef kind="function" id="cpp17__compat_8h_1a79f3a9841a0e4d74cbeb73068dbe0c8a" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::operator==</definition>
+        <argsstring>(const expected&lt; T, E &gt; &amp;lhs, const U &amp;rhs)</argsstring>
+        <name>operator==</name>
+        <qualifiedname>iceberg::cpp17_compat::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const U &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="338" column="16" bodyfile="iceberg/cpp17_compat.h" bodystart="338" bodyend="340"/>
+      </memberdef>
+      <memberdef kind="function" id="cpp17__compat_8h_1ad60896c71a037c1cec3cbc51972210b3" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::operator==</definition>
+        <argsstring>(const U &amp;lhs, const expected&lt; T, E &gt; &amp;rhs)</argsstring>
+        <name>operator==</name>
+        <qualifiedname>iceberg::cpp17_compat::operator==</qualifiedname>
+        <param>
+          <type>const U &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="343" column="16" bodyfile="iceberg/cpp17_compat.h" bodystart="343" bodyend="345"/>
+      </memberdef>
+      <memberdef kind="function" id="cpp17__compat_8h_1a68438cd3cc943ad106f16d12dcee5d2b" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::operator!=</definition>
+        <argsstring>(const expected&lt; T, E &gt; &amp;lhs, const U &amp;rhs)</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>iceberg::cpp17_compat::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const U &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="348" column="16" bodyfile="iceberg/cpp17_compat.h" bodystart="348" bodyend="350"/>
+      </memberdef>
+      <memberdef kind="function" id="cpp17__compat_8h_1afc828f5d2ab76d7bc2758f37ee14488b" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+          <param>
+            <type>class U</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::operator!=</definition>
+        <argsstring>(const U &amp;lhs, const expected&lt; T, E &gt; &amp;rhs)</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>iceberg::cpp17_compat::operator!=</qualifiedname>
+        <param>
+          <type>const U &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="353" column="16" bodyfile="iceberg/cpp17_compat.h" bodystart="353" bodyend="355"/>
+      </memberdef>
+      <memberdef kind="function" id="cpp17__compat_8h_1abbd239eb49945ce2c751f795a079293f" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::operator==</definition>
+        <argsstring>(const expected&lt; T, E &gt; &amp;lhs, const unexpected&lt; E &gt; &amp;rhs)</argsstring>
+        <name>operator==</name>
+        <qualifiedname>iceberg::cpp17_compat::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1unexpected" kindref="compound">unexpected</ref>&lt; E &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="359" column="16" bodyfile="iceberg/cpp17_compat.h" bodystart="359" bodyend="361"/>
+      </memberdef>
+      <memberdef kind="function" id="cpp17__compat_8h_1afd60d3e6fe93147f9da96c6013d9508f" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::operator==</definition>
+        <argsstring>(const unexpected&lt; E &gt; &amp;lhs, const expected&lt; T, E &gt; &amp;rhs)</argsstring>
+        <name>operator==</name>
+        <qualifiedname>iceberg::cpp17_compat::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1unexpected" kindref="compound">unexpected</ref>&lt; E &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="364" column="16" bodyfile="iceberg/cpp17_compat.h" bodystart="364" bodyend="366"/>
+      </memberdef>
+      <memberdef kind="function" id="cpp17__compat_8h_1ab9c52f745b095eccea76d29de21ce3b9" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::operator!=</definition>
+        <argsstring>(const expected&lt; T, E &gt; &amp;lhs, const unexpected&lt; E &gt; &amp;rhs)</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>iceberg::cpp17_compat::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1unexpected" kindref="compound">unexpected</ref>&lt; E &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="369" column="16" bodyfile="iceberg/cpp17_compat.h" bodystart="369" bodyend="371"/>
+      </memberdef>
+      <memberdef kind="function" id="cpp17__compat_8h_1a366846dbcc5b1409c7b60174b56a7b95" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class E</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::operator!=</definition>
+        <argsstring>(const unexpected&lt; E &gt; &amp;lhs, const expected&lt; T, E &gt; &amp;rhs)</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>iceberg::cpp17_compat::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1unexpected" kindref="compound">unexpected</ref>&lt; E &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">expected</ref>&lt; T, E &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="374" column="16" bodyfile="iceberg/cpp17_compat.h" bodystart="374" bodyend="376"/>
+      </memberdef>
+      <memberdef kind="function" id="cpp17__compat_8h_1a4c4e6302a1df14d2c8280c0b4dc1d613" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void iceberg::cpp17_compat::unreachable</definition>
+        <argsstring>()</argsstring>
+        <name>unreachable</name>
+        <qualifiedname>iceberg::cpp17_compat::unreachable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="379" column="14" bodyfile="iceberg/cpp17_compat.h" bodystart="379" bodyend="381"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/cpp17_compat.h" line="28" column="1"/>
+  </compounddef>
+</doxygen>

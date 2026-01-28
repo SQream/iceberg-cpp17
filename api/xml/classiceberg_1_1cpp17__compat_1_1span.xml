@@ -1,0 +1,533 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classiceberg_1_1cpp17__compat_1_1span" kind="class" language="C++" prot="public">
+    <compoundname>iceberg::cpp17_compat::span</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1span_1a9510db74d74c95fc7f061a3a3a09db46" prot="public" static="no">
+        <type>T</type>
+        <definition>using iceberg::cpp17_compat::span&lt; T &gt;::element_type =  T</definition>
+        <argsstring></argsstring>
+        <name>element_type</name>
+        <qualifiedname>iceberg::cpp17_compat::span::element_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="34" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1span_1a22bc30d56a18bf53b6965a6512745d2b" prot="public" static="no">
+        <type>typename std::remove_cv&lt; T &gt;::type</type>
+        <definition>using iceberg::cpp17_compat::span&lt; T &gt;::value_type =  typename std::remove_cv&lt;T&gt;::type</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>iceberg::cpp17_compat::span::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="35" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1span_1a38971b32f7ea641b563900c1a1cbaf81" prot="public" static="no">
+        <type>std::size_t</type>
+        <definition>using iceberg::cpp17_compat::span&lt; T &gt;::size_type =  std::size_t</definition>
+        <argsstring></argsstring>
+        <name>size_type</name>
+        <qualifiedname>iceberg::cpp17_compat::span::size_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="36" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1span_1a88c99c253c9dc2611cd30a8954cf0f35" prot="public" static="no">
+        <type>std::ptrdiff_t</type>
+        <definition>using iceberg::cpp17_compat::span&lt; T &gt;::difference_type =  std::ptrdiff_t</definition>
+        <argsstring></argsstring>
+        <name>difference_type</name>
+        <qualifiedname>iceberg::cpp17_compat::span::difference_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="37" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1span_1a84d56ea06d1fdb57c92c57ded655f97e" prot="public" static="no">
+        <type>T *</type>
+        <definition>using iceberg::cpp17_compat::span&lt; T &gt;::pointer =  T*</definition>
+        <argsstring></argsstring>
+        <name>pointer</name>
+        <qualifiedname>iceberg::cpp17_compat::span::pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="38" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1span_1a7ccf70cf71cafa306702462a555c17ac" prot="public" static="no">
+        <type>const T *</type>
+        <definition>using iceberg::cpp17_compat::span&lt; T &gt;::const_pointer =  const T*</definition>
+        <argsstring></argsstring>
+        <name>const_pointer</name>
+        <qualifiedname>iceberg::cpp17_compat::span::const_pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="39" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1span_1a7d4cdb0e53187318731b07a67bf5b146" prot="public" static="no">
+        <type>T &amp;</type>
+        <definition>using iceberg::cpp17_compat::span&lt; T &gt;::reference =  T&amp;</definition>
+        <argsstring></argsstring>
+        <name>reference</name>
+        <qualifiedname>iceberg::cpp17_compat::span::reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="40" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1span_1a78cd029d22fc5870804603cb435f5dc2" prot="public" static="no">
+        <type>const T &amp;</type>
+        <definition>using iceberg::cpp17_compat::span&lt; T &gt;::const_reference =  const T&amp;</definition>
+        <argsstring></argsstring>
+        <name>const_reference</name>
+        <qualifiedname>iceberg::cpp17_compat::span::const_reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="41" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1span_1ae88dea97d658d01aba437ff8151ef05c" prot="public" static="no">
+        <type>T *</type>
+        <definition>using iceberg::cpp17_compat::span&lt; T &gt;::iterator =  T*</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>iceberg::cpp17_compat::span::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="42" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classiceberg_1_1cpp17__compat_1_1span_1a7a2e29f4609108c7e20cb71401cc1ad7" prot="public" static="no">
+        <type>const T *</type>
+        <definition>using iceberg::cpp17_compat::span&lt; T &gt;::const_iterator =  const T*</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>iceberg::cpp17_compat::span::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="43" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classiceberg_1_1cpp17__compat_1_1span_1a6a962cc38c07cc6308f8013eb4a7d915" prot="private" static="no" mutable="no">
+        <type>pointer</type>
+        <definition>pointer iceberg::cpp17_compat::span&lt; T &gt;::data_</definition>
+        <argsstring></argsstring>
+        <name>data_</name>
+        <qualifiedname>iceberg::cpp17_compat::span::data_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="79" column="11" bodyfile="iceberg/cpp17_compat.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classiceberg_1_1cpp17__compat_1_1span_1a30e147e03bf12aacf84c6ba9e9911a22" prot="private" static="no" mutable="no">
+        <type>size_type</type>
+        <definition>size_type iceberg::cpp17_compat::span&lt; T &gt;::size_</definition>
+        <argsstring></argsstring>
+        <name>size_</name>
+        <qualifiedname>iceberg::cpp17_compat::span::size_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="80" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1ad89e80d0b5e955817ba2eac4468bb4bb" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::span&lt; T &gt;::span</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>span</name>
+        <qualifiedname>iceberg::cpp17_compat::span::span</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="45" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1a45637486e99bb9edccecbf9dfd3b2544" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::span&lt; T &gt;::span</definition>
+        <argsstring>(pointer ptr, size_type count)</argsstring>
+        <name>span</name>
+        <qualifiedname>iceberg::cpp17_compat::span::span</qualifiedname>
+        <param>
+          <type>pointer</type>
+          <declname>ptr</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="47" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1a1f85d8a81b2a959522b7c0c47adb4fe5" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::span&lt; T &gt;::span</definition>
+        <argsstring>(pointer first, pointer last)</argsstring>
+        <name>span</name>
+        <qualifiedname>iceberg::cpp17_compat::span::span</qualifiedname>
+        <param>
+          <type>pointer</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>pointer</type>
+          <declname>last</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="49" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1ab2b3cc57710baf45cbad34cf1b8352da" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>size_t</type>
+            <declname>N</declname>
+            <defname>N</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::span&lt; T &gt;::span</definition>
+        <argsstring>(T(&amp;arr)[N]) noexcept</argsstring>
+        <name>span</name>
+        <qualifiedname>iceberg::cpp17_compat::span::span</qualifiedname>
+        <param>
+          <type>T(&amp;)</type>
+          <declname>arr</declname>
+          <array>[N]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="52" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1ae3de6a34d75c627b9af06139ac23d8ec" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Container</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::span&lt; T &gt;::span</definition>
+        <argsstring>(Container &amp;cont)</argsstring>
+        <name>span</name>
+        <qualifiedname>iceberg::cpp17_compat::span::span</qualifiedname>
+        <param>
+          <type>Container &amp;</type>
+          <declname>cont</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="55" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1a6e03b33df61f917d20dd3001a1c43af9" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Container</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::span&lt; T &gt;::span</definition>
+        <argsstring>(const Container &amp;cont)</argsstring>
+        <name>span</name>
+        <qualifiedname>iceberg::cpp17_compat::span::span</qualifiedname>
+        <param>
+          <type>const Container &amp;</type>
+          <declname>cont</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="58" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1a69c7f05f39eafee4e5f6f7cc5b1090a2" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr iterator</type>
+        <definition>constexpr iterator iceberg::cpp17_compat::span&lt; T &gt;::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>iceberg::cpp17_compat::span::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="60" column="22" bodyfile="iceberg/cpp17_compat.h" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1af06fd2460650975110da5bd934634cf2" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr iterator</type>
+        <definition>constexpr iterator iceberg::cpp17_compat::span&lt; T &gt;::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>iceberg::cpp17_compat::span::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="61" column="22" bodyfile="iceberg/cpp17_compat.h" bodystart="61" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1ae4288758a059b188bc1f7a4a1d0c6e0d" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr const_iterator</type>
+        <definition>constexpr const_iterator iceberg::cpp17_compat::span&lt; T &gt;::cbegin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>cbegin</name>
+        <qualifiedname>iceberg::cpp17_compat::span::cbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="62" column="28" bodyfile="iceberg/cpp17_compat.h" bodystart="62" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1aed1351ebadf25a07542b8e1727f6660d" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr const_iterator</type>
+        <definition>constexpr const_iterator iceberg::cpp17_compat::span&lt; T &gt;::cend</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>cend</name>
+        <qualifiedname>iceberg::cpp17_compat::span::cend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="63" column="28" bodyfile="iceberg/cpp17_compat.h" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1ae9e922f0131e0aaa8bb62ea9ec8fa25c" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr reference</type>
+        <definition>constexpr reference iceberg::cpp17_compat::span&lt; T &gt;::operator[]</definition>
+        <argsstring>(size_type idx) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>iceberg::cpp17_compat::span::operator[]</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="65" column="23" bodyfile="iceberg/cpp17_compat.h" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1a4cdf60338df2b2d116b2c1e88f30c4d4" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr reference</type>
+        <definition>constexpr reference iceberg::cpp17_compat::span&lt; T &gt;::front</definition>
+        <argsstring>() const</argsstring>
+        <name>front</name>
+        <qualifiedname>iceberg::cpp17_compat::span::front</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="66" column="23" bodyfile="iceberg/cpp17_compat.h" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1a63493adc70a2f8f49d7f8fe0e9d1324e" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr reference</type>
+        <definition>constexpr reference iceberg::cpp17_compat::span&lt; T &gt;::back</definition>
+        <argsstring>() const</argsstring>
+        <name>back</name>
+        <qualifiedname>iceberg::cpp17_compat::span::back</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="67" column="23" bodyfile="iceberg/cpp17_compat.h" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1a3037de011cf74457783de62966886000" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr pointer</type>
+        <definition>constexpr pointer iceberg::cpp17_compat::span&lt; T &gt;::data</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>data</name>
+        <qualifiedname>iceberg::cpp17_compat::span::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="68" column="21" bodyfile="iceberg/cpp17_compat.h" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1a0d4d46e727ce1363b3f7fcd53e7d2d05" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr size_type</type>
+        <definition>constexpr size_type iceberg::cpp17_compat::span&lt; T &gt;::size</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>size</name>
+        <qualifiedname>iceberg::cpp17_compat::span::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="70" column="23" bodyfile="iceberg/cpp17_compat.h" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1a335281cee4db123e6cecd4c19bb24f99" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr size_type</type>
+        <definition>constexpr size_type iceberg::cpp17_compat::span&lt; T &gt;::size_bytes</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>size_bytes</name>
+        <qualifiedname>iceberg::cpp17_compat::span::size_bytes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="71" column="23" bodyfile="iceberg/cpp17_compat.h" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1ae5b25779cf1b54aaaf7b096dc1523012" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::span&lt; T &gt;::empty</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>empty</name>
+        <qualifiedname>iceberg::cpp17_compat::span::empty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="72" column="18" bodyfile="iceberg/cpp17_compat.h" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1span_1a4934b22baed7dcc72c0712f28d99e0e6" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr <ref refid="classiceberg_1_1cpp17__compat_1_1span" kindref="compound">span</ref>&lt; element_type &gt;</type>
+        <definition>constexpr span&lt; element_type &gt; iceberg::cpp17_compat::span&lt; T &gt;::subspan</definition>
+        <argsstring>(size_type offset, size_type count=std::size_t(-1)) const</argsstring>
+        <name>subspan</name>
+        <qualifiedname>iceberg::cpp17_compat::span::subspan</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>count</declname>
+          <defval>std::size_t(-1)</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="74" column="18" bodyfile="iceberg/cpp17_compat.h" bodystart="74" bodyend="76"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/cpp17_compat.h" line="32" column="1" bodyfile="iceberg/cpp17_compat.h" bodystart="32" bodyend="81"/>
+    <listofallmembers>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a63493adc70a2f8f49d7f8fe0e9d1324e" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>back</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a69c7f05f39eafee4e5f6f7cc5b1090a2" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>begin</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1ae4288758a059b188bc1f7a4a1d0c6e0d" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>cbegin</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1aed1351ebadf25a07542b8e1727f6660d" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>cend</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a7a2e29f4609108c7e20cb71401cc1ad7" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>const_iterator</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a7ccf70cf71cafa306702462a555c17ac" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>const_pointer</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a78cd029d22fc5870804603cb435f5dc2" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>const_reference</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a3037de011cf74457783de62966886000" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>data</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a6a962cc38c07cc6308f8013eb4a7d915" prot="private" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>data_</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a88c99c253c9dc2611cd30a8954cf0f35" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>difference_type</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a9510db74d74c95fc7f061a3a3a09db46" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>element_type</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1ae5b25779cf1b54aaaf7b096dc1523012" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>empty</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1af06fd2460650975110da5bd934634cf2" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>end</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a4cdf60338df2b2d116b2c1e88f30c4d4" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>front</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1ae88dea97d658d01aba437ff8151ef05c" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>iterator</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1ae9e922f0131e0aaa8bb62ea9ec8fa25c" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>operator[]</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a84d56ea06d1fdb57c92c57ded655f97e" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>pointer</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a7d4cdb0e53187318731b07a67bf5b146" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>reference</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a0d4d46e727ce1363b3f7fcd53e7d2d05" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>size</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a30e147e03bf12aacf84c6ba9e9911a22" prot="private" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>size_</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a335281cee4db123e6cecd4c19bb24f99" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>size_bytes</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a38971b32f7ea641b563900c1a1cbaf81" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>size_type</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1ad89e80d0b5e955817ba2eac4468bb4bb" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>span</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a45637486e99bb9edccecbf9dfd3b2544" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>span</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a1f85d8a81b2a959522b7c0c47adb4fe5" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>span</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1ab2b3cc57710baf45cbad34cf1b8352da" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>span</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1ae3de6a34d75c627b9af06139ac23d8ec" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>span</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a6e03b33df61f917d20dd3001a1c43af9" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>span</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a4934b22baed7dcc72c0712f28d99e0e6" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>subspan</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1span_1a22bc30d56a18bf53b6965a6512745d2b" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::span</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

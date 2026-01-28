@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structiceberg_1_1Literal_1_1AboveMax" kind="struct" language="C++" prot="public">
+    <compoundname>iceberg::Literal::AboveMax</compoundname>
+    <includes refid="literal_8h" local="no">literal.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1AboveMax_1a3b1540a9b87ad12062bd9cc68d0bbe92" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::AboveMax::operator==</definition>
+        <argsstring>(const AboveMax &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>iceberg::Literal::AboveMax::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1AboveMax" kindref="compound">AboveMax</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="56" column="10" bodyfile="iceberg/expression/literal.h" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1AboveMax_1a7f9e16bf27da731da3770242783e58cb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::AboveMax::operator!=</definition>
+        <argsstring>(const AboveMax &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>iceberg::Literal::AboveMax::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1AboveMax" kindref="compound">AboveMax</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="57" column="10" bodyfile="iceberg/expression/literal.h" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1AboveMax_1a195935b63c28f19b81f208b46657f2f2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::AboveMax::operator&lt;</definition>
+        <argsstring>(const AboveMax &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>iceberg::Literal::AboveMax::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1AboveMax" kindref="compound">AboveMax</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="58" column="5" bodyfile="iceberg/expression/literal.h" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1AboveMax_1a7a358eb31248cb23d5e190498f7d3096" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::AboveMax::operator&lt;=</definition>
+        <argsstring>(const AboveMax &amp;) const</argsstring>
+        <name>operator&lt;=</name>
+        <qualifiedname>iceberg::Literal::AboveMax::operator&lt;=</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1AboveMax" kindref="compound">AboveMax</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="59" column="5" bodyfile="iceberg/expression/literal.h" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1AboveMax_1abeee91a7a956fb21bbbfa8c5a8435f70" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::AboveMax::operator&gt;</definition>
+        <argsstring>(const AboveMax &amp;) const</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>iceberg::Literal::AboveMax::operator&gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1AboveMax" kindref="compound">AboveMax</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="60" column="10" bodyfile="iceberg/expression/literal.h" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1AboveMax_1a739138e592762c93095e5e85f2955b39" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::AboveMax::operator&gt;=</definition>
+        <argsstring>(const AboveMax &amp;) const</argsstring>
+        <name>operator&gt;=</name>
+        <qualifiedname>iceberg::Literal::AboveMax::operator&gt;=</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1AboveMax" kindref="compound">AboveMax</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="61" column="10" bodyfile="iceberg/expression/literal.h" bodystart="61" bodyend="61"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Sentinel value to indicate that the literal value is above the valid range of a specific primitive type. It can happen when casting a literal to a narrower primitive type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/expression/literal.h" line="55" column="3" bodyfile="iceberg/expression/literal.h" bodystart="55" bodyend="62"/>
+    <listofallmembers>
+      <member refid="structiceberg_1_1Literal_1_1AboveMax_1a7f9e16bf27da731da3770242783e58cb" prot="public" virt="non-virtual"><scope>iceberg::Literal::AboveMax</scope><name>operator!=</name></member>
+      <member refid="structiceberg_1_1Literal_1_1AboveMax_1a195935b63c28f19b81f208b46657f2f2" prot="public" virt="non-virtual"><scope>iceberg::Literal::AboveMax</scope><name>operator&lt;</name></member>
+      <member refid="structiceberg_1_1Literal_1_1AboveMax_1a7a358eb31248cb23d5e190498f7d3096" prot="public" virt="non-virtual"><scope>iceberg::Literal::AboveMax</scope><name>operator&lt;=</name></member>
+      <member refid="structiceberg_1_1Literal_1_1AboveMax_1a3b1540a9b87ad12062bd9cc68d0bbe92" prot="public" virt="non-virtual"><scope>iceberg::Literal::AboveMax</scope><name>operator==</name></member>
+      <member refid="structiceberg_1_1Literal_1_1AboveMax_1abeee91a7a956fb21bbbfa8c5a8435f70" prot="public" virt="non-virtual"><scope>iceberg::Literal::AboveMax</scope><name>operator&gt;</name></member>
+      <member refid="structiceberg_1_1Literal_1_1AboveMax_1a739138e592762c93095e5e85f2955b39" prot="public" virt="non-virtual"><scope>iceberg::Literal::AboveMax</scope><name>operator&gt;=</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

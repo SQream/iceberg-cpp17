@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structhas__ToString" kind="struct" language="C++" prot="public">
+    <compoundname>has_ToString</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structhas__ToString_1a957908644d4b30d9a472c2db2125207d" prot="public" static="no">
+        <type>decltype(test&lt; T &gt;(0))</type>
+        <definition>using has_ToString&lt; T &gt;::type =  decltype(test&lt;T&gt;(0))</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>has_ToString::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/formatter.h" line="40" column="3" bodyfile="iceberg/util/formatter.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structhas__ToString_1ab88cb86a6b35dfad3ccf087a88869421" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool has_ToString&lt; T &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>has_ToString::value</qualifiedname>
+        <initializer>= type::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/formatter.h" line="41" column="25" bodyfile="iceberg/util/formatter.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structhas__ToString_1a6f130911152ae8532a706d7b6338fc21" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>static auto has_ToString&lt; T &gt;::test</definition>
+        <argsstring>(int) -&gt; decltype(ToString(std::declval&lt; const U &amp; &gt;()), std::true_type{})</argsstring>
+        <name>test</name>
+        <qualifiedname>has_ToString::test</qualifiedname>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/formatter.h" line="37" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="structhas__ToString_1ade7985d0320e2a88c39b77f0cb514c35" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename</type>
+          </param>
+        </templateparamlist>
+        <type>std::false_type</type>
+        <definition>static std::false_type has_ToString&lt; T &gt;::test</definition>
+        <argsstring>(...)</argsstring>
+        <name>test</name>
+        <qualifiedname>has_ToString::test</qualifiedname>
+        <param>
+          <type>...</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/formatter.h" line="39" column="26"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/util/formatter.h" line="35" column="1" bodyfile="iceberg/util/formatter.h" bodystart="35" bodyend="42"/>
+    <listofallmembers>
+      <member refid="structhas__ToString_1a6f130911152ae8532a706d7b6338fc21" prot="public" virt="non-virtual"><scope>has_ToString</scope><name>test</name></member>
+      <member refid="structhas__ToString_1ade7985d0320e2a88c39b77f0cb514c35" prot="public" virt="non-virtual"><scope>has_ToString</scope><name>test</name></member>
+      <member refid="structhas__ToString_1a957908644d4b30d9a472c2db2125207d" prot="public" virt="non-virtual"><scope>has_ToString</scope><name>type</name></member>
+      <member refid="structhas__ToString_1ab88cb86a6b35dfad3ccf087a88869421" prot="public" virt="non-virtual"><scope>has_ToString</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structiceberg_1_1is__term__type" kind="struct" language="C++" prot="public">
+    <compoundname>iceberg::is_term_type</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::is_base_of&lt; Term, T &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>iceberg::is_term_type&lt; T &gt;</label>
+        <link refid="structiceberg_1_1is__term__type"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::is_base_of&lt; Term, T &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>iceberg::is_term_type&lt; T &gt;</label>
+        <link refid="structiceberg_1_1is__term__type"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::is_base_of&lt; Term, T &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="iceberg/expression/term.h" line="51" column="1" bodyfile="iceberg/expression/term.h" bodystart="51" bodyend="51"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

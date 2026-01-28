@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structiceberg_1_1Literal_1_1BelowMin" kind="struct" language="C++" prot="public">
+    <compoundname>iceberg::Literal::BelowMin</compoundname>
+    <includes refid="literal_8h" local="no">literal.h</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1BelowMin_1a1e609b87004d49a423e4a56e5cf0ce9d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::BelowMin::operator==</definition>
+        <argsstring>(const BelowMin &amp;) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>iceberg::Literal::BelowMin::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1BelowMin" kindref="compound">BelowMin</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="44" column="10" bodyfile="iceberg/expression/literal.h" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1BelowMin_1ad9168fc178af39f56e6b9a3f68419179" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::BelowMin::operator!=</definition>
+        <argsstring>(const BelowMin &amp;) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>iceberg::Literal::BelowMin::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1BelowMin" kindref="compound">BelowMin</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="45" column="10" bodyfile="iceberg/expression/literal.h" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1BelowMin_1aa2517b384d19e2074b05a0160a5aabbe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::BelowMin::operator&lt;</definition>
+        <argsstring>(const BelowMin &amp;) const</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>iceberg::Literal::BelowMin::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1BelowMin" kindref="compound">BelowMin</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="46" column="5" bodyfile="iceberg/expression/literal.h" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1BelowMin_1a4a6e1146d705bb1ebbd6e7ef4481f881" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::BelowMin::operator&lt;=</definition>
+        <argsstring>(const BelowMin &amp;) const</argsstring>
+        <name>operator&lt;=</name>
+        <qualifiedname>iceberg::Literal::BelowMin::operator&lt;=</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1BelowMin" kindref="compound">BelowMin</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="47" column="5" bodyfile="iceberg/expression/literal.h" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1BelowMin_1a5ca0f306088d7cf61c045c854bb19aed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::BelowMin::operator&gt;</definition>
+        <argsstring>(const BelowMin &amp;) const</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>iceberg::Literal::BelowMin::operator&gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1BelowMin" kindref="compound">BelowMin</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="48" column="10" bodyfile="iceberg/expression/literal.h" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1Literal_1_1BelowMin_1af682432da686b8661056ba79f5aec128" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool iceberg::Literal::BelowMin::operator&gt;=</definition>
+        <argsstring>(const BelowMin &amp;) const</argsstring>
+        <name>operator&gt;=</name>
+        <qualifiedname>iceberg::Literal::BelowMin::operator&gt;=</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1Literal_1_1BelowMin" kindref="compound">BelowMin</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/expression/literal.h" line="49" column="10" bodyfile="iceberg/expression/literal.h" bodystart="49" bodyend="49"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Sentinel value to indicate that the literal value is below the valid range of a specific primitive type. It can happen when casting a literal to a narrower primitive type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/expression/literal.h" line="43" column="3" bodyfile="iceberg/expression/literal.h" bodystart="43" bodyend="50"/>
+    <listofallmembers>
+      <member refid="structiceberg_1_1Literal_1_1BelowMin_1ad9168fc178af39f56e6b9a3f68419179" prot="public" virt="non-virtual"><scope>iceberg::Literal::BelowMin</scope><name>operator!=</name></member>
+      <member refid="structiceberg_1_1Literal_1_1BelowMin_1aa2517b384d19e2074b05a0160a5aabbe" prot="public" virt="non-virtual"><scope>iceberg::Literal::BelowMin</scope><name>operator&lt;</name></member>
+      <member refid="structiceberg_1_1Literal_1_1BelowMin_1a4a6e1146d705bb1ebbd6e7ef4481f881" prot="public" virt="non-virtual"><scope>iceberg::Literal::BelowMin</scope><name>operator&lt;=</name></member>
+      <member refid="structiceberg_1_1Literal_1_1BelowMin_1a1e609b87004d49a423e4a56e5cf0ce9d" prot="public" virt="non-virtual"><scope>iceberg::Literal::BelowMin</scope><name>operator==</name></member>
+      <member refid="structiceberg_1_1Literal_1_1BelowMin_1a5ca0f306088d7cf61c045c854bb19aed" prot="public" virt="non-virtual"><scope>iceberg::Literal::BelowMin</scope><name>operator&gt;</name></member>
+      <member refid="structiceberg_1_1Literal_1_1BelowMin_1af682432da686b8661056ba79f5aec128" prot="public" virt="non-virtual"><scope>iceberg::Literal::BelowMin</scope><name>operator&gt;=</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceiceberg_1_1detail" kind="namespace" language="C++">
+    <compoundname>iceberg::detail</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="endian_8h_1a598c57669139df0539da55a84d3dcdd1" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::detail::is_little_endian_constexpr</definition>
+        <argsstring>()</argsstring>
+        <name>is_little_endian_constexpr</name>
+        <qualifiedname>iceberg::detail::is_little_endian_constexpr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/endian.h" line="49" column="16" bodyfile="iceberg/util/endian.h" bodystart="49" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="endian_8h_1aa282f2c31efcdffed115e7d728fd54fa" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr std::enable_if_t&lt; sizeof(T)==1, T &gt;</type>
+        <definition>constexpr std::enable_if_t&lt; sizeof(T)==1, T &gt; iceberg::detail::byteswap_impl</definition>
+        <argsstring>(T value)</argsstring>
+        <name>byteswap_impl</name>
+        <qualifiedname>iceberg::detail::byteswap_impl</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/endian.h" line="55" column="37" bodyfile="iceberg/util/endian.h" bodystart="55" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="endian_8h_1abb5c4f5f922b4f0e2eff6798e9240a09" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr std::enable_if_t&lt; sizeof(T)==2, T &gt;</type>
+        <definition>constexpr std::enable_if_t&lt; sizeof(T)==2, T &gt; iceberg::detail::byteswap_impl</definition>
+        <argsstring>(T value)</argsstring>
+        <name>byteswap_impl</name>
+        <qualifiedname>iceberg::detail::byteswap_impl</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/endian.h" line="60" column="37" bodyfile="iceberg/util/endian.h" bodystart="60" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="endian_8h_1aa0681e94e11f73ca10693453552adff8" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr std::enable_if_t&lt; sizeof(T)==4, T &gt;</type>
+        <definition>constexpr std::enable_if_t&lt; sizeof(T)==4, T &gt; iceberg::detail::byteswap_impl</definition>
+        <argsstring>(T value)</argsstring>
+        <name>byteswap_impl</name>
+        <qualifiedname>iceberg::detail::byteswap_impl</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/endian.h" line="67" column="37" bodyfile="iceberg/util/endian.h" bodystart="67" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="endian_8h_1ae0e2878fcab5d16fda275dc8b37fa2e9" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr std::enable_if_t&lt; sizeof(T)==8, T &gt;</type>
+        <definition>constexpr std::enable_if_t&lt; sizeof(T)==8, T &gt; iceberg::detail::byteswap_impl</definition>
+        <argsstring>(T value)</argsstring>
+        <name>byteswap_impl</name>
+        <qualifiedname>iceberg::detail::byteswap_impl</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/endian.h" line="75" column="37" bodyfile="iceberg/util/endian.h" bodystart="75" bodyend="82"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/util/endian.h" line="46" column="1"/>
+  </compounddef>
+</doxygen>

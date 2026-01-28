@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structiceberg_1_1cpp17__compat_1_1strong__ordering" kind="struct" language="C++" prot="public">
+    <compoundname>iceberg::cpp17_compat::strong_ordering</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structiceberg_1_1cpp17__compat_1_1strong__ordering_1afde91c888ec7b3fbb0ed4a4fa06b3f78" prot="public" static="no" mutable="no">
+        <type>signed char</type>
+        <definition>signed char iceberg::cpp17_compat::strong_ordering::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>iceberg::cpp17_compat::strong_ordering::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="385" column="15" bodyfile="iceberg/cpp17_compat.h" bodystart="385" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structiceberg_1_1cpp17__compat_1_1strong__ordering_1afa9015c9e2eec4d837ff45393b573897" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>const <ref refid="structiceberg_1_1cpp17__compat_1_1strong__ordering" kindref="compound">strong_ordering</ref></type>
+        <definition>constexpr strong_ordering iceberg::cpp17_compat::strong_ordering::less</definition>
+        <argsstring></argsstring>
+        <name>less</name>
+        <qualifiedname>iceberg::cpp17_compat::strong_ordering::less</qualifiedname>
+        <initializer>{-1}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="387" column="32" bodyfile="iceberg/cpp17_compat.h" bodystart="387" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structiceberg_1_1cpp17__compat_1_1strong__ordering_1a39548fd71c418005c024ff35992de619" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>const <ref refid="structiceberg_1_1cpp17__compat_1_1strong__ordering" kindref="compound">strong_ordering</ref></type>
+        <definition>constexpr strong_ordering iceberg::cpp17_compat::strong_ordering::equal</definition>
+        <argsstring></argsstring>
+        <name>equal</name>
+        <qualifiedname>iceberg::cpp17_compat::strong_ordering::equal</qualifiedname>
+        <initializer>{0}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="388" column="32" bodyfile="iceberg/cpp17_compat.h" bodystart="388" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structiceberg_1_1cpp17__compat_1_1strong__ordering_1ac6aa624057f855eb9a565373b5c44c8b" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>const <ref refid="structiceberg_1_1cpp17__compat_1_1strong__ordering" kindref="compound">strong_ordering</ref></type>
+        <definition>constexpr strong_ordering iceberg::cpp17_compat::strong_ordering::greater</definition>
+        <argsstring></argsstring>
+        <name>greater</name>
+        <qualifiedname>iceberg::cpp17_compat::strong_ordering::greater</qualifiedname>
+        <initializer>{1}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="389" column="32" bodyfile="iceberg/cpp17_compat.h" bodystart="389" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structiceberg_1_1cpp17__compat_1_1strong__ordering_1a6a1cf84c37445d3fa2e90f1bddce71f7" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::strong_ordering::strong_ordering</definition>
+        <argsstring>(signed char v)</argsstring>
+        <name>strong_ordering</name>
+        <qualifiedname>iceberg::cpp17_compat::strong_ordering::strong_ordering</qualifiedname>
+        <param>
+          <type>signed char</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="391" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="391" bodyend="391"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1cpp17__compat_1_1strong__ordering_1a23b23baba1ac4131e86552f03aabaf1b" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::strong_ordering::operator==</definition>
+        <argsstring>(const strong_ordering &amp;other) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>iceberg::cpp17_compat::strong_ordering::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1cpp17__compat_1_1strong__ordering" kindref="compound">strong_ordering</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="393" column="18" bodyfile="iceberg/cpp17_compat.h" bodystart="393" bodyend="393"/>
+      </memberdef>
+      <memberdef kind="function" id="structiceberg_1_1cpp17__compat_1_1strong__ordering_1a30424ac9219597da6e74398b27f03dbb" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr bool</type>
+        <definition>constexpr bool iceberg::cpp17_compat::strong_ordering::operator!=</definition>
+        <argsstring>(const strong_ordering &amp;other) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>iceberg::cpp17_compat::strong_ordering::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="structiceberg_1_1cpp17__compat_1_1strong__ordering" kindref="compound">strong_ordering</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="394" column="18" bodyfile="iceberg/cpp17_compat.h" bodystart="394" bodyend="394"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>iceberg::cpp17_compat::strong_ordering</label>
+        <link refid="structiceberg_1_1cpp17__compat_1_1strong__ordering"/>
+        <childnode refid="1" relation="usage">
+          <edgelabel>equal</edgelabel>
+          <edgelabel>greater</edgelabel>
+          <edgelabel>less</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="iceberg/cpp17_compat.h" line="384" column="1" bodyfile="iceberg/cpp17_compat.h" bodystart="384" bodyend="395"/>
+    <listofallmembers>
+      <member refid="structiceberg_1_1cpp17__compat_1_1strong__ordering_1a39548fd71c418005c024ff35992de619" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::strong_ordering</scope><name>equal</name></member>
+      <member refid="structiceberg_1_1cpp17__compat_1_1strong__ordering_1ac6aa624057f855eb9a565373b5c44c8b" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::strong_ordering</scope><name>greater</name></member>
+      <member refid="structiceberg_1_1cpp17__compat_1_1strong__ordering_1afa9015c9e2eec4d837ff45393b573897" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::strong_ordering</scope><name>less</name></member>
+      <member refid="structiceberg_1_1cpp17__compat_1_1strong__ordering_1a30424ac9219597da6e74398b27f03dbb" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::strong_ordering</scope><name>operator!=</name></member>
+      <member refid="structiceberg_1_1cpp17__compat_1_1strong__ordering_1a23b23baba1ac4131e86552f03aabaf1b" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::strong_ordering</scope><name>operator==</name></member>
+      <member refid="structiceberg_1_1cpp17__compat_1_1strong__ordering_1a6a1cf84c37445d3fa2e90f1bddce71f7" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::strong_ordering</scope><name>strong_ordering</name></member>
+      <member refid="structiceberg_1_1cpp17__compat_1_1strong__ordering_1afde91c888ec7b3fbb0ed4a4fa06b3f78" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::strong_ordering</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

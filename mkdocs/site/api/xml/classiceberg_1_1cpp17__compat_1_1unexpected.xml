@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classiceberg_1_1cpp17__compat_1_1unexpected" kind="class" language="C++" prot="public">
+    <compoundname>iceberg::cpp17_compat::unexpected</compoundname>
+    <templateparamlist>
+      <param>
+        <type>class E</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classiceberg_1_1cpp17__compat_1_1unexpected_1a2553d3432da97762eeb8c5008983768b" prot="private" static="no" mutable="no">
+        <type>E</type>
+        <definition>E iceberg::cpp17_compat::unexpected&lt; E &gt;::error_</definition>
+        <argsstring></argsstring>
+        <name>error_</name>
+        <qualifiedname>iceberg::cpp17_compat::unexpected::error_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="99" column="5" bodyfile="iceberg/cpp17_compat.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1unexpected_1ae1ba7836a956ac1b597d388b77457363" prot="public" static="no" constexpr="yes" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Err</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::unexpected&lt; E &gt;::unexpected</definition>
+        <argsstring>(Err &amp;&amp;e)</argsstring>
+        <name>unexpected</name>
+        <qualifiedname>iceberg::cpp17_compat::unexpected::unexpected</qualifiedname>
+        <param>
+          <type>Err &amp;&amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="88" column="22" bodyfile="iceberg/cpp17_compat.h" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1unexpected_1abf93fe813afe5a875287eba84681ad1c" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::unexpected&lt; E &gt;::unexpected</definition>
+        <argsstring>(const E &amp;e)</argsstring>
+        <name>unexpected</name>
+        <qualifiedname>iceberg::cpp17_compat::unexpected::unexpected</qualifiedname>
+        <param>
+          <type>const E &amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="90" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1unexpected_1a9533e87b3363d11cce4feb7e492c23d7" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr iceberg::cpp17_compat::unexpected&lt; E &gt;::unexpected</definition>
+        <argsstring>(E &amp;&amp;e)</argsstring>
+        <name>unexpected</name>
+        <qualifiedname>iceberg::cpp17_compat::unexpected::unexpected</qualifiedname>
+        <param>
+          <type>E &amp;&amp;</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="91" column="13" bodyfile="iceberg/cpp17_compat.h" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1unexpected_1ad1422316eb6d713bd15f151469fd4636" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" refqual="lvalue" virt="non-virtual">
+        <type>constexpr const E &amp;</type>
+        <definition>constexpr const E &amp; iceberg::cpp17_compat::unexpected&lt; E &gt;::error</definition>
+        <argsstring>() const &amp;</argsstring>
+        <name>error</name>
+        <qualifiedname>iceberg::cpp17_compat::unexpected::error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="93" column="21" bodyfile="iceberg/cpp17_compat.h" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1unexpected_1a32d78e5a0c5d1f22f9f567bbb2200974" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" refqual="lvalue" virt="non-virtual">
+        <type>constexpr E &amp;</type>
+        <definition>constexpr E &amp; iceberg::cpp17_compat::unexpected&lt; E &gt;::error</definition>
+        <argsstring>() &amp;</argsstring>
+        <name>error</name>
+        <qualifiedname>iceberg::cpp17_compat::unexpected::error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="94" column="15" bodyfile="iceberg/cpp17_compat.h" bodystart="94" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1unexpected_1a809ec3fd745effc04d0ba28c930d73fc" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" refqual="rvalue" virt="non-virtual">
+        <type>constexpr const E &amp;&amp;</type>
+        <definition>constexpr const E &amp;&amp; iceberg::cpp17_compat::unexpected&lt; E &gt;::error</definition>
+        <argsstring>() const &amp;&amp;</argsstring>
+        <name>error</name>
+        <qualifiedname>iceberg::cpp17_compat::unexpected::error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="95" column="21" bodyfile="iceberg/cpp17_compat.h" bodystart="95" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="classiceberg_1_1cpp17__compat_1_1unexpected_1a1e7079453e8e201782babe3cd9ec01bd" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" refqual="rvalue" virt="non-virtual">
+        <type>constexpr E &amp;&amp;</type>
+        <definition>constexpr E &amp;&amp; iceberg::cpp17_compat::unexpected&lt; E &gt;::error</definition>
+        <argsstring>() &amp;&amp;</argsstring>
+        <name>error</name>
+        <qualifiedname>iceberg::cpp17_compat::unexpected::error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="96" column="15" bodyfile="iceberg/cpp17_compat.h" bodystart="96" bodyend="96"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/cpp17_compat.h" line="85" column="1" bodyfile="iceberg/cpp17_compat.h" bodystart="85" bodyend="100"/>
+    <listofallmembers>
+      <member refid="classiceberg_1_1cpp17__compat_1_1unexpected_1ad1422316eb6d713bd15f151469fd4636" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::unexpected</scope><name>error</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1unexpected_1a32d78e5a0c5d1f22f9f567bbb2200974" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::unexpected</scope><name>error</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1unexpected_1a809ec3fd745effc04d0ba28c930d73fc" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::unexpected</scope><name>error</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1unexpected_1a1e7079453e8e201782babe3cd9ec01bd" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::unexpected</scope><name>error</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1unexpected_1a2553d3432da97762eeb8c5008983768b" prot="private" virt="non-virtual"><scope>iceberg::cpp17_compat::unexpected</scope><name>error_</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1unexpected_1ae1ba7836a956ac1b597d388b77457363" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::unexpected</scope><name>unexpected</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1unexpected_1abf93fe813afe5a875287eba84681ad1c" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::unexpected</scope><name>unexpected</name></member>
+      <member refid="classiceberg_1_1cpp17__compat_1_1unexpected_1a9533e87b3363d11cce4feb7e492c23d7" prot="public" virt="non-virtual"><scope>iceberg::cpp17_compat::unexpected</scope><name>unexpected</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

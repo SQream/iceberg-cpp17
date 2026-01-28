@@ -1,0 +1,422 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacecompat" kind="namespace" language="C++">
+    <compoundname>compat</compoundname>
+    <innerclass refid="structcompat_1_1year__month__day" prot="public">compat::year_month_day</innerclass>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="decimal_8cc_1ad45260abb7adaf52550afce1b93a4231" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>decimal_ordering</name>
+        <qualifiedname>compat::decimal_ordering</qualifiedname>
+        <enumvalue id="decimal_8cc_1ad45260abb7adaf52550afce1b93a4231ae37e8d912e8f7b8f9b5ef9452ba47ff1" prot="public">
+          <name>less</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="decimal_8cc_1ad45260abb7adaf52550afce1b93a4231aa219d952c828c6dfd3c9e7465f0d29c4" prot="public">
+          <name>equivalent</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="decimal_8cc_1ad45260abb7adaf52550afce1b93a4231a7b8dc4fb0fb55fc8eb69ff080c45ed7e" prot="public">
+          <name>greater</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="decimal_8cc_1ad45260abb7adaf52550afce1b93a4231a2e3a2fe1ab6a59f682eec190c2b1fe27" prot="public">
+          <name>unordered</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/decimal.cc" line="57" column="3" bodyfile="iceberg/util/decimal.cc" bodystart="57" bodyend="62"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="cpp17__compat_8h_1ab1bb2ca3da02a46aec351b06205b4e23" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classiceberg_1_1cpp17__compat_1_1span" kindref="compound">iceberg::cpp17_compat::span</ref>&lt; T &gt;</type>
+        <definition>using compat::span = typedef iceberg::cpp17_compat::span&lt;T&gt;</definition>
+        <argsstring></argsstring>
+        <name>span</name>
+        <qualifiedname>compat::span</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="439" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="439" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="cpp17__compat_8h_1ae04172ad5cb67d6b819a1ee40998a4a8" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename E</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classiceberg_1_1cpp17__compat_1_1expected" kindref="compound">iceberg::cpp17_compat::expected</ref>&lt; T, E &gt;</type>
+        <definition>using compat::expected = typedef iceberg::cpp17_compat::expected&lt;T, E&gt;</definition>
+        <argsstring></argsstring>
+        <name>expected</name>
+        <qualifiedname>compat::expected</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="442" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="442" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="cpp17__compat_8h_1a72583d6e2f46c268badbcee976b00bde" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename E</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classiceberg_1_1cpp17__compat_1_1unexpected" kindref="compound">iceberg::cpp17_compat::unexpected</ref>&lt; E &gt;</type>
+        <definition>using compat::unexpected = typedef iceberg::cpp17_compat::unexpected&lt;E&gt;</definition>
+        <argsstring></argsstring>
+        <name>unexpected</name>
+        <qualifiedname>compat::unexpected</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="445" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="445" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="cpp17__compat_8h_1aa89d91519383d2b9cb3076ae10598bff" prot="public" static="no">
+        <type><ref refid="structiceberg_1_1cpp17__compat_1_1strong__ordering" kindref="compound">iceberg::cpp17_compat::strong_ordering</ref></type>
+        <definition>using compat::strong_ordering = typedef iceberg::cpp17_compat::strong_ordering</definition>
+        <argsstring></argsstring>
+        <name>strong_ordering</name>
+        <qualifiedname>compat::strong_ordering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="447" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="447" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="cpp17__compat_8h_1ae48e19f794a4c06c8e3f146b4eb672d4" prot="public" static="no">
+        <type><ref refid="structiceberg_1_1cpp17__compat_1_1partial__ordering" kindref="compound">iceberg::cpp17_compat::partial_ordering</ref></type>
+        <definition>using compat::partial_ordering = typedef iceberg::cpp17_compat::partial_ordering</definition>
+        <argsstring></argsstring>
+        <name>partial_ordering</name>
+        <qualifiedname>compat::partial_ordering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="448" column="3" bodyfile="iceberg/cpp17_compat.h" bodystart="448" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="temporal__util_8cc_1a8aafbb1cb0168a5ec894294adb5b8067" prot="public" static="no">
+        <type>std::chrono::duration&lt; int, std::ratio&lt; 86400 &gt; &gt;</type>
+        <definition>using compat::days = typedef std::chrono::duration&lt;int, std::ratio&lt;86400&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>days</name>
+        <qualifiedname>compat::days</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="45" column="3" bodyfile="iceberg/util/temporal_util.cc" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="temporal__util_8cc_1ab692f300cdae7a5b8f9038cd47968733" prot="public" static="no">
+        <type>std::chrono::hours</type>
+        <definition>using compat::hours = typedef std::chrono::hours</definition>
+        <argsstring></argsstring>
+        <name>hours</name>
+        <qualifiedname>compat::hours</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="46" column="3" bodyfile="iceberg/util/temporal_util.cc" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="temporal__util_8cc_1a29c755af602f86b961819e6cb8aaef82" prot="public" static="no">
+        <type>std::chrono::microseconds</type>
+        <definition>using compat::microseconds = typedef std::chrono::microseconds</definition>
+        <argsstring></argsstring>
+        <name>microseconds</name>
+        <qualifiedname>compat::microseconds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="47" column="3" bodyfile="iceberg/util/temporal_util.cc" bodystart="47" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="cpp17__compat_8h_1ae6b0c7e1d301b221f7a40083b0059352" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void compat::unreachable</definition>
+        <argsstring>()</argsstring>
+        <name>unreachable</name>
+        <qualifiedname>compat::unreachable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/cpp17_compat.h" line="450" column="15" bodyfile="iceberg/cpp17_compat.h" bodystart="450" bodyend="452"/>
+      </memberdef>
+      <memberdef kind="function" id="format__compat_8h_1ad5f90e7fcba89d7da152c037b3d51653" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void compat::print</definition>
+        <argsstring>(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</argsstring>
+        <name>print</name>
+        <qualifiedname>compat::print</qualifiedname>
+        <param>
+          <type>fmt::format_string&lt; Args... &gt;</type>
+          <declname>fmt</declname>
+        </param>
+        <param>
+          <type>Args &amp;&amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/format_compat.h" line="30" column="8" bodyfile="iceberg/format_compat.h" bodystart="30" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="format__compat_8h_1a419848fef0e4c4ca16ad6fdb2065cb8b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void compat::print</definition>
+        <argsstring>(std::FILE *f, fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</argsstring>
+        <name>print</name>
+        <qualifiedname>compat::print</qualifiedname>
+        <param>
+          <type>std::FILE *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>fmt::format_string&lt; Args... &gt;</type>
+          <declname>fmt</declname>
+        </param>
+        <param>
+          <type>Args &amp;&amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/format_compat.h" line="36" column="8" bodyfile="iceberg/format_compat.h" bodystart="36" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="format__compat_8h_1a19d2f58d7cfa2e1c74ddd22ca9017de0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void compat::println</definition>
+        <argsstring>(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</argsstring>
+        <name>println</name>
+        <qualifiedname>compat::println</qualifiedname>
+        <param>
+          <type>fmt::format_string&lt; Args... &gt;</type>
+          <declname>fmt</declname>
+        </param>
+        <param>
+          <type>Args &amp;&amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/format_compat.h" line="42" column="8" bodyfile="iceberg/format_compat.h" bodystart="42" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="format__compat_8h_1a8cdcecdc5c0ffca4635bbac94552fe67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void compat::println</definition>
+        <argsstring>(std::FILE *f, fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</argsstring>
+        <name>println</name>
+        <qualifiedname>compat::println</qualifiedname>
+        <param>
+          <type>std::FILE *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>fmt::format_string&lt; Args... &gt;</type>
+          <declname>fmt</declname>
+        </param>
+        <param>
+          <type>Args &amp;&amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/format_compat.h" line="48" column="8" bodyfile="iceberg/format_compat.h" bodystart="48" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="decimal_8cc_1a3d80ef5e9f4d2dc800bfb91b1b1eda6a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool compat::is_little_endian</definition>
+        <argsstring>()</argsstring>
+        <name>is_little_endian</name>
+        <qualifiedname>compat::is_little_endian</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/decimal.cc" line="46" column="15" bodyfile="iceberg/util/decimal.cc" bodystart="46" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="decimal_8cc_1a7bea3fb88113b74fb29ac76b85b53edc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Container</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void compat::reverse</definition>
+        <argsstring>(Container &amp;container)</argsstring>
+        <name>reverse</name>
+        <qualifiedname>compat::reverse</qualifiedname>
+        <param>
+          <type>Container &amp;</type>
+          <declname>container</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/decimal.cc" line="52" column="8" bodyfile="iceberg/util/decimal.cc" bodystart="52" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="temporal__util_8cc_1afa6185660064b2c4638024f4a5273ec6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structcompat_1_1year__month__day" kindref="compound">year_month_day</ref></type>
+        <definition>year_month_day compat::DateToYmd</definition>
+        <argsstring>(int32_t days_since_epoch)</argsstring>
+        <name>DateToYmd</name>
+        <qualifiedname>compat::DateToYmd</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>days_since_epoch</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="50" column="25" bodyfile="iceberg/util/temporal_util.cc" bodystart="50" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="temporal__util_8cc_1a77158bbaa8dbcbb88125d58d90f5d9a6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structcompat_1_1year__month__day" kindref="compound">year_month_day</ref></type>
+        <definition>year_month_day compat::TimestampToYmd</definition>
+        <argsstring>(int64_t micros_since_epoch)</argsstring>
+        <name>TimestampToYmd</name>
+        <qualifiedname>compat::TimestampToYmd</qualifiedname>
+        <param>
+          <type>int64_t</type>
+          <declname>micros_since_epoch</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="97" column="25" bodyfile="iceberg/util/temporal_util.cc" bodystart="97" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="temporal__util_8cc_1ab1a35b06e18d17f004433249bc6c2ef2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Duration</type>
+          </param>
+        </templateparamlist>
+        <type>int32_t</type>
+        <definition>int32_t compat::TimestampToDuration</definition>
+        <argsstring>(int64_t micros_since_epoch)</argsstring>
+        <name>TimestampToDuration</name>
+        <qualifiedname>compat::TimestampToDuration</qualifiedname>
+        <param>
+          <type>int64_t</type>
+          <declname>micros_since_epoch</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="104" column="18" bodyfile="iceberg/util/temporal_util.cc" bodystart="104" bodyend="113"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/cpp17_compat.h" line="437" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structis__formattable" kind="struct" language="C++" prot="public">
+    <compoundname>is_formattable</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::is_base_of&lt; iceberg::util::Formattable, T &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>is_formattable&lt; T &gt;</label>
+        <link refid="structis__formattable"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::is_base_of&lt; iceberg::util::Formattable, T &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>is_formattable&lt; T &gt;</label>
+        <link refid="structis__formattable"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::is_base_of&lt; iceberg::util::Formattable, T &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="iceberg/util/formatter.h" line="49" column="1" bodyfile="iceberg/util/formatter.h" bodystart="49" bodyend="49"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

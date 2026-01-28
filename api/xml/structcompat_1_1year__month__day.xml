@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcompat_1_1year__month__day" kind="struct" language="C++" prot="public">
+    <compoundname>compat::year_month_day</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcompat_1_1year__month__day_1a40187d244cc14afdd61e4aa1ffb11b04" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int compat::year_month_day::year_val</definition>
+        <argsstring></argsstring>
+        <name>year_val</name>
+        <qualifiedname>compat::year_month_day::year_val</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="34" column="9" bodyfile="iceberg/util/temporal_util.cc" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcompat_1_1year__month__day_1a2ae89c028bac3c09e638d6bfbe30f87c" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int compat::year_month_day::month_val</definition>
+        <argsstring></argsstring>
+        <name>month_val</name>
+        <qualifiedname>compat::year_month_day::month_val</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="35" column="9" bodyfile="iceberg/util/temporal_util.cc" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcompat_1_1year__month__day_1aa31a5403f11c3d61a64fd9f5dbbce591" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int compat::year_month_day::day_val</definition>
+        <argsstring></argsstring>
+        <name>day_val</name>
+        <qualifiedname>compat::year_month_day::day_val</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="36" column="9" bodyfile="iceberg/util/temporal_util.cc" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcompat_1_1year__month__day_1a902b18e5a75fc11f9577c19496d75903" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>compat::year_month_day::year_month_day</definition>
+        <argsstring>(int y, int m, int d)</argsstring>
+        <name>year_month_day</name>
+        <qualifiedname>compat::year_month_day::year_month_day</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="38" column="5" bodyfile="iceberg/util/temporal_util.cc" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="structcompat_1_1year__month__day_1ac9fbb750ad6c9721c409d14734777c88" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr int</type>
+        <definition>constexpr int compat::year_month_day::year</definition>
+        <argsstring>() const</argsstring>
+        <name>year</name>
+        <qualifiedname>compat::year_month_day::year</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="40" column="19" bodyfile="iceberg/util/temporal_util.cc" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="structcompat_1_1year__month__day_1a4e8afdc423a19d142cd1fa72cd3ce3b6" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr unsigned</type>
+        <definition>constexpr unsigned compat::year_month_day::month</definition>
+        <argsstring>() const</argsstring>
+        <name>month</name>
+        <qualifiedname>compat::year_month_day::month</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="41" column="24" bodyfile="iceberg/util/temporal_util.cc" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="structcompat_1_1year__month__day_1a675f1451f510eaef1bf5ea4af26e5aa2" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr unsigned</type>
+        <definition>constexpr unsigned compat::year_month_day::day</definition>
+        <argsstring>() const</argsstring>
+        <name>day</name>
+        <qualifiedname>compat::year_month_day::day</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/temporal_util.cc" line="42" column="24" bodyfile="iceberg/util/temporal_util.cc" bodystart="42" bodyend="42"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/util/temporal_util.cc" line="33" column="3" bodyfile="iceberg/util/temporal_util.cc" bodystart="33" bodyend="43"/>
+    <listofallmembers>
+      <member refid="structcompat_1_1year__month__day_1a675f1451f510eaef1bf5ea4af26e5aa2" prot="public" virt="non-virtual"><scope>compat::year_month_day</scope><name>day</name></member>
+      <member refid="structcompat_1_1year__month__day_1aa31a5403f11c3d61a64fd9f5dbbce591" prot="public" virt="non-virtual"><scope>compat::year_month_day</scope><name>day_val</name></member>
+      <member refid="structcompat_1_1year__month__day_1a4e8afdc423a19d142cd1fa72cd3ce3b6" prot="public" virt="non-virtual"><scope>compat::year_month_day</scope><name>month</name></member>
+      <member refid="structcompat_1_1year__month__day_1a2ae89c028bac3c09e638d6bfbe30f87c" prot="public" virt="non-virtual"><scope>compat::year_month_day</scope><name>month_val</name></member>
+      <member refid="structcompat_1_1year__month__day_1ac9fbb750ad6c9721c409d14734777c88" prot="public" virt="non-virtual"><scope>compat::year_month_day</scope><name>year</name></member>
+      <member refid="structcompat_1_1year__month__day_1a902b18e5a75fc11f9577c19496d75903" prot="public" virt="non-virtual"><scope>compat::year_month_day</scope><name>year_month_day</name></member>
+      <member refid="structcompat_1_1year__month__day_1a40187d244cc14afdd61e4aa1ffb11b04" prot="public" virt="non-virtual"><scope>compat::year_month_day</scope><name>year_val</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structis__smart__pointer" kind="struct" language="C++" prot="public">
+    <compoundname>is_smart_pointer</compoundname>
+    <includes refid="formatter__internal_8h" local="no">formatter_internal.h</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structis__smart__pointer_1a3f0c37d3c140a9df87b93ba9f09f7c28" prot="public" static="no">
+        <type>decltype(test&lt; T &gt;(0))</type>
+        <definition>using is_smart_pointer&lt; T &gt;::type =  decltype(test&lt;T&gt;(0))</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>is_smart_pointer::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/formatter_internal.h" line="57" column="3" bodyfile="iceberg/util/formatter_internal.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structis__smart__pointer_1a24db30b66f1eedf7cbef0aa70f817a12" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool is_smart_pointer&lt; T &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>is_smart_pointer::value</qualifiedname>
+        <initializer>= type::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/formatter_internal.h" line="58" column="25" bodyfile="iceberg/util/formatter_internal.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structis__smart__pointer_1a39c09686a08a0c96f0b65e30d4bd6ce5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>static auto is_smart_pointer&lt; T &gt;::test</definition>
+        <argsstring>(int) -&gt; decltype(std::declval&lt; U &gt;().operator-&gt;(), std::true_type{})</argsstring>
+        <name>test</name>
+        <qualifiedname>is_smart_pointer::test</qualifiedname>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/formatter_internal.h" line="54" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="structis__smart__pointer_1a97d9be97b95dc139eb3b708c9d7ceab7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename</type>
+          </param>
+        </templateparamlist>
+        <type>std::false_type</type>
+        <definition>static std::false_type is_smart_pointer&lt; T &gt;::test</definition>
+        <argsstring>(...)</argsstring>
+        <name>test</name>
+        <qualifiedname>is_smart_pointer::test</qualifiedname>
+        <param>
+          <type>...</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="iceberg/util/formatter_internal.h" line="56" column="26"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Helper to check if type has operator-&gt; (duck typing for smart pointers) </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="iceberg/util/formatter_internal.h" line="52" column="1" bodyfile="iceberg/util/formatter_internal.h" bodystart="52" bodyend="59"/>
+    <listofallmembers>
+      <member refid="structis__smart__pointer_1a39c09686a08a0c96f0b65e30d4bd6ce5" prot="public" virt="non-virtual"><scope>is_smart_pointer</scope><name>test</name></member>
+      <member refid="structis__smart__pointer_1a97d9be97b95dc139eb3b708c9d7ceab7" prot="public" virt="non-virtual"><scope>is_smart_pointer</scope><name>test</name></member>
+      <member refid="structis__smart__pointer_1a3f0c37d3c140a9df87b93ba9f09f7c28" prot="public" virt="non-virtual"><scope>is_smart_pointer</scope><name>type</name></member>
+      <member refid="structis__smart__pointer_1a24db30b66f1eedf7cbef0aa70f817a12" prot="public" virt="non-virtual"><scope>is_smart_pointer</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
